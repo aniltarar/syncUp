@@ -1,28 +1,45 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import syncUp from "../../assets/syncUp.svg"
 import { useForm } from 'react-hook-form'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { registerUser } from '../../redux/slices/authSlice'
+import { zodResolver } from '@hookform/resolvers/zod'
+
+import { registerScheme } from '../../validation/scheme'
+import { Link, useNavigate } from 'react-router-dom'
 
 
 const Register = () => {
 
-  const { register, handleSubmit, } = useForm()
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    resolver: zodResolver(registerScheme)
+  })
+  const { status } = useSelector((state) => state.auth)
 
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
 
   const registerHandle = async (data) => {
-    const { username, email, password, rePassword } = data;
+    const { password, rePassword } = data; // password ve rePassword'u alıyoruz
     if (password === rePassword) {
-
-      dispatch(registerUser(data))
-
-     
+      dispatch(registerUser(data));
+    } else {
+      console.log("Passwords do not match!");
     }
+  };
 
+  useEffect(() => {
+    if (status === "succeeded") {
+      console.log("Başarılı");
+      setTimeout(() => {
+        navigate("/")
+      }, 2000)
+    }
   }
+    , [status])
+
+
 
   return (
     <div className='flex flex-col min-h-screen bg-[#111827] items-center justify-center'>
@@ -40,8 +57,9 @@ const Register = () => {
 
             <div className='flex flex-col gap-y-3 w-full h-full justify-center ' >
               <div className='flex flex-col gap-y-3'>
-                <label className='text-gray-400 font-semibold' >Kullanıcı Adınız</label>
-                <input {...register("username")} type="text" placeholder='Kullanıcı Adınızı Giriniz.' className='px-2 py-3 rounded-md outline-[#111827] text-sm' />
+                <label className='text-gray-400 font-semibold' >Ad Soyad</label>
+                <input {...register("displayName")} type="text" placeholder='Ad Soyad Giriniz.' className='px-2 py-3 rounded-md outline-[#111827] text-sm' />
+                <span>{errors.displayName && errors.displayName.message}</span>
               </div>
 
 
@@ -65,7 +83,7 @@ const Register = () => {
             <div className='flex flex-col gap-y-2 mt-5'>
               <span className='hover:cursor-pointer'>Şifrenizi mi unuttunuz? Tıklayın.</span>
               <button className='px-2 py-3 bg-[#29e2a2] text-xl rounded-md hover:bg-[#35c290] transition-colors'>Kayıt Ol</button>
-              <span className='hover:cursor-pointer'>Hesabınız yok mu? Yeni hesap oluşturmak için tıklayın.</span>
+              <Link to="/auth/login" className='hover:cursor-pointer'>Hesabınız yok mu? Yeni hesap oluşturmak için tıklayın.</Link>
             </div>
 
           </form>
