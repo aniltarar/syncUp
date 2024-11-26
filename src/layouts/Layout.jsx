@@ -2,6 +2,7 @@ import Container from "../containers/Container"
 import Navbar from "../components/Navbar"
 import { Outlet } from "react-router-dom"
 import Footer from "../components/Footer"
+import { Toaster } from "react-hot-toast"
 
 
 const Layout = () => {
@@ -11,6 +12,7 @@ const Layout = () => {
         <Navbar/> 
         {/* İçeriye vereceğimiz sayfa */}
         <div className="flex container mx-auto min-h-screen ">
+          <Toaster position="top-center" />
             <Outlet/>
         </div>
         {/* Statik Footer'ımız.  */}

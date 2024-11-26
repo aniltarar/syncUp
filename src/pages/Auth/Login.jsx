@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { loginUser } from '../../redux/slices/authSlice'
 import { Link, useNavigate } from 'react-router-dom'
+import toast from 'react-hot-toast'
 
 
 const Login = () => {
@@ -27,6 +28,7 @@ const Login = () => {
   useEffect(() => {
     if (status === "succeeded") {
       console.log("Başarılı");
+      toast.success("Giriş Başarılı. Anasayfaya yönlendiriliyorsunuz.")
       setTimeout(() => {
         navigate("/")
       }, 2000)
