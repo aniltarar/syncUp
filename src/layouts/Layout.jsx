@@ -10,11 +10,11 @@ const Layout = () => {
         {/* Statik Header'imiz. */}
         <Navbar/> 
         {/* İçeriye vereceğimiz sayfa */}
-        <div className="flex flex-grow min-h-screen">
+        <div className="flex container mx-auto min-h-screen ">
             <Outlet/>
         </div>
         {/* Statik Footer'ımız.  */}
-        <Footer/>
+        {/* <Footer/> */}
     </Container>
   )
 }

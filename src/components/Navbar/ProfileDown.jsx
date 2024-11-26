@@ -60,7 +60,7 @@ const ProfileDown = () => {
           <MenuItem>
             <Link
               className="block transition-colors text-sm data-[focus]:bg-neutral-100 px-2 py-1 rounded-md"
-              to="/be-manager"
+              to="/be-club-leader"
             >
               Kulüp Yöneticisi Ol
             </Link>
@@ -68,7 +68,7 @@ const ProfileDown = () => {
           <MenuItem>
             <Link
               className="block transition-colors text-sm data-[focus]:bg-neutral-100 px-2 py-1 rounded-md"
-              to="/my-events"
+              to="/passed-events"
             >
               Geçmiş Etkinliklerim
             </Link>

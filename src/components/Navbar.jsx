@@ -19,7 +19,7 @@ const Navbar = () => {
       <Link to='/'>
         <img src={syncUp} className='w-24' alt="SyncUp Logo" />
       </Link>
-      <div className='flex flex-row items-center justify-center gap-5 w-1/2 '>
+      <div className='flex flex-row items-center justify-center gap-5 flex-1 '>
         <Link className='text-sm font-medium hover:underline text-neutral-700' to='/clubs'>Kulüpler</Link>
         <Link className='text-sm font-medium hover:underline text-neutral-700' to='/events'>Etkinlikler</Link>
         <Link className='text-sm font-medium hover:underline text-neutral-700' to='/announcments'>Duyurular</Link>

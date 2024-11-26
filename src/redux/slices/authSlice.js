@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { collection, doc, getDoc, setDoc } from "firebase/firestore";
+import { collection, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { auth, db } from "../../firebase/firebaseConfig"; // auth ve db'yi import edin
 
 const initialState = {
@@ -32,6 +32,8 @@ export const registerUser = createAsyncThunk("auth/registerUser", async (data, {
       role: "user",
       notifications: [],
       clubs:[],
+      phoneNumber:null
+
     }
 
     await setDoc(usersRef, userData)
@@ -65,6 +67,33 @@ export const loginUser = createAsyncThunk("auth/loginUser", async (data, { rejec
 
 });
 
+export const updateUser = createAsyncThunk("auth/updateUser",async (data, { rejectWithValue }) => {
+
+      try{
+      const userRef = doc(db,"users",data.uid);
+      await updateDoc(userRef, data);
+      const userDoc = await getDoc(userRef);
+      return userDoc.data();
+    }catch(e){
+        console.error("Update error:", e);
+        return rejectWithValue(e.message);
+    }
+
+})
+
+export const getUserByID = createAsyncThunk("auth/getUserByID", async (uid, { rejectWithValue }) => {
+  try {
+    const userRef = doc(db, "users", uid);
+    const userDoc = await getDoc(userRef);
+    const userData = userDoc.data();
+    return userData;
+
+  } catch (e) {
+    console.error("Get user by ID error:", e);
+    return rejectWithValue(e.message);
+  }
+});
+
 export const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -94,6 +123,27 @@ export const authSlice = createSlice({
       .addCase(loginUser.rejected, (state, action) => {
         state.status = "failed";
         state.message = action.payload || "Registration failed."; // Hata mesajını kaydet
+      })
+      .addCase(updateUser.pending, (state) => {
+        state.status = "loading";
+      }).addCase(updateUser.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.user = action.payload; // Kullanıcı bilgilerini store'a kaydet
+        localStorage.setItem("user", JSON.stringify(action.payload)); // Kullanıcı bilgilerini local storage
+
+      }).addCase(updateUser.rejected, (state, action) => {
+        state.status = "failed";
+        state.message = action.payload || "Update failed."; // Hata mesajını kaydet
+      }).addCase(getUserByID.pending, (state) => {
+        state.status = "loading";
+      }).addCase(getUserByID.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.user = action.payload; // Kullanıcı bilgilerini store'a kaydet
+        localStorage.setItem("user", JSON.stringify(action.payload)); // Kullanıcı bilgilerini local storage
+
+      }).addCase(getUserByID.rejected, (state, action) => {
+        state.status = "failed";
+        state.message = action.payload || "Get user failed."; // Hata mesajını kaydet
       });
   },
 });
