@@ -8,6 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 
 import { registerScheme } from '../../validation/scheme'
 import { Link, useNavigate } from 'react-router-dom'
+import toast from 'react-hot-toast'
 
 
 const Register = () => {
@@ -31,7 +32,8 @@ const Register = () => {
 
   useEffect(() => {
     if (status === "succeeded") {
-      console.log("Başarılı");
+      
+      toast.success("Kayıt Başarılı. Anasayfaya yönlendiriliyorsunuz.")
       setTimeout(() => {
         navigate("/")
       }, 2000)

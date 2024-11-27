@@ -27,7 +27,7 @@ const Login = () => {
 
   useEffect(() => {
     if (status === "succeeded") {
-      console.log("Başarılı");
+
       toast.success("Giriş Başarılı. Anasayfaya yönlendiriliyorsunuz.")
       setTimeout(() => {
         navigate("/")

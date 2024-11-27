@@ -44,6 +44,7 @@ export const registerUser = createAsyncThunk(
         notifications: [],
         clubs: [],
         phoneNumber: null,
+        identity: null,
       };
 
       await setDoc(usersRef, userData);
@@ -71,10 +72,8 @@ export const loginUser = createAsyncThunk(
       const userDoc = await getDoc(userRef);
 
       if (userDoc.exists()) {
-        toast.success("Başarıyla Giriş Yaptınız Yeeey.");
         return userDoc.data();
       } else {
-        toast.error("Kullanıcı bulunamadı.");
         return rejectWithValue("User not found");
       }
     } catch (e) {
@@ -121,7 +120,7 @@ export const sendResetPasswordEmail = createAsyncThunk(
   "auth/sendResetPasswordEmail",
   async (email, { rejectWithValue }) => {
     try {
-      await sendPasswordResetEmail(auth,email);
+      await sendPasswordResetEmail(auth, email);
       toast.success("Şifre sıfırlama e-postası gönderildi.");
     } catch (e) {
       console.error("Send reset password email error:", e);
@@ -184,7 +183,8 @@ export const authSlice = createSlice({
       .addCase(getUserByID.rejected, (state, action) => {
         state.status = "failed";
         state.message = action.payload || "Get user failed."; // Hata mesajını kaydet
-      }).addCase(sendResetPasswordEmail.pending, (state) => {
+      })
+      .addCase(sendResetPasswordEmail.pending, (state) => {
         state.status = "loading";
       })
       .addCase(sendResetPasswordEmail.fulfilled, (state) => {

@@ -10,7 +10,7 @@ const ProfileComplete = ({ user, setIsActive }) => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const dispatch = useDispatch();
 
- 
+
 
   const onSubmit = (data) => {
     const userData = {
@@ -29,8 +29,13 @@ const ProfileComplete = ({ user, setIsActive }) => {
 
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white rounded-lg shadow-lg w-96 p-6">
-        <h2 className="text-xl font-semibold mb-4">Hoş Geldin Kullanıcı</h2>
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-y-4">
+
+        <div className="flex flex-col border-b-2 gap-y-3">
+
+          <h2 className="text-xl font-semibold ">Hoş Geldin, <span className="text-primary font-semibold text-xl animate-pulse">{user.displayName}</span></h2>
+          <span className="text-sm  text-neutral-400  mb-4 flex">Sistemi kullabilmek için gerekli bilgileri doldurmanız ve kaydetmeniz gerekmektedir.</span>
+        </div>
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-y-4 mt-4">
           {/* Telefon Numarası */}
           <div>
             <label className="block mb-1 font-medium">Telefon Numaranız</label>
@@ -105,7 +110,7 @@ const ProfileComplete = ({ user, setIsActive }) => {
             </select>
             {errors.class && <p className="text-red-500 text-sm">{errors.class.message}</p>}
           </div>
-          <span className="text-sm">Sistemi kullabilmek için gerekli bilgileri doldurmanız ve kaydetmeniz gerekmektedir.</span>
+
           {/* Butonlar */}
           <div className="flex justify-end">
             <button
