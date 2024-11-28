@@ -2,7 +2,8 @@ import AdminLayout from "../layouts/AdminLayout";
 import { roleLoader } from "../loaders/roleLoader";
 import AdminAnnouncement from "../pages/Admin/Announcement/AdminAnnouncement";
 import AdminClubs from "../pages/Admin/Clubs/AdminClubs";
-import AdminClubsCheck from "../pages/Admin/Clubs/AdminClubsCheck";
+import AdminClubsApplies from "../pages/Admin/Clubs/AdminClubsApplies";
+
 
 import HomeDash from "../pages/Admin/Dashboard/HomeDash";
 import AdminEvent from "../pages/Admin/Events/AdminEvent";
@@ -44,8 +45,8 @@ export const AdminRoutes = {
             loader: () => roleLoader(["admin"])
         },
         {
-            path:"clubs-check",
-            element: <AdminClubsCheck />,
+            path:"clubs-applies",
+            element: <AdminClubsApplies />,
             loader: () => roleLoader(["admin"])
         }
 
