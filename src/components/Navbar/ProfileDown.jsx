@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux'
 import { Fragment, useState } from 'react';
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { FaUser } from "react-icons/fa";
+import { useAccount } from '../../hooks/useAccount'
 
 
 const ProfileDown = () => {
@@ -24,7 +25,8 @@ const ProfileDown = () => {
       console.log(err);
     }
   }
-  const { user } = useSelector(state => state.auth)
+  const user = useAccount();
+
 
   return (
 
@@ -49,6 +51,19 @@ const ProfileDown = () => {
           anchor="bottom end"
           className="bg-white w-48 rounded-md shadow-xl border p-3 flex flex-col gap-y-2 mt-2"
         >
+          {
+            user.role == "admin" && (
+              <MenuItem>
+              <Link
+                className="block  transition-colors text-sm data-[focus]:bg-neutral-100  px-2 py-1 rounded-md"
+                to="/admin"
+              >
+                Admin Panel
+              </Link>
+            </MenuItem>
+            )
+          }
+          
           <MenuItem>
             <Link
               className="block transition-colors text-sm data-[focus]:bg-neutral-100 px-2 py-1 rounded-md"
@@ -89,6 +104,7 @@ const ProfileDown = () => {
               Ayarlar
             </Link>
           </MenuItem>
+         
           <MenuItem>
             <Link
               onClick={exitHandle}
