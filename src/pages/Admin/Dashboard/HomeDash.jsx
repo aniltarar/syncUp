@@ -2,15 +2,13 @@ import React from 'react'
 import { useAdmin } from '../../../hooks/useAdmin'
 import { useSelector } from 'react-redux';
 import { useAccount } from '../../../hooks/useAccount';
-import { FaCalendarDay } from "react-icons/fa6";
-import { FaUsers } from "react-icons/fa";
-import { FaBullhorn } from "react-icons/fa";
+import { FaUsers, FaBullhorn } from "react-icons/fa";
 import { MdFeedback } from "react-icons/md";
-import { IoLogOut } from "react-icons/io5";
-import { FaPeopleRoof } from "react-icons/fa6";
-import { FaClipboardCheck } from "react-icons/fa6";
-import { FaArrowTrendUp } from "react-icons/fa6";
-// Bileşen ismini büyük harfle başlayacak şekilde değiştirdik
+import { FaPeopleRoof, FaClipboardCheck, FaArrowTrendUp, FaCalendarDay } from "react-icons/fa6";
+
+
+
+
 const TopSection = ({ user, applies }) => {
   return (
     <>
@@ -22,19 +20,22 @@ const TopSection = ({ user, applies }) => {
       <div className="grid grid-cols-3 grid-rows-2  gap-5">
 
         <div className='border shadow p-3 bg-neutral-100 rounded-md '>
+
           <div className=' flex items-center justify-between border-b-2 mb-4'>
-            <h2 className='text-2xl font-semibold text-primary'>Toplam Kullanıcı Sayısı</h2>
+            <h2 className='text-2xl  text-black'>Toplam Kullanıcı Sayısı</h2>
             <FaUsers size={22} className='text-primary' />
           </div>
-          <div className="flex items-center gap-x-3 bg-white p-3 rounded-lg w-full bg-white p-3 rounded-lg">
+
+          <div className="flex items-center gap-x-3 bg-white p-3 rounded-lg w-full ">
             <span className='text-3xl font-bold text-primary'>123</span>
             <span className='text-xl'>Aktif Kullanıcı</span>
           </div>
+
         </div>
 
         <div className='border shadow p-3 bg-neutral-100 rounded-md'>
           <div className=' flex items-center justify-between border-b-2  mb-4'>
-            <h2 className='text-2xl text-primary'>Toplam Kulüp Sayısı</h2>
+            <h2 className='text-2xl text-black'>Toplam Kulüp Sayısı</h2>
             <FaPeopleRoof size={22} className='text-primary' />
           </div>
           <div className="flex items-center gap-x-3 bg-white p-3 rounded-lg w-full">
@@ -45,7 +46,7 @@ const TopSection = ({ user, applies }) => {
 
         <div className='border shadow p-3 bg-neutral-100 rounded-md'>
           <div className=' flex items-center justify-between border-b-2  mb-4'>
-            <h2 className='text-2xl text-primary'>Toplam Etkinlik Sayısı</h2>
+            <h2 className='text-2xl text-black'>Toplam Etkinlik Sayısı</h2>
             <FaCalendarDay size={22} className='text-primary' />
           </div>
           <div className="flex items-center gap-x-3 bg-white p-3 rounded-lg w-full">
@@ -56,7 +57,7 @@ const TopSection = ({ user, applies }) => {
 
         <div className='border shadow p-3 bg-neutral-100 rounded-md'>
           <div className=' flex items-center justify-between border-b-2  mb-4'>
-            <h2 className='text-2xl text-primary'>Toplam Duyuru Sayısı</h2>
+            <h2 className='text-2xl text-black'>Toplam Duyuru Sayısı</h2>
             <FaBullhorn size={22} className='text-primary' />
           </div>
           <div className="flex items-center gap-x-3 bg-white p-3 rounded-lg w-full">
@@ -67,7 +68,7 @@ const TopSection = ({ user, applies }) => {
 
         <div className='border shadow p-3 bg-neutral-100 rounded-md'>
           <div className=' flex items-center justify-between border-b-2  mb-4'>
-            <h2 className='text-2xl text-primary'>Toplam Geri Bildirim Sayısı</h2>
+            <h2 className='text-2xl text-black'>Toplam Geri Bildirim Sayısı</h2>
             <MdFeedback size={22} className='text-primary' />
           </div>
           <div className="flex items-center gap-x-3 bg-white p-3 rounded-lg w-full">
@@ -78,7 +79,7 @@ const TopSection = ({ user, applies }) => {
 
         <div className='border shadow p-3 bg-neutral-100 rounded-md'>
           <div className=' flex items-center justify-between border-b-2  mb-4'>
-            <h2 className='text-2xl text-primary'>Bekleyen Kulüp Onayları</h2>
+            <h2 className='text-2xl text-black'>Bekleyen Kulüp Onayları</h2>
             <FaClipboardCheck size={22} className='text-primary' />
           </div>
           <div className="flex items-center justify-between bg-white p-3 rounded-lg  ">
@@ -102,7 +103,7 @@ const MidSection = () => {
         {/* Sol taraf: Popüler kulüpler listesi */}
         <div className="flex flex-col bg-neutral-100 shadow-lg rounded-lg p-6">
           <div className="flex items-center justify-between mb-4">
-            <span className="text-2xl  font-semibold text-primary">En Popüler Kulüpler</span>
+            <span className="text-2xl  font-semibold text-black">En Popüler Kulüpler</span>
             <FaArrowTrendUp size={30} className="text-primary" />
           </div>
           <ul className="space-y-3">

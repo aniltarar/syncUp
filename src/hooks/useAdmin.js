@@ -6,6 +6,6 @@ export const useAdmin = () => {
     const dispatch = useDispatch();
     useEffect(() => {
         Promise.all([dispatch(getApplies()),]);  
-    }, []);
+    }, [dispatch]);
     
 }

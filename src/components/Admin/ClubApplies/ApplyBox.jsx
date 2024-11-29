@@ -1,30 +1,56 @@
-import React from 'react'
+import React, {  useState } from 'react';
+import ApplyDetails from '../../Modals/ApplyDetails';
+import { useDispatch } from 'react-redux';
+import { rejectApply, successApply } from '../../../redux/slices/adminSlice';
 
-const ApplyBox = () => {
-    return (
-        <div className='px-4 py-2 bg-neutral-300 border flex flex-col justify-between '>
-            <div className='flex flex-col gap-y-3'>
-                <div className='flex items-center justify-between'>
-                    <div className='p-10  bg-blue-500'></div>
-                    <div>
 
-                        <h2 className='text-lg font-semibold'>Club Name : KULÜP ADI</h2>
+const ApplyBox = ({ apply }) => {
+  const statusWord = {
+    pending: "Beklemede",
+    success: "Onaylandı",
+    rejected: "Reddedildi",
+  };
+  const statusColor = {
+    pending: "font-semibold text-yellow-500",
+    success: "font-semibold text-green-500",
+    rejected: "font-semibold text-red-500",
+  };
 
-                    </div>
-                </div>
+const [isOpen, setIsOpen] = useState(false);
+const dispatch = useDispatch();
 
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi nostrum quae voluptatum delectus sed repellat ducimus a molestias deserunt fugit.</p>
-            </div>
-            <div className='text-end'>
-                <h3>Club Leader</h3>
-                <p>Leader Name</p>
-            </div>
-            <div className='gap-x-2 flex'>
-                <button className='bg-green-500 text-white px-4 py-2 rounded-md'>Accept</button>
-                <button className='bg-red-500 text-white px-4 py-2 rounded-md'>Reject</button>
-            </div>
-        </div>
-    )
+const handleOpen = () => {
+  setIsOpen(true);
 }
 
-export default ApplyBox
+
+  return (
+    <>
+    {
+      isOpen && <ApplyDetails apply={apply} setIsOpen={setIsOpen} />
+    }
+    <div key={apply.id} className="grid grid-cols-6 px-4 py-3 bg-neutral-100 rounded-lg items-center ">
+      <span >{apply.clubName}</span>
+      <span>{apply.clubDescription.slice(0, 17)}...</span>
+      <span>{apply.createdByName}</span>
+      <img
+        src={apply.clubLogo}
+        style={{ width: "100px" ,}}
+        alt={`${apply.clubName} kulüp logosu`}
+        />
+      {/* Durum göstergesi */}
+
+      <span  className={`${statusColor[apply.status]}`}>
+        {statusWord[apply.status]}
+      </span>
+      <div className="flex items-center justify-center gap-x-2">
+        <button className="bg-gray-500 text-white px-4 py-2 rounded-md" onClick={handleOpen}>Detay</button>
+        <button className="bg-green-500 text-white px-4 py-2 rounded-md" onClick={()=>dispatch(successApply(apply.id))}>Onayla</button>
+        <button className="bg-red-500 text-white px-4 py-2 rounded-md" onClick={()=>dispatch(rejectApply(apply.id))}>Reddet</button>
+      </div>
+    </div>
+        </>
+  );
+};
+
+export default ApplyBox;

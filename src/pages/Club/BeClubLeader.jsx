@@ -3,12 +3,13 @@ import { useAccount } from '../../hooks/useAccount';
 import { useForm } from 'react-hook-form';
 import IdentityComplete from '../../components/Modals/IdentityComplete';
 import { useDispatch } from 'react-redux';
-import { createClubApply } from '../../redux/slices/clubSlice';
+import { createApply } from '../../redux/slices/applySlice';
+
 
 const BeClubLeader = () => {
 
   const user = useAccount();
-  const { register, handleSubmit, reset,formState: { errors } } = useForm();
+  const { register, handleSubmit, reset, formState: { errors } } = useForm();
   const [hasIdentity, setHasIdentity] = useState(null);
 
   useEffect(() => {
@@ -18,6 +19,7 @@ const BeClubLeader = () => {
   }, [user])
 
   const dispatch = useDispatch();
+
 
   const onSubmit = async (data) => {
 
@@ -38,14 +40,10 @@ const BeClubLeader = () => {
       clubDescription: data.clubDescription,
       clubLogo: fileData.secure_url,
       createdBy: user.uid,
-      leaders: [user.uid],
-      members: [],
-      waitingRoom: [],
+      createdByName: user.displayName,
       status: "pending"
     }
-    dispatch(createClubApply(clubData));
-
-    
+    dispatch(createApply(clubData));
     reset();
   }
 
