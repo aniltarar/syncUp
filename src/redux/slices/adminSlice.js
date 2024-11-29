@@ -10,18 +10,18 @@ const initialState = {
   users: [],
   announcuments: [],
   feedbacks: [],
-  clubApplies: [],
+  applies: [],
 };
 
-export const getClubApplies = createAsyncThunk(
-  "admin/getClubApplies",
+
+export const getApplies = createAsyncThunk(
+  "admin/getApplies",
   async (_, { rejectWithValue }) => {
     try {
-      const clubsRef = collection(db, "clubs");
-      const appliesQuery = query(clubsRef, where("status", "==", "pending"));
-      const clubAplies = await getDocs(appliesQuery);
-      const applies = clubAplies.docs.map((doc) => doc.data());
-      return applies;
+      const appliesRef = collection(db, "applies");
+      const applies = await getDocs(appliesRef);
+      const appliesData = applies.docs.map((doc) => doc.data());
+      return appliesData;
     } catch (e) {
       return rejectWithValue(e.message);
     }
@@ -33,17 +33,18 @@ export const adminSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getClubApplies.pending, (state, action) => {
-      state.status = "loading";
-    });
-    builder.addCase(getClubApplies.fulfilled, (state, action) => {
-      state.status = "success";
-      state.clubApplies = action.payload;
-    });
-    builder.addCase(getClubApplies.rejected, (state, action) => {
-      state.status = "failed";
-      state.message = action.payload;
-    });
+    builder
+      .addCase(getApplies.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(getApplies.fulfilled, (state, action) => {
+        state.status = "success";
+        state.applies = action.payload;
+      })
+      .addCase(getApplies.rejected, (state, action) => {
+        state.status = "failed";
+        state.message = action.payload;
+      });
   },
 });
 

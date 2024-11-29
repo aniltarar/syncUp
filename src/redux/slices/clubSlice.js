@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 const initialState = {
   status: "idle",
   clubs: [],
-  myApplyClubs: [],
+  applies: [],
   message: "",
 };
 
@@ -13,8 +13,8 @@ export const createClubApply = createAsyncThunk(
   "club/createClubApply",
   async (data,{rejectWithValue}) => {
     try {
-      const clubRef = doc(collection(db, "clubs"));
-      await setDoc(clubRef, data);
+      const applyRef = doc(collection(db, "applies"));
+      await setDoc(applyRef, data);
       toast.success("Kulüp başvurunuz başarıyla gönderildi!");
       return data;
     } catch (error) {
@@ -35,7 +35,7 @@ export const clubSlice = createSlice({
     });
     builder.addCase(createClubApply.fulfilled, (state, action) => {
       state.status = "idle";
-      state.myApplyClubs.push(action.payload);
+      state.applies.push(action.payload);
       state.message = "Club applied successfully sended!";
     });
     builder.addCase(createClubApply.rejected, (state, action) => {

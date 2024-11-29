@@ -13,21 +13,22 @@ import { FaClipboardCheck } from "react-icons/fa6";
 
 const AdminSideBar = () => {
   return (
-    <aside className='bg-neutral-100 min-h-screen w-72  flex flex-col items-center   '>
+    <aside className='bg-neutral-100 min-h-screen w-72  flex flex-col items-center border-r-2  '>
       <Link to="/admin">
         <img src={syncUp} alt="syncUp Logo" className=' p-5  border-b-[2px] hover:animate-pulse' />
       </Link>
-      <div className='flex flex-col gap-3 mt-10 p-5'>
+      <div className='flex flex-col gap-3  p-5'>
         <Link to="/admin" className='flex items-center  gap-x-3 text-slate-800 rounded-md transition-colors text-start px-4 py-2 bg-neutral-300 hover:bg-neutral-400  '>
           <MdDashboard size={22} /> Hızlı Erişim Paneli</Link>
+          <Link to="/admin/users" className='flex items-center  gap-x-3 text-slate-800 rounded-md transition-colors text-start  px-4 py-2 bg-neutral-300 hover:bg-neutral-400 '>
+          <FaUsers size={22} />Kullanıcılar
+        </Link>
         <Link to="/admin/clubs" className='flex items-center gap-x-3 text-slate-800 rounded-md transition-colors text-start  px-4 py-2 bg-neutral-300  hover:bg-neutral-400 '>
           <FaPeopleRoof size={22} /> Kulüpler
         </Link>
         <Link to="/admin/events" className='flex items-center gap-x-3 text-slate-800 rounded-md transition-colors text-start  px-4 py-2 bg-neutral-300 hover:bg-neutral-400 '>
           <FaCalendarDay size={22} />Etkinlikler</Link>
-        <Link to="/admin/users" className='flex items-center  gap-x-3 text-slate-800 rounded-md transition-colors text-start  px-4 py-2 bg-neutral-300 hover:bg-neutral-400 '>
-          <FaUsers size={22} />Kullanıcılar
-        </Link>
+       
         <Link to="/admin/announcements" className='flex items-center  gap-x-3 text-slate-800 rounded-md transition-colors text-start  px-4 py-2 bg-neutral-300 hover:bg-neutral-400 '>
           <FaBullhorn size={22} />Duyurular
         </Link>
