@@ -56,6 +56,11 @@ const AdminClubsApplies = () => {
         <span>Durum</span>
         <span >İşlemler</span>
       </div>
+
+    {
+      filteredApplies?.length === 0 && <div className='bg-neutral-100 p-3 rounded-lg'>SyncUp sistemi üzerinde hiç kulüp başvurusu yapılmamış. Kullanıcılara bu özellikten bahsedin.</div>
+    }
+
       {
         filteredApplies?.map((apply,index) => (
           <ApplyBox key={index} apply={apply} />

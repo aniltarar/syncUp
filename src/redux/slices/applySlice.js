@@ -21,7 +21,6 @@ export const createApply = createAsyncThunk(
         ...data,
       }
       await setDoc(applyRef, applyData);
-      dispatch(getApplies());
       toast.success("Kulüp başvurunuz başarıyla gönderildi!");
       return data;
     } catch (error) {
