@@ -1,11 +1,12 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { getApplies } from "../redux/slices/adminSlice";
+import { getApplies, getClubs } from "../redux/slices/adminSlice";
+
 
 export const useAdmin = () => {
     const dispatch = useDispatch();
     useEffect(() => {
-        Promise.all([dispatch(getApplies()),]);  
+        Promise.all([dispatch(getApplies()),dispatch(getClubs())]);  
     }, [dispatch]);
     
 }

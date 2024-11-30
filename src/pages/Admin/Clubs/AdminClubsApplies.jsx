@@ -39,8 +39,8 @@ const AdminClubsApplies = () => {
       </div>
 
       <div className='flex items-center justify-between gap-x-3'>
-        <input type="text" placeholder='Kulüp Adı, Başvuran Kişi' className='px-2 py-1 outline-none w-full rounded-lg' value={search} onChange={(e)=>setSearch(e.target.value)} />
-        <select value={status} onChange={(e)=>setStatus(e.target.value)} className='w-1/6 px-2 py-1 rounded-lg '>
+        <input type="text" placeholder='Kulüp Adı, Başvuran Kişi' className='px-2 py-1 outline-none w-full rounded-lg border' value={search} onChange={(e)=>setSearch(e.target.value)} />
+        <select value={status} onChange={(e)=>setStatus(e.target.value)} className='w-1/6 px-2 py-1 rounded-lg border '>
           <option value="all">Tümü</option>
           <option value="pending">Beklemede</option>
           <option value="success">Onaylanmış</option>

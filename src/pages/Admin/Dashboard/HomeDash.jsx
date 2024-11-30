@@ -9,7 +9,7 @@ import { FaPeopleRoof, FaClipboardCheck, FaArrowTrendUp, FaCalendarDay } from "r
 
 
 
-const TopSection = ({ user, applies }) => {
+const TopSection = ({ user, applies ,clubs}) => {
   return (
     <>
       <div className="w-full bg-neutral-100 p-3 rounded-lg">
@@ -39,7 +39,7 @@ const TopSection = ({ user, applies }) => {
             <FaPeopleRoof size={22} className='text-primary' />
           </div>
           <div className="flex items-center gap-x-3 bg-white p-3 rounded-lg w-full">
-            <span className='text-3xl font-bold text-primary'>12</span>
+            <span className='text-3xl font-bold text-primary'>{clubs?.length}</span>
             <span className='text-xl'>Aktif Kulüp</span>
           </div>
         </div>
@@ -162,13 +162,13 @@ const MidSection = () => {
 const HomeDash = () => {
 
   useAdmin();
-  const { applies } = useSelector((state) => state.admin);
+  const { applies,clubs } = useSelector((state) => state.admin);
   const user = useAccount();
 
   return (
     <div className='p-3 flex flex-col gap-y-5'>
 
-      <TopSection user={user} applies={applies} />
+      <TopSection user={user} applies={applies} clubs={clubs} />
       <MidSection />
     </div>
   )

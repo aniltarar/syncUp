@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { collection, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
+import { collection, doc, getDocs, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebaseConfig";
 import toast from "react-hot-toast";
 
@@ -14,6 +14,7 @@ const initialState = {
   applies: [],
 };
 
+// Apply / Başvuru servisleri
 
 export const getApplies = createAsyncThunk(
   "admin/getApplies",
@@ -28,7 +29,6 @@ export const getApplies = createAsyncThunk(
     }
   }
 );
-
 
 export const successApply = createAsyncThunk(
   "apply/successApply",
@@ -64,6 +64,22 @@ export const rejectApply = createAsyncThunk(
   }
 );
 
+// Club/ Kulüp servisleri
+
+export const getClubs = createAsyncThunk(
+  "admin/getClubs",
+  async (_, { rejectWithValue }) => {
+    try {
+      const clubsRef = collection(db, "clubs");
+      const clubs = await getDocs(clubsRef);
+      const clubsData = clubs.docs.map((doc) => doc.data());
+      return clubsData;
+    } catch (e) {
+      return rejectWithValue(e.message);
+    }
+  }
+);
+
 export const adminSlice = createSlice({
   name: "admin",
   initialState,
@@ -78,6 +94,37 @@ export const adminSlice = createSlice({
         state.applies = action.payload;
       })
       .addCase(getApplies.rejected, (state, action) => {
+        state.status = "failed";
+        state.message = action.payload;
+      })
+      .addCase(getClubs.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(getClubs.fulfilled, (state, action) => {
+        state.status = "success";
+        state.clubs = action.payload;
+      })
+      .addCase(getClubs.rejected, (state, action) => {
+        state.status = "failed";
+        state.message = action.payload;
+      })
+      .addCase(successApply.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(successApply.fulfilled, (state, action) => {
+        state.status = "success";
+      })
+      .addCase(successApply.rejected, (state, action) => {
+        state.status = "failed";
+        state.message = action.payload;
+      })
+      .addCase(rejectApply.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(rejectApply.fulfilled, (state, action) => {
+        state.status = "success";
+      })
+      .addCase(rejectApply.rejected, (state, action) => {
         state.status = "failed";
         state.message = action.payload;
       });

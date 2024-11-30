@@ -2,6 +2,8 @@ import React, {  useState } from 'react';
 import ApplyDetails from '../../Modals/ApplyDetails';
 import { useDispatch } from 'react-redux';
 import { rejectApply, successApply } from '../../../redux/slices/adminSlice';
+import toast from 'react-hot-toast';
+import { createClub } from '../../../redux/slices/clubSlice';
 
 
 const ApplyBox = ({ apply }) => {
@@ -23,6 +25,31 @@ const handleOpen = () => {
   setIsOpen(true);
 }
 
+const handleSuccess = (apply) => () => {
+  if(apply.status ==="success" || apply.status ==="rejected"){
+    if(apply.status ==="success"){
+      toast.error("Bu kulüp zaten onaylanmış!");
+    }else{
+      toast.error("Bu kulüp zaten reddedilmiş!");
+    }
+    return;
+  }
+  dispatch(successApply(apply.id))
+  dispatch(createClub(apply));
+}
+
+const handleReject = (apply) => () => {
+
+  if(apply.status ==="success" || apply.status ==="rejected"){
+    if(apply.status ==="success"){
+      toast.error("Bu kulüp zaten onaylanmış!");
+    }else{
+      toast.error("Bu kulüp zaten reddedilmiş!");
+    }
+    return;
+  }
+  dispatch(rejectApply(apply.id))
+}
 
   return (
     <>
@@ -45,8 +72,8 @@ const handleOpen = () => {
       </span>
       <div className="flex items-center justify-center gap-x-2">
         <button className="bg-gray-500 text-white px-4 py-2 rounded-md" onClick={handleOpen}>Detay</button>
-        <button className="bg-green-500 text-white px-4 py-2 rounded-md" onClick={()=>dispatch(successApply(apply.id))}>Onayla</button>
-        <button className="bg-red-500 text-white px-4 py-2 rounded-md" onClick={()=>dispatch(rejectApply(apply.id))}>Reddet</button>
+        <button className="bg-green-500 text-white px-4 py-2 rounded-md" onClick={handleSuccess(apply)}>Onayla</button>
+        <button className="bg-red-500 text-white px-4 py-2 rounded-md" onClick={handleReject(apply)}>Reddet</button>
       </div>
     </div>
         </>

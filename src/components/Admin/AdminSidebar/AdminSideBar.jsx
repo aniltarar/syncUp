@@ -18,24 +18,24 @@ const AdminSideBar = () => {
         <img src={syncUp} alt="syncUp Logo" className=' p-5  border-b-[2px] hover:animate-pulse' />
       </Link>
       <div className='flex flex-col gap-3  p-5'>
-        <Link to="/admin" className='flex items-center  gap-x-3 text-slate-800 rounded-md transition-colors text-start px-4 py-2 bg-neutral-300 hover:bg-neutral-400  '>
+        <Link to="/admin" className='flex items-center  gap-x-3 text-slate-800 rounded-md transition-colors text-start px-4 py-2 bg-neutral-200 hover:bg-neutral-300  '>
           <MdDashboard size={22} /> Hızlı Erişim Paneli</Link>
-          <Link to="/admin/users" className='flex items-center  gap-x-3 text-slate-800 rounded-md transition-colors text-start  px-4 py-2 bg-neutral-300 hover:bg-neutral-400 '>
+          <Link to="/admin/users" className='flex items-center  gap-x-3 text-slate-800 rounded-md transition-colors text-start  px-4 py-2 bg-neutral-200 hover:bg-neutral-300 '>
           <FaUsers size={22} />Kullanıcılar
         </Link>
-        <Link to="/admin/clubs" className='flex items-center gap-x-3 text-slate-800 rounded-md transition-colors text-start  px-4 py-2 bg-neutral-300  hover:bg-neutral-400 '>
+        <Link to="/admin/clubs" className='flex items-center gap-x-3 text-slate-800 rounded-md transition-colors text-start  px-4 py-2 bg-neutral-200  hover:bg-neutral-300 '>
           <FaPeopleRoof size={22} /> Kulüpler
         </Link>
-        <Link to="/admin/events" className='flex items-center gap-x-3 text-slate-800 rounded-md transition-colors text-start  px-4 py-2 bg-neutral-300 hover:bg-neutral-400 '>
+        <Link to="/admin/events" className='flex items-center gap-x-3 text-slate-800 rounded-md transition-colors text-start  px-4 py-2 bg-neutral-200 hover:bg-neutral-300 '>
           <FaCalendarDay size={22} />Etkinlikler</Link>
        
-        <Link to="/admin/announcements" className='flex items-center  gap-x-3 text-slate-800 rounded-md transition-colors text-start  px-4 py-2 bg-neutral-300 hover:bg-neutral-400 '>
+        <Link to="/admin/announcements" className='flex items-center  gap-x-3 text-slate-800 rounded-md transition-colors text-start  px-4 py-2 bg-neutral-200 hover:bg-neutral-300 '>
           <FaBullhorn size={22} />Duyurular
         </Link>
-        <Link to="/admin/feedbacks" className='flex items-center  gap-x-3 text-slate-800 rounded-md transition-colors text-start  px-4 py-2 bg-neutral-300 hover:bg-neutral-400 '>
+        <Link to="/admin/feedbacks" className='flex items-center  gap-x-3 text-slate-800 rounded-md transition-colors text-start  px-4 py-2 bg-neutral-200 hover:bg-neutral-300 '>
           <MdFeedback size={22} />Geri Bildirimler
         </Link>
-        <Link to="/admin/clubs-applies" className='flex items-center  gap-x-3 text-slate-800 rounded-md transition-colors text-start  px-4 py-2 bg-neutral-300 hover:bg-neutral-400 '>
+        <Link to="/admin/clubs-applies" className='flex items-center  gap-x-3 text-slate-800 rounded-md transition-colors text-start  px-4 py-2 bg-neutral-200 hover:bg-neutral-300 '>
           <FaClipboardCheck size={22} />Kulüp Onayları
         </Link>
       </div>
