@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAccount } from '../../hooks/useAccount';
-import { facultiesAndDepartments } from '../../hooks/data/universityData';
+import { facultiesAndDepartments } from '../../data/universityData';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { sendResetPasswordEmail, updateUser } from '../../redux/slices/authSlice';

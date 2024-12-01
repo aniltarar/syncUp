@@ -6,12 +6,12 @@ import toast from "react-hot-toast";
 const initialState = {
   status: "idle",
   message: "",
+  users: [],
+  applies: [],
   clubs: [],
   events: [],
-  users: [],
   announcuments: [],
   feedbacks: [],
-  applies: [],
 };
 
 // Apply / Başvuru servisleri
@@ -80,6 +80,57 @@ export const getClubs = createAsyncThunk(
   }
 );
 
+// Users / Kullanıcı servisleri
+
+export const getUsers = createAsyncThunk(
+  "admin/getUsers",
+  async (_, { rejectWithValue }) => {
+    try {
+      const usersRef = collection(db, "users");
+      const users = await getDocs(usersRef);
+      const usersData = users.docs.map((doc) => doc.data());
+      return usersData;
+    } catch (e) {
+      return rejectWithValue(e.message);
+    }
+  }
+);
+
+export const disableUser = createAsyncThunk(
+  "admin/disableUser",
+  async (uid, { dispatch, rejectWithValue }) => {
+    try {
+      const userRef = doc(db, "users", uid);
+      await updateDoc(userRef, { disabled: true });
+      toast.success("Kullanıcı başarıyla engellendi!");
+      // İşlem tamamlandıktan sonra getUsers'i çağır
+      dispatch(getUsers());
+      return uid;
+    } catch (error) {
+      toast.error("Kullanıcı engellenemedi! Lütfen tekrar deneyin.");
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const enableUser = createAsyncThunk(
+  "admin/enableUser",
+  async (uid, { dispatch, rejectWithValue }) => {
+    try {
+      const userRef = doc(db, "users", uid);
+      await updateDoc(userRef, { disabled: false });
+      toast.success("Kullanıcı başarıyla engellenenler listesinden çıkarıldı!");
+      // İşlem tamamlandıktan sonra getUsers'i çağır
+      dispatch(getUsers());
+      return uid;
+    } catch (error) {
+      toast.error("Kullanıcı engellenenler listesinden çıkarılamadı! Lütfen tekrar deneyin.");
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+
 export const adminSlice = createSlice({
   name: "admin",
   initialState,
@@ -97,17 +148,7 @@ export const adminSlice = createSlice({
         state.status = "failed";
         state.message = action.payload;
       })
-      .addCase(getClubs.pending, (state) => {
-        state.status = "loading";
-      })
-      .addCase(getClubs.fulfilled, (state, action) => {
-        state.status = "success";
-        state.clubs = action.payload;
-      })
-      .addCase(getClubs.rejected, (state, action) => {
-        state.status = "failed";
-        state.message = action.payload;
-      })
+
       .addCase(successApply.pending, (state) => {
         state.status = "loading";
       })
@@ -125,6 +166,28 @@ export const adminSlice = createSlice({
         state.status = "success";
       })
       .addCase(rejectApply.rejected, (state, action) => {
+        state.status = "failed";
+        state.message = action.payload;
+      })
+      .addCase(getClubs.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(getClubs.fulfilled, (state, action) => {
+        state.status = "success";
+        state.clubs = action.payload;
+      })
+      .addCase(getClubs.rejected, (state, action) => {
+        state.status = "failed";
+        state.message = action.payload;
+      })
+      .addCase(getUsers.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(getUsers.fulfilled, (state, action) => {
+        state.status = "success";
+        state.users = action.payload;
+      })
+      .addCase(getUsers.rejected, (state, action) => {
         state.status = "failed";
         state.message = action.payload;
       });

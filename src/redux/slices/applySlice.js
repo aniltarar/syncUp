@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { collection, doc, setDoc, updateDoc } from "firebase/firestore";
+import { arrayUnion, collection, doc, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebaseConfig";
 import toast from "react-hot-toast";
 import { getApplies } from "./adminSlice";
@@ -14,6 +14,7 @@ const initialState = {
 export const createApply = createAsyncThunk(
   "club/createClubApply",
   async (data,{rejectWithValue}) => {
+
     try {
       const applyRef = doc(collection(db, "applies"));
       const applyData = {
@@ -22,6 +23,13 @@ export const createApply = createAsyncThunk(
       }
       await setDoc(applyRef, applyData);
       toast.success("Kulüp başvurunuz başarıyla gönderildi!");
+
+      const setUserApplies = doc(db, "users", data.createdBy);
+      await updateDoc(setUserApplies, {
+        applies: arrayUnion(applyRef.id),
+      });
+
+
       return data;
     } catch (error) {
       console.log(error);

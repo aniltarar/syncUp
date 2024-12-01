@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { useForm } from "react-hook-form";
 import { updateUser } from "../../redux/slices/authSlice";
 import { useDispatch } from "react-redux";
-import { facultiesAndDepartments } from "../../hooks/data/universityData";
+import { facultiesAndDepartments } from "../../data/universityData";
 
 const ProfileComplete = ({ user, setIsActive }) => {
   const [selectedFaculty, setSelectedFaculty] = useState(null);

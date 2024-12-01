@@ -10,6 +10,10 @@ import { FaPeopleRoof, FaClipboardCheck, FaArrowTrendUp, FaCalendarDay } from "r
 
 
 const TopSection = ({ user, applies ,clubs}) => {
+
+  const filteredPendingApplies = applies?.filter(apply => apply.status === 'pending');
+
+
   return (
     <>
       <div className="w-full bg-neutral-100 p-3 rounded-lg">
@@ -85,7 +89,7 @@ const TopSection = ({ user, applies ,clubs}) => {
           <div className="flex items-center justify-between bg-white p-3 rounded-lg  ">
             <div className='flex items-center justify-between gap-x-3'>
 
-              <span className='text-3xl font-bold text-primary '>{applies?.length}</span>
+              <span className='text-3xl font-bold text-primary '>{filteredPendingApplies?.length}</span>
               <span className='text-xl'>Bekleyen Kulüp</span>
             </div>
             <button className='px-4 py-2 bg-primary rounded-lg hover:bg-primary-hover'>İncele</button>
@@ -160,10 +164,13 @@ const MidSection = () => {
 };
 
 const HomeDash = () => {
-
-  useAdmin();
-  const { applies,clubs } = useSelector((state) => state.admin);
+  // Servisler
   const user = useAccount();
+  useAdmin();
+// Redux Stateler
+const { applies,clubs } = useSelector((state) => state.admin);
+
+
 
   return (
     <div className='p-3 flex flex-col gap-y-5'>

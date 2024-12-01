@@ -14,3 +14,5 @@ export const facultiesAndDepartments = {
     "Diş Hekimliği Fakültesi": ["Diş Hekimliği"],
     "Sağlık Bilimleri Fakültesi": ["Hemşirelik", "Beslenme ve Diyetetik"],
   };
+
+  

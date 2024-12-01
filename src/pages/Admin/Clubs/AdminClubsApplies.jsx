@@ -6,29 +6,35 @@ import { useAccount } from '../../../hooks/useAccount';
 import { getApplies } from '../../../redux/slices/adminSlice';
 
 const AdminClubsApplies = () => {
+  //Servisler
+  const user = useAccount();
 
-  
-  useAdmin();
+  // Redux State
   const { applies } = useSelector((state) => state.admin);
+
+  // UseState
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState('all');
 
-  const user = useAccount();
 
+  const dispatch = useDispatch();
 
 
   const filteredApplies = applies?.filter(apply => {
-  
+
     const matchSearch = apply.clubName.toLowerCase().includes(search.toLowerCase()) || apply.createdByName.toLowerCase().includes(search.toLowerCase());
 
-    const matchStatus = status==="all" || apply.status === status;
+    const matchStatus = status === "all" || apply.status === status;
 
     return matchSearch && matchStatus;
   }
   )
 
+  // getApplies servis
+useEffect(() => {
+  dispatch(getApplies());
+}, [dispatch])
 
-  
   // Kulüp Adı , Açıklaması , Başvuran Kişi, Logo , İşlemler
 
   return (
@@ -39,8 +45,8 @@ const AdminClubsApplies = () => {
       </div>
 
       <div className='flex items-center justify-between gap-x-3'>
-        <input type="text" placeholder='Kulüp Adı, Başvuran Kişi' className='px-2 py-1 outline-none w-full rounded-lg border' value={search} onChange={(e)=>setSearch(e.target.value)} />
-        <select value={status} onChange={(e)=>setStatus(e.target.value)} className='w-1/6 px-2 py-1 rounded-lg border '>
+        <input type="text" placeholder='Kulüp Adı, Başvuran Kişi' className='px-2 py-1 outline-none w-full rounded-lg border' value={search} onChange={(e) => setSearch(e.target.value)} />
+        <select value={status} onChange={(e) => setStatus(e.target.value)} className='w-1/6 px-2 py-1 rounded-lg border '>
           <option value="all">Tümü</option>
           <option value="pending">Beklemede</option>
           <option value="success">Onaylanmış</option>
@@ -57,12 +63,12 @@ const AdminClubsApplies = () => {
         <span >İşlemler</span>
       </div>
 
-    {
-      filteredApplies?.length === 0 && <div className='bg-neutral-100 p-3 rounded-lg'>SyncUp sistemi üzerinde hiç kulüp başvurusu yapılmamış. Kullanıcılara bu özellikten bahsedin.</div>
-    }
+      {
+        filteredApplies?.length === 0 && <div className='bg-neutral-100 p-3 rounded-lg'>SyncUp sistemi üzerinde hiç kulüp başvurusu yapılmamış. Kullanıcılara bu özellikten bahsedin.</div>
+      }
 
       {
-        filteredApplies?.map((apply,index) => (
+        filteredApplies?.map((apply, index) => (
           <ApplyBox key={index} apply={apply} />
         ))
       }

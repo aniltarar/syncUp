@@ -33,8 +33,6 @@ const BeClubLeader = () => {
       body: formData
     });
     const fileData = await response.json();
-
-
     const clubData = {
       clubName: data.clubName,
       clubDescription: data.clubDescription,
@@ -44,6 +42,7 @@ const BeClubLeader = () => {
       status: "pending"
     }
     dispatch(createApply(clubData));
+
     reset();
   }
 
@@ -80,11 +79,11 @@ const BeClubLeader = () => {
             <input
               type="text"
               placeholder='Yazılım ve Bilişim Kulübü'
-              {...register("clubName", { required: "Kulüp Adını Girmek Zorunludurç", maxLength: { value: 50, message: "Kulüp adı en fazla 50 karakter olabilir." }, minLength: { value: 5, message: "Kulüp adı en az 5 karakter olabilir." } })}
+              {...register("clubName", { required: "Kulüp Adını Girmek Zorunludur.", maxLength: { value: 50, message: "Kulüp adı en fazla 50 karakter olabilir." }, minLength: { value: 5, message: "Kulüp adı en az 5 karakter olabilir." } })}
               className={`mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:ring-primary focus:border-primary ${errors.name ? "border-red-500" : "border-gray-300"
                 }`}
             />
-            {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
+            {errors.clubName && <p className="text-red-500 text-sm">{errors.clubName.message}</p>}
           </div>
 
           {/* Kulüp Açıklaması */}
@@ -93,11 +92,13 @@ const BeClubLeader = () => {
 
             <textarea
               placeholder='Kulübünüzün amacı, hedefleri ve faaliyetleri hakkında kısa bir açıklama yapınız.'
+
+
               {...register("clubDescription", { required: "Kulübün Açıklamasını Girmek Zorunludur", maxLength: { value: 500, message: "Kulüp açıklaması en fazla 500 karakter olabilir." }, minLength: { value: 10, message: "Kulüp açıklaması en az 10 karakter olabilir." } })}
               className={`mt-1 block w-full px-4 py-2 border rounded-md shadow-sm min-h-20 max-h-60 focus:ring-primary focus:border-primary ${errors.description ? "border-red-500" : "border-gray-300"
                 }`}
             />
-            {errors.description && <p className="text-red-500 text-sm">{errors.description.message}</p>}
+            {errors.clubDescription && <p className="text-red-500 text-sm">{errors.clubDescription.message}</p>}
 
 
           </div>
@@ -111,7 +112,7 @@ const BeClubLeader = () => {
               className={`mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:ring-primary focus:border-primary ${errors.logo ? "border-red-500" : "border-gray-300"
                 }`}
             />
-            {errors.logo && <p className="text-red-500 text-sm">{errors.logo.message}</p>}
+            {errors.clubLogo && <p className="text-red-500 text-sm">{errors.clubLogo.message}</p>}
           </div>
 
 
