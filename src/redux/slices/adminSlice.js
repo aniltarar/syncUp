@@ -1,5 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { collection, doc, getDocs, updateDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import { db } from "../../firebase/firebaseConfig";
 import toast from "react-hot-toast";
 
@@ -80,6 +88,80 @@ export const getClubs = createAsyncThunk(
   }
 );
 
+export const getClubLeadersName = createAsyncThunk(
+  "admin/getClubLeadersName",
+  async (clubID, { rejectWithValue }) => {
+    try {
+      // ilgili kulübün liderlerinin ID'sini al
+      const clubRef = doc(db, "clubs", clubID);
+      const club = await getDoc(clubRef);
+      const { leaders } = club.data(); // liderlerin ID'si
+
+      // liderlerin ID'sini kullanarak liderlerin isimlerini al
+      const leadersRef = collection(db, "users");
+      const leadersQuery = query(leadersRef, where("uid", "in", leaders));
+      const leadersData = await getDocs(leadersQuery);
+      const leadersName = leadersData.docs.map((doc) => doc.data().displayName);
+      return leadersName;
+    } catch (e) {
+      return rejectWithValue(e.message);
+    }
+  }
+);
+
+export const getClubMembers = createAsyncThunk(
+  "admin/getClubMembers",
+  async (clubID, { rejectWithValue }) => {
+    try {
+      // ilgili kulübün üyelerinin ID'sini al
+      const clubRef = doc(db, "clubs", clubID);
+      const club = await getDoc(clubRef);
+      const { members } = club.data(); // üyelerin ID'si
+
+      // üyelerin ID'sini kullanarak üyelerin isimlerini al
+      const membersRef = collection(db, "users");
+      const membersQuery = query(membersRef, where("uid", "in", members));
+      const membersData = await getDocs(membersQuery);
+      const membersName = membersData.docs.map((doc) => doc.data().displayName);
+
+      return membersName;
+    } catch (e) {
+      return rejectWithValue(e.message);
+    }
+  }
+);
+
+export const setClubActive = createAsyncThunk(
+  "admin/setClubActive",
+  async (clubID, { rejectWithValue,dispatch }) => {
+    try {
+      const clubRef = doc(db, "clubs", clubID);
+      await updateDoc(clubRef, { status: "active" });
+      toast.success("Kulüp başarıyla aktif hale getirildi!");
+      dispatch(getClubs());
+      return clubID;
+    } catch (e) {
+      return rejectWithValue(e.message);
+    }
+  }
+);
+
+export const setClubPassive = createAsyncThunk(
+  "admin/setClubPassive",
+  async (clubID, { rejectWithValue, dispatch }) => {
+    try {
+      const clubRef = doc(db, "clubs", clubID);
+      await updateDoc(clubRef, { status: "passive" });
+      toast.success("Kulüp başarıyla pasif hale getirildi!");
+      dispatch(getClubs());
+      return clubID;
+    } catch (e) {
+      return rejectWithValue(e.message);
+    }
+  }
+);
+
+
 // Users / Kullanıcı servisleri
 
 export const getUsers = createAsyncThunk(
@@ -124,12 +206,13 @@ export const enableUser = createAsyncThunk(
       dispatch(getUsers());
       return uid;
     } catch (error) {
-      toast.error("Kullanıcı engellenenler listesinden çıkarılamadı! Lütfen tekrar deneyin.");
+      toast.error(
+        "Kullanıcı engellenenler listesinden çıkarılamadı! Lütfen tekrar deneyin."
+      );
       return rejectWithValue(error.message);
     }
   }
 );
-
 
 export const adminSlice = createSlice({
   name: "admin",

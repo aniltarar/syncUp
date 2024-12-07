@@ -59,13 +59,21 @@ const AdminUsers = () => {
 
   return (
     <div className='flex flex-col p-3 gap-y-5'>
-      <div className='bg-neutral-100 p-3 rounded-lg'>
-        <h1 className='text-2xl'>Hoş Geldiniz, <span className='text-primary font-semibold'>Admin</span></h1>
-        <p>Admin paneli üzerinden kullanıcılar hakkında bilgi edinebilirsiniz.</p>
-        <p>Kullanıcıların <span className='font-semibold hover:cursor-pointer'>mail adresine</span> veya <span className='font-semibold hover:cursor-pointer'>telefon numarasına</span> tıklayarak iletişime geçebilirsiniz.</p>
+      <div className='bg-neutral-100 p-3 rounded-lg flex flex-row items-center justify-between gap-y-2'>
+        <div>
+
+          <h1 className='text-2xl  font-semibold'>Kullanıcı Paneli </h1>
+          <p className='text-sm'>Admin paneli üzerinden kullanıcılar hakkında bilgi edinebilirsiniz.</p>
+          <p className='text-sm'>Kullanıcıların <span className='font-semibold hover:cursor-pointer '>mail adresine</span> veya <span className='font-semibold hover:cursor-pointer'>telefon numarasına</span> tıklayarak iletişime geçebilirsiniz.</p>
+        </div>
+        <div className=' text-xl flex items-center gap-x-2 animate-pulse'>
+          <span className='text-2xl font-semibold text-primary '>{sortedUsers?.length}</span>  Kullanıcı Mevcut
+        </div>
       </div>
 
       <div className='bg-neutral-100 p-3 rounded-lg shadow'>
+        <div className='flex w-full items-center justify-between mb-3'>
+        </div>
         <div className='grid grid-cols-6 gap-3 items-center'>
           <input type="text" placeholder='Kullanıcı Adı, Mail Adresi, Telefon Numarası'
             className='col-span-3 px-2 py-1 outline-none rounded-lg border'
@@ -73,7 +81,7 @@ const AdminUsers = () => {
 
           <select value={faculty} onChange={(e) => setFaculty(e.target.value)}
             className='col-span-1 px-2 py-1 rounded-lg border'>
-            <option value="">Fakülte</option>
+            <option value="">Tüm Fakülteler</option>
             {Object.keys(facultiesAndDepartments).map(faculty => (
               <option key={faculty} value={faculty}>{faculty}</option>
             ))}
@@ -81,7 +89,7 @@ const AdminUsers = () => {
 
           <select value={department} onChange={(e) => setDepartment(e.target.value)}
             className='col-span-1 px-2 py-1 rounded-lg border'>
-            <option value="">Bölüm</option>
+            <option value="">Tüm Bölümler</option>
             {faculty && facultiesAndDepartments[faculty].map(department => (
               <option key={department} value={department}>{department}</option>
             ))}
@@ -94,6 +102,7 @@ const AdminUsers = () => {
             <option value="user">Üye</option>
             <option value="leader">Kulüp Lideri</option>
           </select>
+
         </div>
       </div>
 
@@ -109,9 +118,9 @@ const AdminUsers = () => {
         <span className="justify-self-center">Hesap Durumu</span>
       </div>
 
-      {sortedUsers?.map(user => (
-        <div key={user.uid} className='grid grid-cols-7 gap-3 items-center bg-neutral-100 p-3 rounded-lg shadow'>
-          <span className="justify-self-start">{user.displayName.toUpperCase()}</span>
+      {sortedUsers?.map((user) => (
+        <div key={user.uid} className='grid grid-cols-7 gap-3 items-center bg-neutral-100 p-3 rounded-lg shadow min-h-16 max-h-20'>
+          <span className="justify-self-start"> {user.displayName.toUpperCase()}</span>
           <a href={`mailto:${user.email}`} className='hover:text-blue-500 justify-self-start'>{user.email}</a>
           <a href={`tel:${user.phoneNumber}`} className='hover:text-blue-500 justify-self-start'>{user.phoneNumber}</a>
           <span>{user.faculty}</span>

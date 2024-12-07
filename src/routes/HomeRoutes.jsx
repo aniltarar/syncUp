@@ -24,9 +24,9 @@ export const HomeRoutes = {
         { path: "announcments", element: <Announcement />, loader: () => roleLoader(["user", "leader", "admin"]) },
         { path: "settings", element: <Settings />, loader: () => roleLoader(["user", "leader", "admin"]) },
        
-        { path: "my-clubs", element: <MyClubs />, loader: () => roleLoader(["user", "leader"]) },
-        { path: "passed-events", element: <PassedEvents />, loader: () => roleLoader(["user", "leader"]) },
-        { path: "be-club-leader", element: <BeClubLeader />, loader: () => roleLoader(["user"]) },
+        { path: "my-clubs", element: <MyClubs />, loader: () => roleLoader(["user", "leader","admin"]) },
+        { path: "passed-events", element: <PassedEvents />, loader: () => roleLoader(["user", "leader","admin"]) },
+        { path: "be-club-leader", element: <BeClubLeader />, loader: () => roleLoader(["user","leader","admin"]) },
 
 
 

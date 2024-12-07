@@ -59,7 +59,7 @@ const Profile = () => {
       <div className="min-h-screen w-full  flex flex-col items-center py-5 px-4 ">
 
         {/* Header */}
-        <div className="max-w-3xl w-full bg-white shadow-md rounded-lg p-5 border flex items-center justify-between">
+        <div className="max-w-4xl w-full bg-white shadow-md rounded-lg p-5 border flex items-center justify-between">
           <div className='flex flex-col '>
 
             <h1 className="text-2xl font-bold text-gray-800 text-start">Profilini Düzenle</h1>
@@ -70,7 +70,7 @@ const Profile = () => {
         {/* Form */}
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="max-w-3xl w-full bg-white shadow-md rounded-lg p-6 mt-6 space-y-3 border"
+          className="max-w-4xl w-full bg-white shadow-md rounded-lg p-6 mt-6 space-y-3 border"
 
         >
           {/* Ad Soyad */}

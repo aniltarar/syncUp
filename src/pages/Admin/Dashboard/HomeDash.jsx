@@ -5,11 +5,10 @@ import { useAccount } from '../../../hooks/useAccount';
 import { FaUsers, FaBullhorn } from "react-icons/fa";
 import { MdFeedback } from "react-icons/md";
 import { FaPeopleRoof, FaClipboardCheck, FaArrowTrendUp, FaCalendarDay } from "react-icons/fa6";
+import { Link } from 'react-router-dom';
 
 
-
-
-const TopSection = ({ user, applies ,clubs}) => {
+const TopSection = ({ user, applies ,clubs,users}) => {
 
   const filteredPendingApplies = applies?.filter(apply => apply.status === 'pending');
 
@@ -25,22 +24,22 @@ const TopSection = ({ user, applies ,clubs}) => {
 
         <div className='border shadow p-3 bg-neutral-100 rounded-md '>
 
-          <div className=' flex items-center justify-between border-b-2 mb-4'>
-            <h2 className='text-2xl  text-black'>Toplam Kullanıcı Sayısı</h2>
-            <FaUsers size={22} className='text-primary' />
+          <div className=' flex items-center justify-between border-b-2 mb-4 pb-2'>
+            <h2 className='text-xl  text-black font-semibold'>Toplam Kullanıcı Sayısı</h2>
+            <FaUsers size={22} className='text-black' />
           </div>
 
           <div className="flex items-center gap-x-3 bg-white p-3 rounded-lg w-full ">
-            <span className='text-3xl font-bold text-primary'>123</span>
+            <span className='text-3xl font-bold text-primary'>{users.length}</span>
             <span className='text-xl'>Aktif Kullanıcı</span>
           </div>
 
         </div>
 
         <div className='border shadow p-3 bg-neutral-100 rounded-md'>
-          <div className=' flex items-center justify-between border-b-2  mb-4'>
-            <h2 className='text-2xl text-black'>Toplam Kulüp Sayısı</h2>
-            <FaPeopleRoof size={22} className='text-primary' />
+          <div className=' flex items-center justify-between border-b-2 pb-2  mb-4'>
+            <h2 className='text-xl text-black font-semibold '>Toplam Kulüp Sayısı</h2>
+            <FaPeopleRoof size={22} className='text-black' />
           </div>
           <div className="flex items-center gap-x-3 bg-white p-3 rounded-lg w-full">
             <span className='text-3xl font-bold text-primary'>{clubs?.length}</span>
@@ -49,9 +48,9 @@ const TopSection = ({ user, applies ,clubs}) => {
         </div>
 
         <div className='border shadow p-3 bg-neutral-100 rounded-md'>
-          <div className=' flex items-center justify-between border-b-2  mb-4'>
-            <h2 className='text-2xl text-black'>Toplam Etkinlik Sayısı</h2>
-            <FaCalendarDay size={22} className='text-primary' />
+          <div className=' flex items-center justify-between border-b-2 pb-2  mb-4'>
+            <h2 className='text-xl text-black font-semibold'>Toplam Etkinlik Sayısı</h2>
+            <FaCalendarDay size={22} className='text-black' />
           </div>
           <div className="flex items-center gap-x-3 bg-white p-3 rounded-lg w-full">
             <span className='text-3xl font-bold text-primary'>20</span>
@@ -60,9 +59,9 @@ const TopSection = ({ user, applies ,clubs}) => {
         </div>
 
         <div className='border shadow p-3 bg-neutral-100 rounded-md'>
-          <div className=' flex items-center justify-between border-b-2  mb-4'>
-            <h2 className='text-2xl text-black'>Toplam Duyuru Sayısı</h2>
-            <FaBullhorn size={22} className='text-primary' />
+          <div className=' flex items-center justify-between border-b-2 pb-2  mb-4'>
+            <h2 className='text-xl text-black font-semibold'>Toplam Duyuru Sayısı</h2>
+            <FaBullhorn size={22} className='text-black' />
           </div>
           <div className="flex items-center gap-x-3 bg-white p-3 rounded-lg w-full">
             <span className='text-3xl font-bold text-primary'>46</span>
@@ -71,9 +70,9 @@ const TopSection = ({ user, applies ,clubs}) => {
         </div>
 
         <div className='border shadow p-3 bg-neutral-100 rounded-md'>
-          <div className=' flex items-center justify-between border-b-2  mb-4'>
-            <h2 className='text-2xl text-black'>Toplam Geri Bildirim Sayısı</h2>
-            <MdFeedback size={22} className='text-primary' />
+          <div className=' flex items-center justify-between border-b-2 pb-2 mb-4'>
+            <h2 className='text-xl text-black font-semibold'>Toplam Geri Bildirim Sayısı</h2>
+            <MdFeedback size={22} className='text-black' />
           </div>
           <div className="flex items-center gap-x-3 bg-white p-3 rounded-lg w-full">
             <span className='text-3xl font-bold text-primary'>26</span>
@@ -82,17 +81,17 @@ const TopSection = ({ user, applies ,clubs}) => {
         </div>
 
         <div className='border shadow p-3 bg-neutral-100 rounded-md'>
-          <div className=' flex items-center justify-between border-b-2  mb-4'>
-            <h2 className='text-2xl text-black'>Bekleyen Kulüp Onayları</h2>
-            <FaClipboardCheck size={22} className='text-primary' />
+          <div className=' flex items-center justify-between border-b-2 pb-2 mb-4'>
+            <h2 className='text-xl text-black font-semibold'>Bekleyen Kulüp Onayları</h2>
+            <FaClipboardCheck size={22} className='text-black' />
           </div>
           <div className="flex items-center justify-between bg-white p-3 rounded-lg  ">
             <div className='flex items-center justify-between gap-x-3'>
 
               <span className='text-3xl font-bold text-primary '>{filteredPendingApplies?.length}</span>
-              <span className='text-xl'>Bekleyen Kulüp</span>
+              <span className='text-xl'>Bekleyen Kulüp Onayı</span>
             </div>
-            <button className='px-4 py-2 bg-primary rounded-lg hover:bg-primary-hover'>İncele</button>
+            <Link to="/admin/clubs-applies" className='px-4 py-2 bg-primary rounded-lg hover:bg-primary-hover'>İncele</Link>
           </div>
         </div>
       </div>
@@ -108,7 +107,7 @@ const MidSection = () => {
         <div className="flex flex-col bg-neutral-100 shadow-lg rounded-lg p-6">
           <div className="flex items-center justify-between mb-4">
             <span className="text-2xl  font-semibold text-black">En Popüler Kulüpler</span>
-            <FaArrowTrendUp size={30} className="text-primary" />
+            <FaArrowTrendUp size={30} className="text-black" />
           </div>
           <ul className="space-y-3">
             {["Kulüp 1", "Kulüp 2", "Kulüp 3", "Kulüp 4", "Kulüp 5"].map((club, index) => (
@@ -126,8 +125,8 @@ const MidSection = () => {
         {/* Sağ taraf: Tamamlanan Son Etkinlikler */}
         <div className="flex flex-col bg-neutral-100 shadow-lg rounded-lg p-6">
           <div className="flex items-center justify-between mb-4">
-            <span className="text-2xl font-semibold text-primary">Tamamlanan Son Etkinlikler</span>
-            <FaCalendarDay size={30} className="text-primary" />
+            <span className="text-2xl font-semibold text-black">Tamamlanan Son Etkinlikler</span>
+            <FaCalendarDay size={30} className="text-black" />
           </div>
           <ul className="space-y-3">
             {[
@@ -168,14 +167,13 @@ const HomeDash = () => {
   const user = useAccount();
   useAdmin();
 // Redux Stateler
-const { applies,clubs } = useSelector((state) => state.admin);
+const { applies,clubs,users } = useSelector(state => state.admin);
 
 
 
   return (
     <div className='p-3 flex flex-col gap-y-5'>
-
-      <TopSection user={user} applies={applies} clubs={clubs} />
+      <TopSection user={user} applies={applies} clubs={clubs} users={users} />
       <MidSection />
     </div>
   )

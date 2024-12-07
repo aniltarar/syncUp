@@ -30,9 +30,7 @@ export const registerUser = createAsyncThunk(
         password
       );
       const user = userCredential.user;
-
       await updateProfile(user, { displayName: displayName });
-
       // Firestore'a veri ekleme
       const usersRef = doc(collection(db, "users"), user.uid);
 

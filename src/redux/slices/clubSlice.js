@@ -30,6 +30,7 @@ export const createClub = createAsyncThunk(
         members: [],
         events: [],
         announcements: [],
+        status: "active",
       };
       await setDoc(clubRef, clubData);
 
