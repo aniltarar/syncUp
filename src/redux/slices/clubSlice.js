@@ -3,11 +3,12 @@ import {
   arrayUnion,
   collection,
   doc,
+  getDocs,
   setDoc,
   updateDoc,
 } from "firebase/firestore";
 import { db } from "../../firebase/firebaseConfig";
-import toast from "react-hot-toast";
+
 const initialState = {
   status: "idle",
   clubs: [],
@@ -15,6 +16,15 @@ const initialState = {
   message: "",
 };
 
+// Tüm Kulüpleri getirme işlemi
+export const fetchClubs = createAsyncThunk("club/fetchClubs", async () => {
+  const clubsRef = collection(db, "clubs");
+  const clubsSnapshot = await getDocs(clubsRef);
+  const clubs = clubsSnapshot.docs.map((doc) => doc.data());
+  return clubs;
+});
+
+// Club oluşturma / Apply'i onaylama işlemi
 export const createClub = createAsyncThunk(
   "club/createClub",
   async (applyData, { rejectWithValue }) => {
@@ -52,7 +62,19 @@ export const clubSlice = createSlice({
   name: "club",
   initialState,
   reducers: {},
-  extraReducers: (builder) => {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchClubs.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchClubs.fulfilled, (state, action) => {
+        state.status = "success";
+        state.clubs = action.payload;
+      })
+      .addCase(fetchClubs.rejected, (state) => {
+        state.status = "failed";
+      });
+  },
 });
 
 export const {} = clubSlice.actions;

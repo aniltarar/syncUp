@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useAccount } from '../../../hooks/useAccount';
 import { useDispatch, useSelector } from 'react-redux';
 import { getClubs } from '../../../redux/slices/adminSlice';
-import ClubBox from '../../../components/Clubs/ClubBox';
+import ClubBox from '../../../components/Admin/Clubs/ClubBox';
 import { FaSortAlphaDown, FaSortAlphaDownAlt } from 'react-icons/fa';
+import autoAnimate from '@formkit/auto-animate';
 
 const AdminClubs = () => {
   const user = useAccount();
   const dispatch = useDispatch();
   const { clubs } = useSelector((state) => state.admin);
+
 
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState('all');
@@ -31,6 +33,16 @@ const AdminClubs = () => {
       return b.clubName.localeCompare(a.clubName);
     }
   });
+
+  const clubsContainerRef = useRef(null);
+
+  useEffect(() => {
+    if (clubsContainerRef.current) {
+      autoAnimate(clubsContainerRef.current);
+    }
+
+  }, [clubsContainerRef])
+
 
   useEffect(() => {
     dispatch(getClubs());
@@ -83,9 +95,12 @@ const AdminClubs = () => {
         <span className="justify-self-center">Durum</span>
       </div>
 
-      {sortedClubs?.map((club) => (
-        <ClubBox key={club.id} club={club} />
-      ))}
+      <div ref={clubsContainerRef} className='flex flex-col gap-y-3'>
+
+        {sortedClubs?.map((club) => (
+          <ClubBox key={club.id} club={club} />
+        ))}
+      </div>
     </div>
   );
 };

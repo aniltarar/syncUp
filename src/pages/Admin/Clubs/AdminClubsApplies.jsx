@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useAdmin } from '../../../hooks/useAdmin';
 import { useDispatch, useSelector } from 'react-redux';
 import ApplyBox from '../../../components/Admin/ClubApplies/ApplyBox';
 import { useAccount } from '../../../hooks/useAccount';
 import { getApplies } from '../../../redux/slices/adminSlice';
 import { FaSortAlphaDown, FaSortAlphaDownAlt } from "react-icons/fa";
+import autoAnimate from '@formkit/auto-animate';
 
 const AdminClubsApplies = () => {
   // Servisler
@@ -20,10 +21,20 @@ const AdminClubsApplies = () => {
 
   const dispatch = useDispatch();
 
+  // Animasyon için ref
+  const appliesContainerRef = useRef(null);
+
   // getApplies servis
   useEffect(() => {
     dispatch(getApplies());
   }, [dispatch]);
+
+  // autoAnimate bağlama
+  useEffect(() => {
+    if (appliesContainerRef.current) {
+      autoAnimate(appliesContainerRef.current);
+    }
+  }, [appliesContainerRef]);
 
   // Sıralama fonksiyonu
   const toggleSortOrder = () => {
@@ -94,15 +105,17 @@ const AdminClubsApplies = () => {
         <span>İşlemler</span>
       </div>
 
-      {filteredApplies?.length === 0 && (
-        <div className='bg-neutral-100 p-3 rounded-lg'>
-          SyncUp sistemi üzerinde arama kriterlerinize uygun bir kulüp başvurusu bulunamadı.
-        </div>
-      )}
+      <div ref={appliesContainerRef} className='flex flex-col gap-y-3'>
+        {filteredApplies?.length === 0 && (
+          <div className='bg-neutral-100 p-3 rounded-lg'>
+            SyncUp sistemi üzerinde arama kriterlerinize uygun bir kulüp başvurusu bulunamadı.
+          </div>
+        )}
 
-      {filteredApplies?.map((apply, index) => (
-        <ApplyBox key={index} apply={apply} />
-      ))}
+        {filteredApplies?.map((apply, index) => (
+          <ApplyBox key={index} apply={apply} />
+        ))}
+      </div>
     </div>
   );
 };

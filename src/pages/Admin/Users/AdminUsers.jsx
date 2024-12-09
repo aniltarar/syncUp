@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { disableUser, enableUser, getUsers } from '../../../redux/slices/adminSlice';
 import { facultiesAndDepartments } from '../../../data/universityData';
 import { FaSortAlphaDown } from "react-icons/fa";
 import { FaSortAlphaDownAlt } from "react-icons/fa";
 import toast from 'react-hot-toast';
+import autoAnimate from '@formkit/auto-animate';
 
 const AdminUsers = () => {
   const dispatch = useDispatch();
@@ -22,10 +23,8 @@ const AdminUsers = () => {
   const [search, setSearch] = useState('');
   const [sortOrder, setSortOrder] = useState("asc"); // A-Z veya Z-A sıralama
 
-  useEffect(() => {
-    dispatch(getUsers());
-  }, [dispatch]);
 
+  
   const filteredUsers = users?.filter(user => {
     const matchFaculty = faculty === '' || user.faculty === faculty;
     const matchDepartment = department === '' || user.department === department;
@@ -56,6 +55,18 @@ const AdminUsers = () => {
       dispatch(disableUser(user.uid));
     }
   }
+
+  const userBoxRef = useRef(null);
+
+useEffect(() => {
+    if (userBoxRef.current) {
+      autoAnimate(userBoxRef.current);
+    }
+}, [userBoxRef]);
+
+  useEffect(() => {
+    dispatch(getUsers());
+  }, [dispatch]);
 
   return (
     <div className='flex flex-col p-3 gap-y-5'>
@@ -118,6 +129,9 @@ const AdminUsers = () => {
         <span className="justify-self-center">Hesap Durumu</span>
       </div>
 
+      <div ref={userBoxRef} className='flex flex-col gap-y-3'>
+
+     
       {sortedUsers?.map((user) => (
         <div key={user.uid} className='grid grid-cols-7 gap-3 items-center bg-neutral-100 p-3 rounded-lg shadow min-h-16 max-h-20'>
           <span className="justify-self-start"> {user.displayName.toUpperCase()}</span>
@@ -134,6 +148,7 @@ const AdminUsers = () => {
           </span>
         </div>
       ))}
+       </div>
 
     </div>
   );

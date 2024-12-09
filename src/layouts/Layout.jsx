@@ -11,7 +11,7 @@ const Layout = () => {
         {/* Statik Header'imiz. */}
         <Navbar/> 
         {/* İçeriye vereceğimiz sayfa */}
-        <div className="flex container mx-auto min-h-screen ">
+        <div className="flex container mx-auto mt-5 min-h-screen ">
           <Toaster position="top-center" />
             <Outlet/>
         </div>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { getClubLeadersName, setClubActive, setClubPassive } from '../../redux/slices/adminSlice';
+import { getClubLeadersName, setClubActive, setClubPassive } from '../../../redux/slices/adminSlice';
 
 const ClubBox = ({ club }) => {
   const dispatch = useDispatch();
