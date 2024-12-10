@@ -1,29 +1,44 @@
 import React, { useState } from 'react'
+import toast from 'react-hot-toast'
 import { CiSquareInfo } from 'react-icons/ci'
 import { FaCalendarDay, FaUsers } from 'react-icons/fa6'
 import { IoIosInformationCircleOutline } from 'react-icons/io'
 import { IoLocationSharp } from 'react-icons/io5'
 import { MdLogin } from 'react-icons/md'
-import ClubDetail from '../Modals/ClubDetail'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { applyMemberClub } from '../../redux/slices/clubSlice'
+
 
 const ClubCard = ({ club }) => {
 
-    const { clubName, clubLogo, events, members, clubDescription } = club
+    const { id, clubName, clubLogo, events, members, clubDescription } = club
+    const { user } = useSelector((state) => state.auth)
 
-    const [isOpen, setIsOpen] = useState(false)
 
-    const handleOpen = () => {
-        setIsOpen(true)
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
+
+    const handleMemberApply = () => {
+        if (!user) {
+            toast.error('Kulübe başvuru yapabilmek için giriş yapmalısınız.')
+            return;
+        }
+        // Kulübe üye başvurusu yap
+        const applyData = {
+            clubID: id,
+            userID: user.uid
+        }
+        dispatch(applyMemberClub(applyData))
     }
+
 
 
 
     return (
 
         <div className='flex flex-col  border shadow-lg rounded-lg items-center gap-y-2 '>
-            {
-                isOpen && <ClubDetail club={club} setIsOpen={setIsOpen} />
-            }
+
             <div className="badges flex w-full my-3 ml-3 gap-x-3">
                 <span className='px-2 py-1 bg-primary-light rounded-full text-sm hover:bg-primary-hover cursor-pointer'>Teknoloji</span>
                 <span className='px-2 py-1 bg-primary-light rounded-full text-sm hover:bg-primary-hover cursor-pointer'>Yazılım</span>
@@ -57,11 +72,16 @@ const ClubCard = ({ club }) => {
 
             </div>
             <div className="buttons flex items-center justify-center p-3 gap-x-3  bg-gray-100 w-full mt-auto ">
-                <button className='px-2 py-1 bg-neutral-300 rounded-lg flex items-center justify-center gap-x-2  w-full hover:bg-neutral-400' onClick={handleOpen}>
+                <button
+                    className='px-2 py-1 bg-neutral-300 rounded-lg
+                 flex items-center justify-center gap-x-2 
+                  w-full hover:bg-neutral-400'
+                    onClick={() => navigate(`/clubs/${club.id}`)}
+                >
                     <IoIosInformationCircleOutline size={20} />
                     <span>Detaylar</span>
                 </button>
-                <button className='px-2 py-1 bg-primary rounded-lg flex items-center justify-center gap-x-2  w-full'>
+                <button className='px-2 py-1 bg-primary rounded-lg flex items-center justify-center gap-x-2  w-full hover:bg-primary-hover' onClick={handleMemberApply}>
                     <MdLogin size={20} />
                     <span className='text-center '>Katıl</span>
                 </button>

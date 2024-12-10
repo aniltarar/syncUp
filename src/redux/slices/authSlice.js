@@ -20,9 +20,9 @@ export const registerUser = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     const { displayName, email, password } = data;
 
-    console.log("Register Calıstı.");
+
     try {
-      console.log("Register Calıstı.");
+
       // Kullanıcı oluşturma
       const userCredential = await createUserWithEmailAndPassword(
         auth,
