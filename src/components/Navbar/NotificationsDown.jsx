@@ -1,30 +1,30 @@
-import React, { Fragment, useEffect, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react';
 import { useAccount } from '../../hooks/useAccount';
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react';
 import { FaBell } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchNotifications } from '../../redux/slices/authSlice';
 import { Link } from 'react-router-dom';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+
+// relativeTime plugin'ini dahil ediyoruz
+dayjs.extend(relativeTime);
 
 const NotificationsDown = () => {
-
     const dispatch = useDispatch();
     const user = useAccount();
-    const { notifications } = useSelector(state => state.auth.user)
-    const [open, setOpen] = useState(false)
-
+    const { notifications } = useSelector(state => state.auth.user);
+    const [open, setOpen] = useState(false);
 
     const toggleOpen = () => {
         setOpen(!open); // open durumunu tersine çevirir
         dispatch(fetchNotifications(user.uid))
     };
 
-
     useEffect(() => {
         dispatch(fetchNotifications(user.uid))
-    }, [dispatch, user.uid])
-
-
+    }, [dispatch, user.uid]);
 
     return (
         <Menu>
@@ -47,16 +47,23 @@ const NotificationsDown = () => {
                     className="bg-white w-60 rounded-md shadow-xl border p-3 flex flex-col gap-y-2 mt-2"
                 >
                     {
-                        notifications && notifications.slice(0, 3).map(notification => (
-                            <MenuItem key={notification.id}>
-                                <Link to='/notifications' className='block transition-colors text-sm data-[focus]:bg-neutral-100 px-2 py-1 rounded-md'>
-                                    <div className='flex items-center justify-between'>
-                                        <h2 className="text-lg font-bold text-gray-800">{notification.title}</h2>
-                                        <span className="text-sm text-gray-500">{new Date(notification.date).toLocaleDateString()}</span>
-                                    </div>
-                                </Link>
-                            </MenuItem>
-                        ))
+                        notifications && notifications.slice(0, 3).map(notification => {
+                            // Eğer createdAt bir Firestore Timestamp ise toDate() kullan
+                            const notificationTime = notification.createdAt?.toDate 
+                                ? dayjs(notification.createdAt.toDate()).fromNow()  // fromNow() kullanarak zaman farkını alıyoruz
+                                : 'Geçersiz Tarih'; // Eğer toDate() fonksiyonu yoksa hata mesajı ver
+
+                            return (
+                                <MenuItem key={notification.id}>
+                                    <Link to='/notifications' className='block transition-colors text-sm data-[focus]:bg-neutral-100 px-2 py-1 rounded-md'>
+                                        <div className='flex items-center justify-between'>
+                                            <h2 className="text-lg font-bold text-gray-800">{notification.title}</h2>
+                                            <span className="text-sm text-gray-500">{notificationTime}</span> {/* Relative time'ı burada gösteriyoruz */}
+                                        </div>
+                                    </Link>
+                                </MenuItem>
+                            );
+                        })
                     }
 
                     <MenuItem className="mt-5 text-center block bg-neutral-200  transition-colors text-sm data-[focus]:bg-neutral-300  px-2 py-1 rounded-md">
@@ -65,7 +72,7 @@ const NotificationsDown = () => {
                 </MenuItems>
             </Transition>
         </Menu>
-    )
+    );
 }
 
-export default NotificationsDown
+export default NotificationsDown;

@@ -12,7 +12,7 @@ import { applyMemberClub } from '../../redux/slices/clubSlice'
 
 const ClubCard = ({ club }) => {
 
-    const { id, clubName, clubLogo, events, members, clubDescription } = club
+    const { id, clubName, clubLogo, events, members, clubDescription,createdAt } = club
     const { user } = useSelector((state) => state.auth)
 
 
@@ -44,7 +44,7 @@ const ClubCard = ({ club }) => {
                 <span className='px-2 py-1 bg-primary-light rounded-full text-sm hover:bg-primary-hover cursor-pointer'>Yazılım</span>
             </div>
             <div className="clubLogo p-3">
-                <img src={clubLogo} className='w-32 h-32 rounded-md border ' alt={`${clubName} kulübünün logosu.`} />
+                <img src={clubLogo} className='h-52 rounded-md border ' alt={`${clubName} kulübünün logosu.`} />
             </div>
             <div className="clubName text-lg font-semibold">{clubName}</div>
 

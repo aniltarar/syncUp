@@ -9,12 +9,13 @@ import { FiAward } from 'react-icons/fi'
 import { FaRegUserCircle } from 'react-icons/fa'
 import { CiInstagram, CiLinkedin, CiMail } from 'react-icons/ci'
 import toast from 'react-hot-toast'
+import dayjs from 'dayjs'
 
 const ClubDetail = () => {
     // Kulübün ID'sini almak için useParams hook'unu kullanın.
     const { id } = useParams()
     const { currentClub } = useSelector((state) => state.club)
-    const { clubName, clubLogo, events, members, clubDescription } = currentClub
+    const { clubName, clubLogo, events, members, clubDescription,createdAt } = currentClub
     const { user } = useSelector((state) => state.auth)
     const dispatch = useDispatch()
 
@@ -31,6 +32,9 @@ const ClubDetail = () => {
         }
         dispatch(applyMemberClub(applyData))
     }
+
+
+
 
 
 
@@ -133,7 +137,7 @@ const ClubDetail = () => {
                             <FaCalendarDay size={25} /> {events?.length} Üye
                         </span>
                         <span className='flex items-center gap-x-2'>
-                            <FiAward size={25} /> Kuruluş Tarihi : 10 Ekim 2021
+                            <FiAward size={25} /> {createdAt} Tarihinde Kuruldu
                         </span>
 
                     </div>

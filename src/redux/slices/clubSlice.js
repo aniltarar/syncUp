@@ -6,6 +6,7 @@ import {
   getDoc,
   getDocs,
   setDoc,
+  Timestamp,
   updateDoc,
 } from "firebase/firestore";
 import { db } from "../../firebase/firebaseConfig";
@@ -60,6 +61,7 @@ export const createClub = createAsyncThunk(
         clubName: applyData.clubName,
         clubDescription: applyData.clubDescription,
         clubLogo: applyData.clubLogo,
+        createdAt: Timestamp.now(),
         leaders: [applyData.createdBy],
         members: [],
         events: [],

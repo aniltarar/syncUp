@@ -7,12 +7,14 @@ import {
   getDocs,
   query,
   setDoc,
+  Timestamp,
   updateDoc,
   where,
 } from "firebase/firestore";
 import { db } from "../../firebase/firebaseConfig";
 import toast from "react-hot-toast";
 import { array } from "zod";
+import dayjs from "dayjs";
 
 const initialState = {
   status: "idle",
@@ -59,6 +61,7 @@ export const successApply = createAsyncThunk(
         id: notificationRef.id,
         from: "admin",
         to: createdBy,
+        createdAt: Timestamp.now(),
         title: "Kulüp Başvurusu Hakkında",
         message: `Tebrikler! ${clubName} kulübü için yaptığınız başvurunuz onaylandı!`,
         isRead: false,

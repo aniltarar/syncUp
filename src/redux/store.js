@@ -10,5 +10,9 @@ export const store = configureStore({
         club:clubReducer,
         apply:applyReducer,
         admin:adminReducer,
-    }
+    },
+    middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+        serializableCheck: false,
+    }),
 })
