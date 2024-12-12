@@ -26,6 +26,7 @@ const handleOpen = () => {
 }
 
 const handleSuccess = (apply) => () => {
+
   if(apply.status ==="success" || apply.status ==="rejected"){
     if(apply.status ==="success"){
       toast.error("Bu kulüp zaten onaylanmış!");
@@ -34,7 +35,7 @@ const handleSuccess = (apply) => () => {
     }
     return;
   }
-  dispatch(successApply(apply.id))
+  dispatch(successApply(apply))
   dispatch(createClub(apply));
 }
 

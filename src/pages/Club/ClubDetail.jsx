@@ -27,7 +27,7 @@ const ClubDetail = () => {
         // Kulübe üye başvurusu yap
         const applyData = {
             clubID: id,
-            userID: user.uid
+            userID: user.uid,
         }
         dispatch(applyMemberClub(applyData))
     }

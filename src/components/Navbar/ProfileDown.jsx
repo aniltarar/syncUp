@@ -52,13 +52,25 @@ const ProfileDown = () => {
           className="bg-white w-48 rounded-md shadow-xl border p-3 flex flex-col gap-y-2 mt-2"
         >
           {
-            user.role == "admin" && (
+            (user.role == "admin") && (
               <MenuItem>
               <Link
                 className="block  transition-colors text-sm data-[focus]:bg-neutral-100  px-2 py-1 rounded-md"
                 to="/admin"
               >
                 Admin Panel
+              </Link>
+            </MenuItem>
+            )
+          }
+          {
+            (user.role == "leader" || user.role=="admin") && (
+              <MenuItem>
+              <Link
+                className="block  transition-colors text-sm data-[focus]:bg-neutral-100  px-2 py-1 rounded-md"
+                to="/leader"
+              >
+                Kulüp Yönetimi
               </Link>
             </MenuItem>
             )

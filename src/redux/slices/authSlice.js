@@ -5,7 +5,17 @@ import {
   signInWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
-import { collection, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import {
+  arrayRemove,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  setDoc,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import { auth, db } from "../../firebase/firebaseConfig"; // auth ve db'yi import edin
 import toast from "react-hot-toast";
 
@@ -20,9 +30,7 @@ export const registerUser = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     const { displayName, email, password } = data;
 
-
     try {
-
       // Kullanıcı oluşturma
       const userCredential = await createUserWithEmailAndPassword(
         auth,
@@ -127,6 +135,69 @@ export const sendResetPasswordEmail = createAsyncThunk(
     }
   }
 );
+// Bildirim İşlemleri
+
+// Bildirimleri getir
+export const fetchNotifications = createAsyncThunk(
+  "auth/fetchNotifications",
+  async (uid, { rejectWithValue }) => {
+    try {
+      // Kullanıcıya ait bildirim ID'lerini getir
+      const userRef = doc(db, "users", uid);
+      const userDoc = await getDoc(userRef);
+      const { notifications } = userDoc.data(); // Kullanıcıya ait bildirimlerin ID dizisi
+
+      // notifications collection'undan bildirimleri getir
+      const notificationsRef = collection(db, "notifications");
+      const notifyQuery = query(
+        notificationsRef,
+        where("id", "in", notifications)
+      );
+      const notifySnapshot = await getDocs(notifyQuery);
+      const notificationsData = notifySnapshot.docs.map((doc) => doc.data());
+
+      return notificationsData;
+    } catch (e) {
+      return rejectWithValue(e.message);
+    }
+  }
+);
+// Bildirimi okundu olarak işaretle
+export const markAsRead = createAsyncThunk(
+  "auth/markAsRead",
+  async (data, { rejectWithValue,dispatch }) => {
+    const { uid, notificationID } = data;
+    try {
+      const notificationRef = doc(db, "notifications", notificationID);
+      await updateDoc(notificationRef, { isRead: true });
+
+
+      dispatch(fetchNotifications(uid));
+      toast.success("Bildirim okundu olarak işaretlendi.");
+      return notificationID;
+    } catch (e) {
+      return rejectWithValue(e.message);
+    }
+  }
+);
+
+export const deleteNotification = createAsyncThunk(
+  "auth/deleteNotification",
+  async (data, { rejectWithValue,dispatch }) => {
+    const { uid, notificationID } = data;
+    try {
+      const userRef = doc(db, "users", uid);
+      await updateDoc(userRef, {
+        notifications: arrayRemove(notificationID),
+      });
+      toast.success("Bildirim başarıyla silindi")
+      dispatch(fetchNotifications(uid));
+      return notificationID;
+    } catch (e) {
+      return rejectWithValue(e.message);
+    }
+  }
+);
 
 export const authSlice = createSlice({
   name: "auth",
@@ -191,7 +262,21 @@ export const authSlice = createSlice({
       .addCase(sendResetPasswordEmail.rejected, (state, action) => {
         state.status = "failed";
         state.message = action.payload || "Send reset password email failed."; // Hata mesajını kaydet
-      });
+      })
+      .addCase(fetchNotifications.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchNotifications.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.user.notifications = action.payload;
+        localStorage.setItem("user", JSON.stringify(state.user));
+      })
+      .addCase(fetchNotifications.rejected, (state, action) => {
+        state.status = "failed";
+        state.message = action.payload || "Fetch notifications failed.";
+      })
+
+
   },
 });
 

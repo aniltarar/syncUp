@@ -1,15 +1,18 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
+  arrayUnion,
   collection,
   doc,
   getDoc,
   getDocs,
   query,
+  setDoc,
   updateDoc,
   where,
 } from "firebase/firestore";
 import { db } from "../../firebase/firebaseConfig";
 import toast from "react-hot-toast";
+import { array } from "zod";
 
 const initialState = {
   status: "idle",
@@ -40,13 +43,33 @@ export const getApplies = createAsyncThunk(
 
 export const successApply = createAsyncThunk(
   "apply/successApply",
-  async (id, { dispatch, rejectWithValue }) => {
+  async (apply, { dispatch, rejectWithValue }) => {
+    const { id, createdBy, clubName } = apply;
     try {
+      // Apply onaylama işlemi
       const applyRef = doc(db, "applies", id);
       await updateDoc(applyRef, { status: "success" });
       toast.success("Kulüp onayınız başarıyla gerçekleşti!");
       // İşlem tamamlandıktan sonra getApplies'i çağır
       dispatch(getApplies());
+
+      // Kullanıcıya bildirim gönderme
+      const notificationRef = doc(collection(db, "notifications"));
+      const notificationData = {
+        id: notificationRef.id,
+        from: "admin",
+        to: createdBy,
+        title: "Kulüp Başvurusu Hakkında",
+        message: `Tebrikler! ${clubName} kulübü için yaptığınız başvurunuz onaylandı!`,
+        isRead: false,
+      };
+      // notifications collection'ına notificationData'yı ekle
+      await setDoc(notificationRef, notificationData);
+
+      const userRef = doc(db, "users", createdBy);
+      await updateDoc(userRef, {
+        notifications: arrayUnion(notificationRef.id),
+      });
       return id;
     } catch (error) {
       toast.error("Kulüp onayınız başarısız oldu! Lütfen tekrar deneyin.");
@@ -133,7 +156,7 @@ export const getClubMembers = createAsyncThunk(
 
 export const setClubActive = createAsyncThunk(
   "admin/setClubActive",
-  async (clubID, { rejectWithValue,dispatch }) => {
+  async (clubID, { rejectWithValue, dispatch }) => {
     try {
       const clubRef = doc(db, "clubs", clubID);
       await updateDoc(clubRef, { status: "active" });
@@ -160,7 +183,6 @@ export const setClubPassive = createAsyncThunk(
     }
   }
 );
-
 
 // Users / Kullanıcı servisleri
 
