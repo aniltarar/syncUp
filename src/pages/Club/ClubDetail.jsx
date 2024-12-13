@@ -34,10 +34,6 @@ const ClubDetail = () => {
     }
 
 
-
-
-
-
     // Kulüp detaylarını getirme işlemi
     useEffect(() => {
         // Eğer Slice'ta mevcut kulüp varsa sıfırlama işlemi
@@ -46,7 +42,7 @@ const ClubDetail = () => {
         dispatch(fetchClubByID(id))
     }, [dispatch, id])
 
-
+    const clubCreatedDate = createdAt?.toDate ? dayjs(createdAt.toDate()).format('DD/MM/YYYY') : dayjs(createdAt).format('DD/MM/YYYY');
 
     return (
         <div className='flex flex-col  w-full'>
@@ -137,7 +133,7 @@ const ClubDetail = () => {
                             <FaCalendarDay size={25} /> {events?.length} Üye
                         </span>
                         <span className='flex items-center gap-x-2'>
-                            <FiAward size={25} /> {createdAt} Tarihinde Kuruldu
+                            <FiAward size={25} /> {clubCreatedDate} Tarihinde Kuruldu
                         </span>
 
                     </div>

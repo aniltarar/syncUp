@@ -25,6 +25,7 @@ const initialState = {
   message: "",
 };
 
+// Auth İşlemleri
 export const registerUser = createAsyncThunk(
   "auth/registerUser",
   async (data, { rejectWithValue }) => {
@@ -107,6 +108,7 @@ export const updateUser = createAsyncThunk(
   }
 );
 
+// Kullanıcı Çekme
 export const getUserByID = createAsyncThunk(
   "auth/getUserByID",
   async (uid, { rejectWithValue }) => {
@@ -122,6 +124,7 @@ export const getUserByID = createAsyncThunk(
   }
 );
 
+// Şifre / Parola Sıfırlama
 export const sendResetPasswordEmail = createAsyncThunk(
   "auth/sendResetPasswordEmail",
   async (email, { rejectWithValue }) => {
@@ -181,6 +184,7 @@ export const markAsRead = createAsyncThunk(
   }
 );
 
+// bildirim silme
 export const deleteNotification = createAsyncThunk(
   "auth/deleteNotification",
   async (data, { rejectWithValue,dispatch }) => {

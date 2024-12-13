@@ -7,9 +7,12 @@ import { fetchNotifications } from '../../redux/slices/authSlice';
 import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import 'dayjs/locale/tr'; // Türkçe dil dosyasını dahil ediyoruz
 
 // relativeTime plugin'ini dahil ediyoruz
 dayjs.extend(relativeTime);
+dayjs.locale('tr');
+
 
 const NotificationsDown = () => {
     const dispatch = useDispatch();

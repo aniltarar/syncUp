@@ -84,6 +84,15 @@ const ProfileDown = () => {
               Profil
             </Link>
           </MenuItem>
+          
+          <MenuItem>
+            <Link
+              className="block transition-colors text-sm data-[focus]:bg-neutral-100 px-2 py-1 rounded-md"
+              to="/my-applies"
+            >
+              Başvurularım
+            </Link>
+          </MenuItem>
           <MenuItem>
             <Link
               className="block transition-colors text-sm data-[focus]:bg-neutral-100 px-2 py-1 rounded-md"

@@ -5,12 +5,14 @@ import {
   doc,
   getDoc,
   getDocs,
+  query,
   setDoc,
-  Timestamp,
   updateDoc,
+  where,
 } from "firebase/firestore";
 import { db } from "../../firebase/firebaseConfig";
 import toast from "react-hot-toast";
+import dayjs from "dayjs";
 
 const initialState = {
   status: "idle",
@@ -61,7 +63,7 @@ export const createClub = createAsyncThunk(
         clubName: applyData.clubName,
         clubDescription: applyData.clubDescription,
         clubLogo: applyData.clubLogo,
-        createdAt: Timestamp.now(),
+        createdAt: dayjs().toDate(),
         leaders: [applyData.createdBy],
         members: [],
         events: [],
@@ -89,34 +91,46 @@ export const applyMemberClub = createAsyncThunk(
   "club/applyMemberClub",
   async (applyData, { rejectWithValue }) => {
     try {
-      // Kulübün içerisindeki membershipApplies dizisine kullanıcının ID'si eklenir.
-
-      const clubRef = doc(db, "clubs", applyData.clubID);
-      const clubSnapshot = await getDoc(clubRef);
-      const clubData = clubSnapshot.data();
-      if (clubData.membershipApplies?.includes(applyData.userID)) {
-        toast.error("Zaten başvurunuz alınmıştır. Lütfen onay bekleyiniz.");
+      // memberApplies içinde aynı kulübe aynı kullanıcıdan başvuru var mı kontrolü
+      const memberAppliesColRef = collection(db, "memberApplies");
+      const isMemberExist = query(
+        memberAppliesColRef,
+        where("clubID", "==", applyData.clubID),
+        where("userID", "==", applyData.userID)
+      );
+      const isMemberExistSnapshot = await getDocs(isMemberExist);
+      if (isMemberExistSnapshot.docs.length > 0) {
+        toast.error("Bu kulübe zaten başvurunuz bulunmaktadır.");
         return;
       }
+      // MemberApplies collection'unun olusturulması
+      const memberAppliesRef = doc(collection(db, "memberApplies"));
+      const memberApplyData = {
+        id: memberAppliesRef.id,
+        clubID: applyData.clubID,
+        userID: applyData.userID,
+        status: "pending",
+        createdAt: dayjs().toDate(),
+      };
+      await setDoc(memberAppliesRef, memberApplyData);
+      // Kulübün içerisindeki membershipApplies dizisine memberApply ID'si eklenir.
+      const clubRef = doc(db, "clubs", applyData.clubID);
+
       await updateDoc(clubRef, {
-        membershipApplies: arrayUnion(applyData.userID),
+        membershipApplies: arrayUnion(memberAppliesRef.id),
       });
 
       // Kullanıcının içerisindeki membershipApplies dizisine kulübün ID'si eklenir.
       const userRef = doc(db, "users", applyData.userID);
       const userSnapshot = await getDoc(userRef);
       const userData = userSnapshot.data();
-      if (userData.membershipApplies?.includes(applyData.clubID)) {
-        toast.error("Zaten başvurunuz alınmıştır. Lütfen onay bekleyiniz.");
-        return;
-      }
+
       await updateDoc(userRef, {
-        membershipApplies: arrayUnion(applyData.clubID),
+        membershipApplies: arrayUnion(memberAppliesRef.id),
       });
 
       toast.success("Başvurunuz alınmıştır. Lütfen onay bekleyiniz.");
-
-      return applyData;
+      return memberApplyData;
     } catch (e) {
       console.log(rejectWithValue(e.message));
       toast.error("Bir hata oluştu. Lütfen tekrar deneyiniz.");
@@ -153,6 +167,26 @@ export const clubSlice = createSlice({
         state.currentClub = action.payload;
       })
       .addCase(fetchClubByID.rejected, (state, action) => {
+        state.status = "failed";
+        state.message = action.payload;
+      })
+      .addCase(createClub.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(createClub.fulfilled, (state) => {
+        state.status = "success";
+      })
+      .addCase(createClub.rejected, (state, action) => {
+        state.status = "failed";
+        state.message = action.payload;
+      })
+      .addCase(applyMemberClub.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(applyMemberClub.fulfilled, (state) => {
+        state.status = "success";
+      })
+      .addCase(applyMemberClub.rejected, (state, action) => {
         state.status = "failed";
         state.message = action.payload;
       });

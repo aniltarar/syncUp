@@ -7,7 +7,6 @@ import {
   getDocs,
   query,
   setDoc,
-  Timestamp,
   updateDoc,
   where,
 } from "firebase/firestore";
@@ -61,7 +60,7 @@ export const successApply = createAsyncThunk(
         id: notificationRef.id,
         from: "admin",
         to: createdBy,
-        createdAt: Timestamp.now(),
+        createdAt: dayjs().toDate(),
         title: "Kulüp Başvurusu Hakkında",
         message: `Tebrikler! ${clubName} kulübü için yaptığınız başvurunuz onaylandı!`,
         isRead: false,
