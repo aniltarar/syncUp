@@ -8,7 +8,7 @@ const LeaderLayout = () => {
   return (
     <LeaderContainer>
       <LeaderSidebar />
-      <div className="w-full min-h-screen bg-white"> {/* className düzeltildi */}
+      <div className="w-full min-h-screen bg-white p-5"> {/* className düzeltildi */}
         <Toaster position="top-right" />
         <Outlet />
       </div>

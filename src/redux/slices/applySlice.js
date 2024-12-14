@@ -60,7 +60,7 @@ export const getMemberAppliesByUserID = createAsyncThunk(
       const memberAppliesData = memberAppliesSnapshot.docs.map((doc) =>
         doc.data()
       );
-      console.table(memberAppliesData);
+      
       return memberAppliesData;
     } catch (error) {
       console.log(error);
@@ -81,7 +81,7 @@ export const getClubAppliesByUserID = createAsyncThunk(
       const clubAppliesSnapshot = await getDocs(userClubAppliesQuery);
       const clubAppliesData = clubAppliesSnapshot.docs.map((doc) => doc.data());
 
-      console.table(clubAppliesData);
+     
 
       return clubAppliesData;
     } catch (error) {

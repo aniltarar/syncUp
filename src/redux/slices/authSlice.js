@@ -273,7 +273,6 @@ export const authSlice = createSlice({
       .addCase(fetchNotifications.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.user.notifications = action.payload;
-        localStorage.setItem("user", JSON.stringify(state.user));
       })
       .addCase(fetchNotifications.rejected, (state, action) => {
         state.status = "failed";

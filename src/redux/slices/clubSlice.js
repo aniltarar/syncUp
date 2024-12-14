@@ -68,6 +68,7 @@ export const createClub = createAsyncThunk(
         members: [],
         events: [],
         announcements: [],
+        membershipApplies: [],
         status: "active",
       };
       await setDoc(clubRef, clubData);
@@ -108,6 +109,7 @@ export const applyMemberClub = createAsyncThunk(
       const memberApplyData = {
         id: memberAppliesRef.id,
         clubID: applyData.clubID,
+        clubName: applyData.clubName,
         userID: applyData.userID,
         status: "pending",
         createdAt: dayjs().toDate(),
