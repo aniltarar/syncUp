@@ -81,8 +81,6 @@ export const getClubAppliesByUserID = createAsyncThunk(
       const clubAppliesSnapshot = await getDocs(userClubAppliesQuery);
       const clubAppliesData = clubAppliesSnapshot.docs.map((doc) => doc.data());
 
-     
-
       return clubAppliesData;
     } catch (error) {
       console.log(error);

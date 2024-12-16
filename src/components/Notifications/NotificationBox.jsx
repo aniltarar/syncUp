@@ -19,10 +19,12 @@ const NotificationBox = ({ notification }) => {
             return;
         }
         dispatch(markAsRead({ uid: to, notificationID: notification.id }));
+       
     };
 
     const handleDeleteNotification = () => {
         dispatch(deleteNotification({ uid: to, notificationID: notification.id }));
+       
     };
 
     return (

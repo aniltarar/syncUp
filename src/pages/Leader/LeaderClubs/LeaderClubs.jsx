@@ -14,7 +14,9 @@ const LeaderClubs = () => {
   const user = useAccount()
   const { clubs } = useSelector(state => state.leader)
   const [sortOrder, setSortOrder] = useState("asc"); // A-Z veya Z-A sıralama
-  
+  const [search, setSearch] = useState('');
+
+
   const sortedClubs = [...clubs]?.sort((a, b) => {
     if (sortOrder === "asc") {
       return a.clubName.localeCompare(b.clubName);
@@ -23,9 +25,15 @@ const LeaderClubs = () => {
     }
   });
 
+
+
   const toggleSortOrder = () => {
     setSortOrder(prevOrder => (prevOrder === "asc" ? "desc" : "asc"));
   };
+
+  const filteredClubs = sortedClubs?.filter((club) => {
+    return club.clubName.toLowerCase().includes(search.toLowerCase()) ;
+  });
 
   const clubBoxRef = useRef(null);
 
@@ -49,6 +57,15 @@ const LeaderClubs = () => {
       <div className='border-b '>
         <h1 className='text-2xl font-semibold'>Lideri Olduğum Kulüpler</h1>
       </div>
+      <div className="grid grid-cols-5 gap-3 bg-neutral-100 p-3 rounded-lg shadow font-semibold">
+        <input
+          type="text"
+          placeholder="Kulüp Adına Göre Ara"
+          className="col-span-5 p-2 rounded-lg shadow"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </div>
 
 
       <div className='grid grid-cols-6 gap-3 bg-neutral-100 p-3 place-items-center rounded-lg shadow font-semibold'>
@@ -61,7 +78,7 @@ const LeaderClubs = () => {
       </div>
 
       <div ref={clubBoxRef} className='grid gap-3'>
-        {sortedClubs?.map((club) => (
+        {filteredClubs?.map((club) => (
           <LeaderClubBox key={club.id} club={club} />
         ))}
       </div>

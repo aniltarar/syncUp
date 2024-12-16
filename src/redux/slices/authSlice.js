@@ -141,6 +141,30 @@ export const sendResetPasswordEmail = createAsyncThunk(
 // Bildirim İşlemleri
 
 // Bildirimleri getir
+// export const fetchNotifications = createAsyncThunk(
+//   "auth/fetchNotifications",
+//   async (uid, { rejectWithValue }) => {
+//     try {
+//       // Kullanıcıya ait bildirim ID'lerini getir
+//       const userRef = doc(db, "users", uid);
+//       const userDoc = await getDoc(userRef);
+//       const { notifications } = userDoc.data(); // Kullanıcıya ait bildirimlerin ID dizisi
+
+//       // notifications collection'undan bildirimleri getir
+//       const notificationsRef = collection(db, "notifications");
+//       const notifyQuery = query(
+//         notificationsRef,
+//         where("id", "in", notifications)
+//       );
+//       const notifySnapshot = await getDocs(notifyQuery);
+//       const notificationsData = notifySnapshot.docs.map((doc) => doc.data());
+
+//       return notificationsData;
+//     } catch (e) {
+//       return rejectWithValue(e.message);
+//     }
+//   }
+// );
 export const fetchNotifications = createAsyncThunk(
   "auth/fetchNotifications",
   async (uid, { rejectWithValue }) => {
@@ -148,32 +172,43 @@ export const fetchNotifications = createAsyncThunk(
       // Kullanıcıya ait bildirim ID'lerini getir
       const userRef = doc(db, "users", uid);
       const userDoc = await getDoc(userRef);
+
       const { notifications } = userDoc.data(); // Kullanıcıya ait bildirimlerin ID dizisi
 
-      // notifications collection'undan bildirimleri getir
+      // Eğer notifications boşsa, boş bir dizi döndür
+      if (!notifications || notifications.length === 0) {
+        return [];
+      }
+
+      // Bildirimleri Firestore'dan çek
       const notificationsRef = collection(db, "notifications");
       const notifyQuery = query(
         notificationsRef,
-        where("id", "in", notifications)
+        where("id", "in", notifications) // notifications burada dolu
       );
+
       const notifySnapshot = await getDocs(notifyQuery);
-      const notificationsData = notifySnapshot.docs.map((doc) => doc.data());
+      const notificationsData = notifySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
 
       return notificationsData;
     } catch (e) {
+      console.error("Error fetching notifications:", e.message);
       return rejectWithValue(e.message);
     }
   }
 );
+
 // Bildirimi okundu olarak işaretle
 export const markAsRead = createAsyncThunk(
   "auth/markAsRead",
-  async (data, { rejectWithValue,dispatch }) => {
+  async (data, { rejectWithValue, dispatch }) => {
     const { uid, notificationID } = data;
     try {
       const notificationRef = doc(db, "notifications", notificationID);
       await updateDoc(notificationRef, { isRead: true });
-
 
       dispatch(fetchNotifications(uid));
       toast.success("Bildirim okundu olarak işaretlendi.");
@@ -187,17 +222,18 @@ export const markAsRead = createAsyncThunk(
 // bildirim silme
 export const deleteNotification = createAsyncThunk(
   "auth/deleteNotification",
-  async (data, { rejectWithValue,dispatch }) => {
+  async (data, { rejectWithValue, dispatch }) => {
     const { uid, notificationID } = data;
     try {
       const userRef = doc(db, "users", uid);
       await updateDoc(userRef, {
         notifications: arrayRemove(notificationID),
       });
-      toast.success("Bildirim başarıyla silindi")
+      toast.success("Bildirim başarıyla silindi");
       dispatch(fetchNotifications(uid));
       return notificationID;
     } catch (e) {
+      console.log(e.message);
       return rejectWithValue(e.message);
     }
   }
@@ -276,10 +312,8 @@ export const authSlice = createSlice({
       })
       .addCase(fetchNotifications.rejected, (state, action) => {
         state.status = "failed";
-        state.message = action.payload || "Fetch notifications failed.";
-      })
-
-
+        state.message = action.payload;
+      });
   },
 });
 

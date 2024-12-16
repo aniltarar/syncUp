@@ -36,6 +36,16 @@ const Notifications = () => {
         return matchSearch
     })
 
+    if(notifications.length === 0) {
+
+        return(
+            <div className='flex h-full w-full   items-center justify-center '>
+                <h1 className='text-2xl font-semibold p-3 rounded-lg bg-red-400  w-full text-center'>Bildirim Bulunamadı</h1>
+            </div>
+        )
+
+    }
+
 
 
     return (
