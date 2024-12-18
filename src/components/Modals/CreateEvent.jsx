@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useForm } from 'react-hook-form';
@@ -35,7 +36,8 @@ const CreateEvent = ({ clubs, setIsOpen }) => {
             clubID: data.clubID,
             clubName: clubs.find(club => club.id === data.clubID).clubName,
             leaders: clubs.find(club => club.id === data.clubID).leaders,
-            status: "pending"
+            status: "pending",
+            participants: []
         }
 
         dispatch(createEvent(eventData));

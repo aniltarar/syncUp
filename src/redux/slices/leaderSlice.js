@@ -7,6 +7,7 @@ import {
   getDocs,
   query,
   setDoc,
+  updateDoc,
   where,
 } from "firebase/firestore";
 import { db } from "../../firebase/firebaseConfig";
@@ -63,13 +64,15 @@ export const fetchClubLeadersName = createAsyncThunk(
   }
 );
 
-
 export const fetchEventsByLeaderID = createAsyncThunk(
   "leader/fetchEventsByLeaderID",
   async (leaderID, { rejectWithValue }) => {
     try {
       const eventsRef = collection(db, "events");
-      const eventsQuery = query(eventsRef, where("leaders", "array-contains", leaderID));
+      const eventsQuery = query(
+        eventsRef,
+        where("leaders", "array-contains", leaderID)
+      );
       const eventsSnapshot = await getDocs(eventsQuery);
       const eventsData = eventsSnapshot.docs.map((doc) => doc.data());
       return eventsData;
@@ -90,7 +93,7 @@ export const createEvent = createAsyncThunk(
         ...eventData,
       };
       await setDoc(eventRef, setEventData);
-      
+
       toast.success("Etkinlik başarıyla oluşturuldu.");
 
       // Clubs Collection'una Event ID'nin eklenmesi
@@ -109,6 +112,55 @@ export const createEvent = createAsyncThunk(
     } catch (e) {
       toast.error("Etkinlik oluşturulurken bir hata oluştu.");
       console.log(e.message);
+      return rejectWithValue(e.message);
+    }
+  }
+);
+
+export const cancelEvent = createAsyncThunk(
+  "leader/cancelEvent",
+  async (eventID, { rejectWithValue, dispatch }) => {
+    try {
+      const eventRef = doc(db, "events", eventID);
+      const event = await getDoc(eventRef);
+      const { leaders, status } = event.data();
+
+      if (status === "failed") {
+        toast.error("Etkinlik zaten iptal edilmiş.");
+        return;
+      }
+
+      await setDoc(
+        eventRef,
+        {
+          status: "failed",
+        },
+        { merge: true }
+      );
+
+      toast.success("Etkinlik başarıyla iptal edildi.");
+
+      dispatch(fetchEventsByLeaderID(leaders[0]));
+    } catch (e) {
+      toast.error("Etkinlik iptal edilirken bir hata oluştu.");
+      return rejectWithValue(e.message);
+    }
+  }
+);
+
+export const updateEvent = createAsyncThunk(
+  "leader/updateEvent",
+  async (eventData, { rejectWithValue, dispatch }) => {
+    try {
+      const eventRef = doc(db, "events", eventData.id);
+      await updateDoc(eventRef, eventData);
+      
+
+      toast.success("Etkinlik başarıyla güncellendi.");
+
+      dispatch(fetchEventsByLeaderID(eventData.leaders[0]));
+    } catch (e) {
+      toast.error("Etkinlik güncellenirken bir hata oluştu.");
       return rejectWithValue(e.message);
     }
   }
@@ -140,7 +192,8 @@ export const leaderSlice = createSlice({
       .addCase(fetchClubLeadersName.rejected, (state, action) => {
         state.status = "failed";
         state.message = action.payload;
-      }).addCase(fetchEventsByLeaderID.pending, (state) => {
+      })
+      .addCase(fetchEventsByLeaderID.pending, (state) => {
         state.status = "loading";
       })
       .addCase(fetchEventsByLeaderID.fulfilled, (state, action) => {
