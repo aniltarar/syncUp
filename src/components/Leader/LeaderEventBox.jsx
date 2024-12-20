@@ -40,7 +40,7 @@ const LeaderEventBox = ({ event }) => {
           {/* Etkinlik Tarihi */}
           <span className="justify-self-start text-gray-600">{eventDate}</span>
         {/* Etkinlik Görseli */}
-        <span className="justify-self-start">
+        <span className="justify-self-center">
           <img
             src={event.eventImage}
             alt={event.eventName}
@@ -48,27 +48,24 @@ const LeaderEventBox = ({ event }) => {
           />
         </span>
 
-      
-
-
-
+    
         {/* Etkinlik Konumu */}
-        <span className="justify-self-start text-gray-600">{event.eventLocation}</span>
+        <span className="justify-self-center text-center text-gray-600">{event.eventLocation}</span>
 
         {/* Kulüp Adı */}
-        <span className="justify-self-center text-gray-800">{event.clubName}</span>
+        <span className="justify-self-center text-center  text-gray-800">{event.clubName}</span>
 
         {/* Etkinlik Katılımcı Sayısı */}
-        <span className="justify-self-center text-gray-800">{event.participants? <span>{(event?.participants?.length)} Katılımcı</span>: <span>Henüz Katılımcı Yok</span>}</span>
+        <span className="justify-self-center text-center text-gray-800">{event.participants? <span>{(event?.participants?.length)} Katılımcı</span>: <span>Henüz Katılımcı Yok</span>}</span>
 
         {/* Etkinlik Durumu */}
         <span
-          className={`justify-self-center text-sm px-4 py-1 rounded-full font-medium ${statusColor[event.status]}`}
+          className={`justify-self-end text-sm px-4 py-1 rounded-full font-medium ${statusColor[event.status]}`}
         >
           {statusTranslate[event.status]}
         </span>
         <span
-          className={`justify-self-center text-sm flex flex-col gap-y-2`}
+          className={`justify-self-end text-sm flex flex-col gap-y-2`}
         >
           <button onClick={()=>setIsEditOpen(true)} className=' px-4 py-2 rounded-full font-medium bg-yellow-500 text-white hover:bg-yellow-600' >Düzenle</button>
           <button onClick={() => setIsOpen(true)} className=' px-4 py-2 rounded-full font-medium bg-red-500 text-white hover:bg-red-600' >İptal Et</button>

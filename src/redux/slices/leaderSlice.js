@@ -21,6 +21,7 @@ const initialState = {
   events: [],
   currentEvent: {},
   members: [],
+  memberApplies: [],
 };
 
 export const fetchLeaderClubsByUserID = createAsyncThunk(
@@ -154,13 +155,122 @@ export const updateEvent = createAsyncThunk(
     try {
       const eventRef = doc(db, "events", eventData.id);
       await updateDoc(eventRef, eventData);
-      
 
       toast.success("Etkinlik başarıyla güncellendi.");
 
       dispatch(fetchEventsByLeaderID(eventData.leaders[0]));
     } catch (e) {
       toast.error("Etkinlik güncellenirken bir hata oluştu.");
+      return rejectWithValue(e.message);
+    }
+  }
+);
+
+export const fetchMemberAppliesByClubID = createAsyncThunk(
+  "leader/fetchMemberAppliesByClubID",
+  async (clubID, { rejectWithValue, dispatch }) => {
+    try {
+      const memberAppliesRef = collection(db, "memberApplies");
+      const memberAppliesQuery = query(
+        memberAppliesRef,
+        where("clubID", "==", clubID)
+      );
+      const memberAppliesSnapshot = await getDocs(memberAppliesQuery);
+
+      const memberAppliesData = memberAppliesSnapshot.docs.map((doc) =>
+        doc.data()
+      );
+      return memberAppliesData;
+    } catch (e) {
+      console.log(rejectWithValue(e.message));
+      return rejectWithValue(e.message);
+    }
+  }
+);
+
+export const successMemberApply = createAsyncThunk(
+  "leader/successMemberApply",
+  async (memberApply, { rejectWithValue, dispatch }) => {
+    try {
+      // memberApply'nin status'ünü success yap
+      const memberApplyRef = doc(db, "memberApplies", memberApply.id);
+      // memberApply'nin status'ü success veya failed ise işlem yapma
+      const memberApplyData = await getDoc(memberApplyRef);
+      if (
+        memberApplyData.data().status === "success" ||
+        memberApplyData.data().status === "failed"
+      ) {
+        if (memberApplyData.data().status === "success") {
+          toast.error("Üyelik zaten onaylanmış.");
+          return;
+        } else if (memberApplyData.data().status === "failed") {
+          toast.error("Üyelik zaten reddedilmiş.");
+          return;
+        }
+        return;
+      }
+      await updateDoc(memberApplyRef, {
+        status: "success",
+      });
+
+      // memberApply'nin clubID'sini kullanarak kulüp members içerisine userID ekle
+      const clubRef = doc(db, "clubs", memberApply.clubID);
+      await updateDoc(
+        clubRef,
+        {
+          members: arrayUnion(memberApply.userID),
+        },
+        { merge: true }
+      );
+
+      // memberApply'nin userID'sini kullanarak user'ın clubs içerisine clubID ekle
+      const userRef = doc(db, "users", memberApply.userID);
+      await updateDoc(
+        userRef,
+        {
+          clubs: arrayUnion(memberApply.clubID),
+        },
+        { merge: true }
+      );
+
+      dispatch(fetchMemberAppliesByClubID(memberApply.clubID));
+      toast.success("Üyelik başarıyla onaylandı.");
+    } catch (e) {
+      console.log(rejectWithValue(e.message));
+      return rejectWithValue(e.message);
+    }
+  }
+);
+
+export const rejectMemberApply = createAsyncThunk(
+  "leader/rejectMemberApply",
+  async (memberApply, { rejectWithValue, dispatch }) => {
+    try {
+      // memberApply'nin status'ünü failed yap
+      const memberApplyRef = doc(db, "memberApplies", memberApply.id);
+      // memberApply'nin status'ü success veya failed ise işlem yapma
+      const memberApplyData = await getDoc(memberApplyRef);
+      if (
+        memberApplyData.data().status === "success" ||
+        memberApplyData.data().status === "failed"
+      ) {
+        if (memberApplyData.data().status === "success") {
+          toast.error("Üyelik zaten onaylanmış.");
+          return;
+        } else if (memberApplyData.data().status === "failed") {
+          toast.error("Üyelik zaten reddedilmiş.");
+          return;
+        }
+        return;
+      }
+      await updateDoc(memberApplyRef, {
+        status: "failed",
+      });
+
+      dispatch(fetchMemberAppliesByClubID(memberApply.clubID));
+      toast.success("Üyelik başarıyla reddedildi.");
+    } catch (e) {
+      console.log(rejectWithValue(e.message));
       return rejectWithValue(e.message);
     }
   }
@@ -201,6 +311,47 @@ export const leaderSlice = createSlice({
         state.events = action.payload;
       })
       .addCase(fetchEventsByLeaderID.rejected, (state, action) => {
+        state.status = "failed";
+        state.message = action.payload;
+      })
+      .addCase(createEvent.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(createEvent.fulfilled, (state) => {
+        state.status = "success";
+      })
+      .addCase(createEvent.rejected, (state, action) => {
+        state.status = "failed";
+        state.message = action.payload;
+      })
+      .addCase(cancelEvent.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(cancelEvent.fulfilled, (state) => {
+        state.status = "success";
+      })
+      .addCase(cancelEvent.rejected, (state, action) => {
+        state.status = "failed";
+        state.message = action.payload;
+      })
+      .addCase(updateEvent.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(updateEvent.fulfilled, (state) => {
+        state.status = "success";
+      })
+      .addCase(updateEvent.rejected, (state, action) => {
+        state.status = "failed";
+        state.message = action.payload;
+      })
+      .addCase(fetchMemberAppliesByClubID.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchMemberAppliesByClubID.fulfilled, (state, action) => {
+        state.status = "success";
+        state.memberApplies = action.payload;
+      })
+      .addCase(fetchMemberAppliesByClubID.rejected, (state, action) => {
         state.status = "failed";
         state.message = action.payload;
       });

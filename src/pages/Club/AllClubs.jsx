@@ -2,10 +2,12 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchClubs } from '../../redux/slices/clubSlice';
 import ClubCard from '../../components/Clubs/ClubCard';
+import { useAccount } from '../../hooks/useAccount';
 
 const AllClubs = () => {
   const dispatch = useDispatch();
 
+const user = useAccount();
   const { clubs } = useSelector((state) => state.club)
 
 

@@ -129,7 +129,7 @@ const LeaderEvents = () => {
             Etkinlik Tarihi{' '}
             {sortBy === 'eventDate' ? (
               sortOrder === 'asc' ? (
-                <FaSortAlphaDown size={20} />
+                <FaSortAlphaDown size={20} /> 
               ) : (
                 <FaSortAlphaDownAlt size={20} />
               )
@@ -137,13 +137,13 @@ const LeaderEvents = () => {
               <FaSortAlphaDownAlt size={20} />
             )}
           </span>
-          <span className="justify-self-start">Etkinlik Afişi</span>
-        
-          <span className="justify-self-start">Etkinlik Konumu</span>
+          <span className="justify-self-center">Etkinlik Afişi</span>
+
+          <span className="justify-self-center">Etkinlik Konumu</span>
           <span className="justify-self-center">Kulüp Adı</span>
           <span className="justify-self-center">Katılımcı Sayısı</span>
-          <span className="justify-self-center">Etkinlik Durumu</span>
-          <span className="justify-self-center">İşlemler</span>
+          <span className="justify-self-end">Etkinlik Durumu</span>
+          <span className="justify-self-end">İşlemler</span>
         </div>
         <div className="event-list grid gap-3">
           {filteredEvents?.map((event) => (

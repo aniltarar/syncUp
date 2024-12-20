@@ -138,33 +138,7 @@ export const sendResetPasswordEmail = createAsyncThunk(
     }
   }
 );
-// Bildirim İşlemleri
 
-// Bildirimleri getir
-// export const fetchNotifications = createAsyncThunk(
-//   "auth/fetchNotifications",
-//   async (uid, { rejectWithValue }) => {
-//     try {
-//       // Kullanıcıya ait bildirim ID'lerini getir
-//       const userRef = doc(db, "users", uid);
-//       const userDoc = await getDoc(userRef);
-//       const { notifications } = userDoc.data(); // Kullanıcıya ait bildirimlerin ID dizisi
-
-//       // notifications collection'undan bildirimleri getir
-//       const notificationsRef = collection(db, "notifications");
-//       const notifyQuery = query(
-//         notificationsRef,
-//         where("id", "in", notifications)
-//       );
-//       const notifySnapshot = await getDocs(notifyQuery);
-//       const notificationsData = notifySnapshot.docs.map((doc) => doc.data());
-
-//       return notificationsData;
-//     } catch (e) {
-//       return rejectWithValue(e.message);
-//     }
-//   }
-// );
 export const fetchNotifications = createAsyncThunk(
   "auth/fetchNotifications",
   async (uid, { rejectWithValue }) => {

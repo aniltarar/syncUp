@@ -111,6 +111,7 @@ export const applyMemberClub = createAsyncThunk(
         clubID: applyData.clubID,
         clubName: applyData.clubName,
         userID: applyData.userID,
+        displayName: applyData.displayName,
         status: "pending",
         createdAt: dayjs().toDate(),
       };

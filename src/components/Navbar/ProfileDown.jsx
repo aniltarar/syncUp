@@ -64,7 +64,7 @@ const ProfileDown = () => {
             )
           }
           {
-            (user.role == "leader" || user.role=="admin") && (
+            (user.role == "leader") && (
               <MenuItem>
               <Link
                 className="block  transition-colors text-sm data-[focus]:bg-neutral-100  px-2 py-1 rounded-md"
