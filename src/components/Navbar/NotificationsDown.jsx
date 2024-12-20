@@ -50,24 +50,25 @@ const NotificationsDown = () => {
                     className="bg-white w-60 rounded-md shadow-xl border p-3 flex flex-col gap-y-2 mt-2"
                 >
                     {
-                        notifications && notifications.slice(0, 3).map(notification => {
-                            // Eğer createdAt bir Firestore Timestamp ise toDate() kullan
-                            const notificationTime = notification.createdAt?.toDate 
-                                ? dayjs(notification.createdAt.toDate()).fromNow()  // fromNow() kullanarak zaman farkını alıyoruz
-                                : 'Geçersiz Tarih'; // Eğer toDate() fonksiyonu yoksa hata mesajı ver
+                        notifications &&
+                        notifications.slice(0, 3).map((notification, index) => {
+                            const notificationTime = notification.createdAt?.toDate
+                                ? dayjs(notification.createdAt.toDate()).fromNow()
+                                : 'Geçersiz Tarih'; // Eğer createdAt eksikse
 
                             return (
-                                <MenuItem key={notification.id}>
-                                    <Link to='/notifications' className='block transition-colors text-sm data-[focus]:bg-neutral-100 px-2 py-1 rounded-md'>
-                                        <div className='flex items-center justify-between'>
+                                <MenuItem key={notification.id || index}>
+                                    <Link to="/notifications" className="block transition-colors text-sm data-[focus]:bg-neutral-100 px-2 py-1 rounded-md">
+                                        <div className="flex items-center justify-between">
                                             <h2 className="text-lg font-bold text-gray-800">{notification.title}</h2>
-                                            <span className="text-sm text-gray-500">{notificationTime}</span> {/* Relative time'ı burada gösteriyoruz */}
+                                            <span className="text-sm text-gray-500">{notificationTime}</span>
                                         </div>
                                     </Link>
                                 </MenuItem>
                             );
                         })
                     }
+
 
                     <MenuItem className="mt-5 text-center block bg-neutral-200  transition-colors text-sm data-[focus]:bg-neutral-300  px-2 py-1 rounded-md">
                         <Link to='/notifications' className=' '>Tüm Bildirimlere Git</Link>

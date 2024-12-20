@@ -279,7 +279,11 @@ export const rejectMemberApply = createAsyncThunk(
 export const leaderSlice = createSlice({
   name: "leader",
   initialState,
-  reducers: {},
+  reducers: {
+    resetMemberApplies: (state) => {
+      state.memberApplies = [];
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchLeaderClubsByUserID.pending, (state) => {
@@ -358,5 +362,5 @@ export const leaderSlice = createSlice({
   },
 });
 
-export const {} = leaderSlice.actions;
+export const {resetMemberApplies} = leaderSlice.actions;
 export default leaderSlice.reducer;

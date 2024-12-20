@@ -6,6 +6,7 @@ import LeaderClubSettings from "../pages/Leader/LeaderClubSettings/LeaderClubSet
 import LeaderDash from "../pages/Leader/LeaderDash/LeaderDash";
 import LeaderEvents from "../pages/Leader/LeaderEvents/LeaderEvents";
 import LeaderMembershipApplies from "../pages/Leader/LeaderMembershipApplies/LeaderMembershipApplies";
+import LeaderMembershipAppliesDetail from "../pages/Leader/LeaderMembershipApplies/LeaderMembershipAppliesDetail";
 
 
 export const LeaderRoutes = {
@@ -35,6 +36,11 @@ export const LeaderRoutes = {
         {
             path: "membership-applies",
             element: <LeaderMembershipApplies />,
+            loader: () => roleLoader(["leader", "admin"])
+        },
+        {
+            path: "membership-applies/:clubID",
+            element: <LeaderMembershipAppliesDetail />,
             loader: () => roleLoader(["leader", "admin"])
         },
         {
