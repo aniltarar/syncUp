@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom'
 import { fetchMemberAppliesByClubID } from '../../../redux/slices/leaderSlice';
 import MemberApplyBox from '../../../components/Leader/MemberApplyBox';
 import autoAnimate from '@formkit/auto-animate';
-import { use } from 'react';
+
 
 const LeaderMembershipAppliesDetail = () => {
     const { clubID } = useParams();
@@ -15,7 +15,7 @@ const LeaderMembershipAppliesDetail = () => {
     const [status, setStatus] = useState('')
 
     const filteredMemberApplies = memberApplies?.filter((memberApply) => {
-        return memberApply.displayName.toLowerCase().includes(search.toLowerCase()) && (status ? memberApply.status === status : true)
+        return memberApply?.displayName?.toLowerCase()?.includes(search?.toLowerCase()) && (status ? memberApply?.status === status : true)
     })
 
 

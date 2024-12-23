@@ -33,7 +33,7 @@ const MemberApplyBox = ({ memberApply }) => {
         <div>
            
 
-            <div className='grid grid-cols-5 gap-3 items-center bg-neutral-100 p-3 rounded-lg shadow'>
+            <div className='grid grid-cols-5 gap-3 items-center bg-white p-3 rounded-lg shadow border hover:shadow-md transition-shadow duration-300'>
                 <div className='justify-self-start'>{memberApply.displayName}</div>
                 <div className='justify-self-start'>{memberApply.clubName}</div>
                 <div className='justify-self-start'>{formattedDate}</div>

@@ -1,5 +1,6 @@
 import LeaderLayout from "../layouts/LeaderLayout";
 import { roleLoader } from "../loaders/roleLoader";
+import LeaderAnnouncemenDetail from "../pages/Leader/LeaderAnnouncement/LeaderAnnouncemenDetail";
 import LeaderAnnouncement from "../pages/Leader/LeaderAnnouncement/LeaderAnnouncement";
 import LeaderClubs from "../pages/Leader/LeaderClubs/LeaderClubs";
 import LeaderClubSettings from "../pages/Leader/LeaderClubSettings/LeaderClubSettings";
@@ -34,6 +35,11 @@ export const LeaderRoutes = {
             loader: () => roleLoader(["leader", "admin"])
         },
         {
+            path: "announcements/:clubID",
+            element: <LeaderAnnouncemenDetail />,
+            loader: () => roleLoader(["leader", "admin"])
+        },
+        {
             path: "membership-applies",
             element: <LeaderMembershipApplies />,
             loader: () => roleLoader(["leader", "admin"])
@@ -48,8 +54,8 @@ export const LeaderRoutes = {
             element: <LeaderClubSettings />,
             loader: () => roleLoader(["leader", "admin"])
         },
-     
-      
+
+
 
 
 

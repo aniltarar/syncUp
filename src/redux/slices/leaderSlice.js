@@ -23,7 +23,7 @@ const initialState = {
   members: [],
   memberApplies: [],
 };
-
+// Club Services
 export const fetchLeaderClubsByUserID = createAsyncThunk(
   "leader/fetchLeaderClubsByUserID",
   async (userID) => {
@@ -65,6 +65,7 @@ export const fetchClubLeadersName = createAsyncThunk(
   }
 );
 
+// Event Services
 export const fetchEventsByLeaderID = createAsyncThunk(
   "leader/fetchEventsByLeaderID",
   async (leaderID, { rejectWithValue }) => {
@@ -77,6 +78,19 @@ export const fetchEventsByLeaderID = createAsyncThunk(
       const eventsSnapshot = await getDocs(eventsQuery);
       const eventsData = eventsSnapshot.docs.map((doc) => doc.data());
       return eventsData;
+    } catch (e) {
+      return rejectWithValue(e.message);
+    }
+  }
+);
+
+export const fetchClubByClubID = createAsyncThunk(
+  "leader/fetchClubByClubID",
+  async (clubID, { rejectWithValue }) => {
+    try {
+      const clubRef = doc(db, "clubs", clubID);
+      const club = await getDoc(clubRef);
+      return club.data();
     } catch (e) {
       return rejectWithValue(e.message);
     }
@@ -166,6 +180,7 @@ export const updateEvent = createAsyncThunk(
   }
 );
 
+// Member Apply Services
 export const fetchMemberAppliesByClubID = createAsyncThunk(
   "leader/fetchMemberAppliesByClubID",
   async (clubID, { rejectWithValue, dispatch }) => {
@@ -183,6 +198,28 @@ export const fetchMemberAppliesByClubID = createAsyncThunk(
       return memberAppliesData;
     } catch (e) {
       console.log(rejectWithValue(e.message));
+      return rejectWithValue(e.message);
+    }
+  }
+);
+
+export const fetchPendingMemberApplies = createAsyncThunk(
+  "leader/fetchPendingMemberApplies",
+  async (clubID, { rejectWithValue }) => {
+    try {
+      const memberAppliesRef = collection(db, "memberApplies");
+      const pendingAppliesQuery = query(
+        memberAppliesRef,
+        where("clubID", "==", clubID),
+        where("status", "==", "pending")
+      );
+      const pendingAppliesSnapshot = await getDocs(pendingAppliesQuery);
+      const pendingAppliesData = pendingAppliesSnapshot.docs.map((doc) =>
+        doc.data()
+      );
+
+      return pendingAppliesData;
+    } catch (e) {
       return rejectWithValue(e.message);
     }
   }
@@ -276,13 +313,62 @@ export const rejectMemberApply = createAsyncThunk(
   }
 );
 
+// Announcement Services
+
+export const fetchAnnouncementsByClubID = createAsyncThunk(
+  "leader/fetchAnnouncementsByClubID",
+  async (clubID, { rejectWithValue }) => {
+    try {
+      const announcementsRef = collection(db, "announcements");
+      const announcementsQuery = query(
+        announcementsRef,
+        where("clubID", "==", clubID)
+      );
+      const announcementsSnapshot = await getDocs(announcementsQuery);
+      const announcementsData = announcementsSnapshot.docs.map((doc) =>
+        doc.data()
+      );
+      return announcementsData;
+    } catch (e) {
+      return rejectWithValue(e.message);
+    }
+  }
+);
+
+export const createAnnouncement = createAsyncThunk(
+  "leader/createAnnouncement",
+  async (announcementData, { rejectWithValue, dispatch }) => {
+    try {
+      const announcementRef = doc(collection(db, "announcements"));
+      const setAnnouncementData = {
+        id: announcementRef.id,
+        ...announcementData,
+      };
+
+      await setDoc(announcementRef, setAnnouncementData);
+      dispatch(fetchAnnouncementsByClubID(announcementData.clubID));
+      toast.success("Duyuru başarıyla oluşturuldu.");
+    } catch (e) {
+      console.log(rejectWithValue(e.message));
+      toast.error("Duyuru oluşturulurken bir hata oluştu.");
+      return rejectWithValue(e.message);
+    }
+  }
+);
+
 export const leaderSlice = createSlice({
   name: "leader",
   initialState,
   reducers: {
     resetMemberApplies: (state) => {
       state.memberApplies = [];
-    }
+    },
+    resetAnnouncements: (state) => {
+      state.announcements = [];
+    },
+    resetCurrentClub: (state) => {
+      state.currentClub = {};
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -358,9 +444,41 @@ export const leaderSlice = createSlice({
       .addCase(fetchMemberAppliesByClubID.rejected, (state, action) => {
         state.status = "failed";
         state.message = action.payload;
+      })
+      .addCase(fetchClubByClubID.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchClubByClubID.fulfilled, (state, action) => {
+        state.status = "success";
+        state.currentClub = action.payload;
+      })
+      .addCase(fetchClubByClubID.rejected, (state, action) => {
+        state.status = "failed";
+        state.message = action.payload;
+      })
+      .addCase(fetchAnnouncementsByClubID.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchAnnouncementsByClubID.fulfilled, (state, action) => {
+        state.status = "success";
+        state.announcements = action.payload;
+      })
+      .addCase(fetchAnnouncementsByClubID.rejected, (state, action) => {
+        state.status = "failed";
+        state.message = action.payload;
+      })
+      .addCase(createAnnouncement.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(createAnnouncement.fulfilled, (state) => {
+        state.status = "success";
+      })
+      .addCase(createAnnouncement.rejected, (state, action) => {
+        state.status = "failed";
+        state.message = action.payload;
       });
   },
 });
 
-export const {resetMemberApplies} = leaderSlice.actions;
+export const { resetMemberApplies,resetAnnouncements,resetCurrentClub } = leaderSlice.actions;
 export default leaderSlice.reducer;

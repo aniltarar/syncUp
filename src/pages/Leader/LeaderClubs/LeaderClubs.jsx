@@ -32,7 +32,7 @@ const LeaderClubs = () => {
   };
 
   const filteredClubs = sortedClubs?.filter((club) => {
-    return club.clubName.toLowerCase().includes(search.toLowerCase()) ;
+    return club.clubName.toLowerCase().includes(search.toLowerCase());
   });
 
   const clubBoxRef = useRef(null);
@@ -54,9 +54,10 @@ const LeaderClubs = () => {
 
   return (
     <div className='flex flex-col gap-y-3 '>
-      <div className='border-b '>
-        <h1 className='text-2xl font-semibold'>Lideri Olduğum Kulüpler</h1>
-      </div>
+
+      <h1 className='text-2xl font-semibold'>Lideri Olduğum Kulüpler</h1>
+
+      <hr />
       <div className="grid grid-cols-5 gap-3 bg-neutral-100 p-3 rounded-lg shadow font-semibold">
         <input
           type="text"

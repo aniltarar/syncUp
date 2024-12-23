@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { fetchClubLeadersName } from '../../redux/slices/leaderSlice';
+import { fetchClubLeadersName, fetchPendingMemberApplies } from '../../redux/slices/leaderSlice';
+
 
 const LeaderClubBox = ({ club }) => {
   const dispatch = useDispatch();
   const [leaderNames, setLeaderNames] = useState([]);
+  const [pendingApplies, setPendingApplies] = useState([]);
 
   const capitalizeWords = (str) => {
     return str
@@ -13,12 +15,24 @@ const LeaderClubBox = ({ club }) => {
       .join(' ');
   };
 
+
+
+
   useEffect(() => {
     dispatch(fetchClubLeadersName(club.id)).then((data) => {
       const leaderNames = data.payload.map((name) => capitalizeWords(name));
       setLeaderNames(leaderNames);
     });
+    
   }, [club, dispatch]);
+
+  useEffect(() => {
+    dispatch(fetchPendingMemberApplies(club.id)).then((data) => {
+      setPendingApplies(data.payload);
+    });
+  }, [club, dispatch]);
+
+
 
   return (
     <div className="grid grid-cols-6 gap-3 bg-white p-4 rounded-lg shadow hover:shadow-md transition-shadow duration-300 place-items-center border">
@@ -47,7 +61,7 @@ const LeaderClubBox = ({ club }) => {
 
       {/* Bekleyen Üye Başvuruları */}
       <span className="justify-self-center text-sm px-4 py-1 rounded-full font-medium bg-yellow-100 text-yellow-500 animate-pulse">
-        {club?.membershipApplies?.length || 0} Kişi bekliyor.
+        {pendingApplies?.length || 0} Kişi bekliyor.
       </span>
     </div>
   );
