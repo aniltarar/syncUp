@@ -74,7 +74,7 @@ const LeaderCreateAnnouncement = ({ setIsOpen, club }) => {
                             {errors.content && <span className='text-red-500'>Bu alan zorunludur</span>}
                         </div>
                         <div className='flex justify-end gap-x-4'>
-                            <button type='button' onClick={() => setIsOpen(false)} className='p-2 bg-gray-300 rounded-lg'>İptal</button>
+                            <button type='button' onClick={() => setIsOpen(false)} className='p-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600'>İptal</button>
                             <button type='submit' className='p-2 bg-primary rounded-lg text-white hover:bg-primary-hover'>Oluştur</button>
                         </div>
                     </div>

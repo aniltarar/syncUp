@@ -1,45 +1,97 @@
 import dayjs from 'dayjs';
-import React from 'react';
-import { FaCalendarDay } from "react-icons/fa6";
-import { FaUsers } from "react-icons/fa";
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { toggleAnnouncementStatus } from '../../redux/slices/leaderSlice';
+import LeaderAnnouncementDetailModal from '../Modals/LeaderAnnouncementDetailModal';
+import LeaderAnnouncementEditModal from '../Modals/LeaderAnnouncementEditModal';
 
 const LeaderAnnouncementBox = ({ announcement }) => {
-    const { title, content, announcementImage, createdAt, clubName } = announcement;
+    const { title, content, announcementImage, createdAt, clubName, clubID, status } = announcement;
+    const dispatch = useDispatch();
+    const [isOpen, setIsOpen] = useState(false);
+    const [isEdit, setIsEdit] = useState(false);
+    const formattedDate = dayjs(new Date(createdAt.seconds * 1000 + createdAt.nanoseconds / 1e6)).format('DD/MM/YYYY');
+
+    const statusTranslate = {
+        active: 'Yayında',
+        passive: 'Yayından Kaldırıldı',
+    };
+
+    const statusColor = {
+        active: 'text-green-500 bg-green-100',
+        passive: 'text-red-500 bg-red-100',
+    };
 
 
-    const date = new Date(createdAt.seconds * 1000 + createdAt.nanoseconds / 1e6);
-    const formattedDate = dayjs(date).format('DD/MM/YYYY');
+
+    const handleRemoveAnnouncement = () => {
+        dispatch(toggleAnnouncementStatus({ clubID, announcementID: announcement.id, status }));
+    };
+
+
 
     return (
-        <div className="bg-white shadow-lg rounded-lg overflow-hidden flex flex-col h-full transition-all duration-300 hover:shadow-xl">
-            <div className="relative border-b py-3">
+        <>
+        {
+            isOpen && ( <LeaderAnnouncementDetailModal setIsOpen={setIsOpen} announcement={announcement} />)
+        }
+        {
+            isEdit && ( <LeaderAnnouncementEditModal setIsEdit={setIsEdit} announcement={announcement} />)
+        }
+       
+        <div className="grid grid-cols-6 gap-3 bg-white p-4 rounded-lg shadow hover:shadow-md transition-shadow duration-300 place-items-center border">
+            {/* Duyuru Başlığı */}
+            <span className="col-span-1 justify-self-start text-gray-800 font-medium">{title}</span>
+
+            {/* Yayın Tarihi */}
+            <span className="col-span-1 justify-self-center text-gray-600">{formattedDate}</span>
+
+            {/* Görsel */}
+            <span className="col-span-1 justify-self-center">
                 <img
                     src={announcementImage || "/placeholder.svg?height=200&width=400"}
                     alt={title}
-                    className="w-full h-48 object-contain"
+                    className="w-32 h-32 object-contain rounded-md border"
                 />
-                <div className="absolute top-0 left-0 bg-primary text-primary-foreground px-3 py-1 rounded-br-lg">
-                    {clubName}
-                </div>
-            </div>
-            <div className="flex-1 p-4 flex flex-col gap-y-3">
-                <div>
-                    <h3 className="text-xl font-semibold mb-2">{title}</h3>
-                    <p className="text-muted-foreground mb-4">{content}</p>
-                </div>
-       
-                <div className="flex justify-between items-center text-sm text-muted-foreground mt-auto border-t pt-2">
-                    <div className="flex items-center">
-                        <FaCalendarDay className="w-4 h-4 mr-1" />
-                        {formattedDate}
-                    </div>
-                    <div className="flex items-center">
-                        <FaUsers className="w-4 h-4 mr-1" />
-                        {clubName}
-                    </div>
-                </div>
+            </span>
+
+            {/* Kulüp Adı */}
+            <span className="col-span-1 justify-self-center text-center text-gray-800">{clubName}</span>
+
+            {/* Duyuru Durumu */}
+            <span
+                className={`col-span-1 justify-self-center  px-4 py-1 rounded-full font-medium ${statusColor[status]}`}
+            >
+                {statusTranslate[status]}
+            </span>
+
+            {/* Eylem Düğmeleri */}
+            <div className="col-span-1 justify-self-center flex flex-col gap-y-2">
+                <button onClick={()=>setIsOpen(true)} className="px-4 py-2 rounded-full text-sm bg-gray-500 text-white hover:bg-gray-600">
+                    Detay
+                </button>
+                <button onClick={()=>setIsEdit(true)} className="px-4 py-2 rounded-full text-sm bg-yellow-500 text-white hover:bg-yellow-600">
+                    Düzenle
+                </button>
+                {status === 'active' && (
+                    <button
+                        onClick={handleRemoveAnnouncement}
+                        className="px-4 py-2 rounded-full text-sm bg-red-500 text-white hover:bg-red-600"
+                    >
+                        Yayından Kaldır
+                    </button>
+                )}
+                {status === 'passive' && (
+                    <button
+                        onClick={handleRemoveAnnouncement}
+                        className="px-4 py-2 rounded-full text-sm bg-green-500 text-white hover:bg-green-600"
+                    >
+                        Yayına Al
+                    </button>
+                )}
             </div>
         </div>
+        </>
     );
 };
 

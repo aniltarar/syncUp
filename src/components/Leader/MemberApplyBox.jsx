@@ -5,7 +5,8 @@ import { rejectMemberApply, successMemberApply } from '../../redux/slices/leader
 
 const MemberApplyBox = ({ memberApply }) => {
 
-    const formattedDate = dayjs(memberApply.date).format('DD/MM/YYYY HH:mm')
+
+    const formattedDate = dayjs(new Date(memberApply.createdAt.seconds * 1000 + memberApply.createdAt.nanoseconds / 1e6)).format('DD/MM/YYYY HH:mm');
     const dispatch = useDispatch()
 
     const statusTranslate = {

@@ -342,15 +342,61 @@ export const createAnnouncement = createAsyncThunk(
       const announcementRef = doc(collection(db, "announcements"));
       const setAnnouncementData = {
         id: announcementRef.id,
+        status: "active",
         ...announcementData,
       };
-
       await setDoc(announcementRef, setAnnouncementData);
+      const clubRef = doc(db, "clubs", announcementData.clubID);
+      await updateDoc(clubRef, {
+        announcements: arrayUnion(announcementRef.id),
+      });
       dispatch(fetchAnnouncementsByClubID(announcementData.clubID));
       toast.success("Duyuru başarıyla oluşturuldu.");
     } catch (e) {
       console.log(rejectWithValue(e.message));
       toast.error("Duyuru oluşturulurken bir hata oluştu.");
+      return rejectWithValue(e.message);
+    }
+  }
+);
+
+export const toggleAnnouncementStatus = createAsyncThunk(
+  "leader/toggleAnnouncementStatus",
+  async ({ announcementID, clubID, status }, { rejectWithValue, dispatch }) => {
+    try {
+      const announcementRef = doc(db, "announcements", announcementID);
+
+      if (status === "active") {
+        await updateDoc(announcementRef, {
+          status: "passive",
+        });
+        toast.success("Duyuru başarıyla yayından kaldırıldı.");
+      } else {
+        await updateDoc(announcementRef, {
+          status: "active",
+        });
+        toast.success("Duyuru başarıyla yayınlandı.");
+      }
+      dispatch(fetchAnnouncementsByClubID(clubID));
+    } catch (e) {
+      console.log(rejectWithValue(e.message));
+      toast.error("Duyuru durumu değiştirilirken bir hata oluştu.");
+      return rejectWithValue(e.message);
+    }
+  }
+);
+
+export const updateAnnouncement = createAsyncThunk(
+  "leader/updateAnnouncement",
+  async (announcementData, { rejectWithValue, dispatch }) => {
+    try {
+      const announcementRef = doc(db, "announcements", announcementData.id);
+      await updateDoc(announcementRef, announcementData);
+      dispatch(fetchAnnouncementsByClubID(announcementData.clubID));
+      toast.success("Duyuru başarıyla güncellendi.");
+    } catch (e) {
+      console.log(rejectWithValue(e.message));
+      toast.error("Duyuru güncellenirken bir hata oluştu.");
       return rejectWithValue(e.message);
     }
   }
@@ -480,5 +526,6 @@ export const leaderSlice = createSlice({
   },
 });
 
-export const { resetMemberApplies,resetAnnouncements,resetCurrentClub } = leaderSlice.actions;
+export const { resetMemberApplies, resetAnnouncements, resetCurrentClub } =
+  leaderSlice.actions;
 export default leaderSlice.reducer;
