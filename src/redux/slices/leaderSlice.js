@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
+  arrayRemove,
   arrayUnion,
   collection,
   doc,
@@ -18,6 +19,7 @@ const initialState = {
   message: "",
   clubs: [],
   currentClub: {},
+  leaders: [],
   events: [],
   currentEvent: {},
   members: [],
@@ -402,6 +404,78 @@ export const updateAnnouncement = createAsyncThunk(
   }
 );
 
+export const fetchMembersByClubID = createAsyncThunk(
+  "leader/fetchMembersByClubID",
+  async (clubID, { rejectWithValue }) => {
+    try {
+      const membersRef = collection(db, "users");
+      const membersQuery = query(
+        membersRef,
+        where("clubs", "array-contains", clubID)
+      );
+      const membersSnapshot = await getDocs(membersQuery);
+      const membersData = membersSnapshot.docs.map((doc) => doc.data());
+      return membersData;
+    } catch (e) {
+      return rejectWithValue(e.message);
+    }
+  }
+);
+
+export const giveLeadership = createAsyncThunk(
+  "leader/giveLeadership",
+  async (data, { rejectWithValue, dispatch }) => {
+    try {
+      const { clubID, newLeaderID } = data;
+      const clubRef = doc(db, "clubs", clubID);
+      const club = await getDoc(clubRef);
+      const { leaders } = club.data();
+      if (leaders.includes(newLeaderID)) {
+        toast.error("Kullanıcı zaten lider.");
+        return;
+      }
+      await updateDoc(clubRef, {
+        leaders: arrayUnion(newLeaderID),
+      });
+      dispatch(fetchLeaderClubsByUserID(newLeaderID));
+      toast.success("Liderlik başarıyla verildi.");
+    } catch (e) {
+      toast.error("Liderlik verilirken bir hata oluştu.");
+      console.log(rejectWithValue(e.message));
+      return rejectWithValue(e.message);
+    }
+  }
+);
+
+export const removeMember = createAsyncThunk(
+  "leader/removeMember",
+  async (data, { rejectWithValue, dispatch }) => {
+    try {
+      const { clubID, memberID } = data;
+      const clubRef = doc(db, "clubs", clubID);
+      const club = await getDoc(clubRef);
+      const { leaders } = club.data();
+      if (leaders.includes(memberID)) {
+        toast.error("Kullanıcı lider olduğu için kulüpten çıkarılamaz.");
+        return;
+      }
+
+      await updateDoc(clubRef, {
+        members: arrayRemove(memberID),
+      });
+      const userRef = doc(db, "users", memberID);
+      await updateDoc(userRef, {
+        clubs: arrayRemove(clubID),
+      });
+      dispatch(fetchMembersByClubID(clubID));
+      toast.success("Üye başarıyla kulüpten çıkarıldı.");
+    } catch (e) {
+      console.log(rejectWithValue(e.message));
+      return rejectWithValue(e.message);
+    }
+  }
+);
+
 export const leaderSlice = createSlice({
   name: "leader",
   initialState,
@@ -414,6 +488,9 @@ export const leaderSlice = createSlice({
     },
     resetCurrentClub: (state) => {
       state.currentClub = {};
+    },
+    resetMembers: (state) => {
+      state.members = [];
     },
   },
   extraReducers: (builder) => {
@@ -522,10 +599,45 @@ export const leaderSlice = createSlice({
       .addCase(createAnnouncement.rejected, (state, action) => {
         state.status = "failed";
         state.message = action.payload;
+      })
+      .addCase(toggleAnnouncementStatus.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(toggleAnnouncementStatus.fulfilled, (state) => {
+        state.status = "success";
+      })
+      .addCase(toggleAnnouncementStatus.rejected, (state, action) => {
+        state.status = "failed";
+        state.message = action.payload;
+      })
+      .addCase(updateAnnouncement.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(updateAnnouncement.fulfilled, (state) => {
+        state.status = "success";
+      })
+      .addCase(updateAnnouncement.rejected, (state, action) => {
+        state.status = "failed";
+        state.message = action.payload;
+      })
+      .addCase(fetchMembersByClubID.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchMembersByClubID.fulfilled, (state, action) => {
+        state.status = "success";
+        state.members = action.payload;
+      })
+      .addCase(fetchMembersByClubID.rejected, (state, action) => {
+        state.status = "failed";
+        state.message = action.payload;
       });
   },
 });
 
-export const { resetMemberApplies, resetAnnouncements, resetCurrentClub } =
-  leaderSlice.actions;
+export const {
+  resetMemberApplies,
+  resetAnnouncements,
+  resetCurrentClub,
+  resetMembers,
+} = leaderSlice.actions;
 export default leaderSlice.reducer;

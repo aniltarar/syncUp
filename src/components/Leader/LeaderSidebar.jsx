@@ -2,7 +2,7 @@ import React from 'react'
 import { NavLink } from 'react-router-dom'
 import syncUp from '/src/assets/syncUp.svg'
 import { MdDashboard } from "react-icons/md";
-import { FaBullhorn } from "react-icons/fa";
+import { FaBullhorn, FaUsers } from "react-icons/fa";
 import { FaClipboardCheck,FaPeopleRoof,FaCalendarDay } from "react-icons/fa6";
 import { IoMdSettings } from 'react-icons/io';
 
@@ -48,6 +48,7 @@ const LeaderSidebar = () => {
                     <FaClipboardCheck size={22} />
                     Üye Başvuruları
                 </NavLink>
+              
                 <NavLink to="club-settings" className={({ isActive }) =>
                     `flex items-center gap-x-3 text-slate-800 rounded-md transition-colors text-start px-4 py-2 ${isActive ? 'bg-neutral-700 text-white' : 'bg-neutral-200 hover:bg-neutral-300'}`
                 }>

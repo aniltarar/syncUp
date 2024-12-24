@@ -25,8 +25,6 @@ const LeaderClubs = () => {
     }
   });
 
-
-
   const toggleSortOrder = () => {
     setSortOrder(prevOrder => (prevOrder === "asc" ? "desc" : "asc"));
   };
@@ -36,11 +34,6 @@ const LeaderClubs = () => {
   });
 
   const clubBoxRef = useRef(null);
-
-
-
-
-
 
   useEffect(() => {
     dispatch(fetchLeaderClubsByUserID(user.uid))
@@ -73,7 +66,7 @@ const LeaderClubs = () => {
         <span className='justify-self-start flex items-center gap-x-3 cursor-pointer' onClick={toggleSortOrder}>Kulüp Adı {sortOrder === "asc" ? <FaSortAlphaDown size={20} /> : <FaSortAlphaDownAlt size={20} />}</span>
         <span className='justify-self-start'>Kulüp Logosu</span>
         <span className='justify-self-start'>Kulüp Liderleri</span>
-        <span className='justify-self-center'>Üye Sayısı</span>
+        <span className='justify-self-center'>Üyeleri Görüntüle</span>
         <span className='justify-self-center'>Etkinlik Sayısı</span>
         <span className='justify-self-center'>Bekleyen Üye Başvurusu</span>
       </div>

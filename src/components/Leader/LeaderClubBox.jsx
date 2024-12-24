@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { fetchClubLeadersName, fetchPendingMemberApplies } from '../../redux/slices/leaderSlice';
+import { Link } from 'react-router-dom';
 
 
 const LeaderClubBox = ({ club }) => {
@@ -54,7 +55,7 @@ const LeaderClubBox = ({ club }) => {
       </span>
 
       {/* Üye Sayısı */}
-      <span className="justify-self-center text-gray-800">{club?.members?.length} Üye</span>
+      <Link to={`members/${club.id}`} className="justify-self-center text-gray-800 px-4 py-1 bg-primary rounded-full hover:bg-primary-hover ">{club?.members?.length} Üye</Link>
 
       {/* Etkinlik Sayısı */}
       <span className="justify-self-center text-gray-800">{club?.events?.length} Etkinlik</span>

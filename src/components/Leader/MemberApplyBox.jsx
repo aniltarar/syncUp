@@ -35,12 +35,12 @@ const MemberApplyBox = ({ memberApply }) => {
            
 
             <div className='grid grid-cols-5 gap-3 items-center bg-white p-3 rounded-lg shadow border hover:shadow-md transition-shadow duration-300'>
-                <div className='justify-self-start'>{memberApply.displayName}</div>
+                <div className='justify-self-start'>{memberApply.displayName.toUpperCase()}</div>
                 <div className='justify-self-start'>{memberApply.clubName}</div>
                 <div className='justify-self-start'>{formattedDate}</div>
                 <div className={`justify-self-start text-sm px-4 py-1 rounded-full font-medium text-center w-32 ${statusColor[memberApply.status]}`}>{statusTranslate[memberApply.status]}</div>
                 <div className='justify-self-center flex gap-x-3'>
-                    <button onClick={() => handleSuccessApply(memberApply)} className=' px-4 py-2 rounded-full font-medium bg-yellow-500 text-white hover:bg-yellow-600' >Onayla</button>
+                    <button onClick={() => handleSuccessApply(memberApply)} className=' px-4 py-2 rounded-full font-medium bg-primary text-white hover:bg-primary-hover' >Onayla</button>
                     <button onClick={() => handleRejectApply(memberApply)} className=' px-4 py-2 rounded-full font-medium bg-red-500 text-white hover:bg-red-600' >Reddet</button>
                 </div>
             </div>

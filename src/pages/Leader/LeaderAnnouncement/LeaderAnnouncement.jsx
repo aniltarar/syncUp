@@ -22,10 +22,10 @@ const LeaderAnnouncement = () => {
   return (
 
     <div className='flex flex-col gap-y-3'>
-      <div className='flex justify-between items-center'>
+      <div className='flex flex-col justify-between items-start'>
         <h1 className='text-2xl font-semibold'>Duyurular</h1>
       </div>
-
+      <hr />
       <div className='grid grid-cols-3 gap-3'>
         {
           clubs?.map(club => (

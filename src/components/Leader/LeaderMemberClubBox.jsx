@@ -20,12 +20,12 @@ const LeaderMemberClubBox = ({ club }) => {
 
 
     return (
-        <div key={club.id} className='bg-neutral-100 p-3 rounded-lg shadow flex flex-col items-center justify-center'>
-            <div className='flex items-start gap-x-3 w-full'>
-                <img src={club.clubLogo} className='w-20 rounded-full h-20 size-fit' alt={`${club.clubName} kulübünün logosu`} />
-                <div className='flex flex-col gap-y-1'>
+        <div key={club.id} className='bg-white p-3 rounded-lg shadow flex flex-col items-center justify-center border'>
+            <div className='flex items-start gap-x-3 w-full justify-between'>
+                <img src={club.clubLogo} className=' rounded-full w-32 h-32  object-cover' alt={`${club.clubName} kulübünün logosu`} />
+                <div className='flex flex-col gap-y-1 items-end '>
                     <h1 className='text-xl font-semibold'>{club.clubName}</h1>
-                    <span className="justify-self-center text-sm px-4 py-1 rounded-full font-medium bg-primary-dark w-32 text-white "> Üye Sayısı : {club.members.length}</span>
+                    <span className=" text-sm px-4 py-1 rounded-full font-medium bg-primary-dark w-32 text-white "> Üye Sayısı : {club.members.length}</span>
                 </div>
             </div>
             <div className='flex flex-col gap-y-3 w-full '>

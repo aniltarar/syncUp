@@ -15,8 +15,8 @@ const LeaderEvents = () => {
   const [search, setSearch] = useState('');
   const [selectClub, setSelectClub] = useState('');
   const [selectStatus, setSelectStatus] = useState('');
-  const [sortOrder, setSortOrder] = useState('asc'); // Sıralama yönü
-  const [sortBy, setSortBy] = useState(''); // Aktif sıralama alanı
+  const [sortOrder, setSortOrder] = useState('asc'); // Varsayılan sıralama yönü (A-Z)
+  const [sortBy, setSortBy] = useState('eventName'); // Varsayılan sıralama alanı
   const [isOpen, setIsOpen] = useState(false); // Modal açma durumu
 
   const toggleSortOrder = (field) => {
@@ -24,7 +24,7 @@ const LeaderEvents = () => {
       setSortOrder((prevOrder) => (prevOrder === 'asc' ? 'desc' : 'asc'));
     } else {
       setSortBy(field);
-      setSortOrder('asc');
+      setSortOrder('asc'); // Yeni alan seçildiğinde varsayılan olarak A-Z başlatılır
     }
   };
 
@@ -48,7 +48,7 @@ const LeaderEvents = () => {
           ? new Date(a.eventDate) - new Date(b.eventDate)
           : new Date(b.eventDate) - new Date(a.eventDate);
       }
-      return 0;
+      return 0; // Varsayılan sıralama
     });
 
   useEffect(() => {
@@ -109,36 +109,37 @@ const LeaderEvents = () => {
         <div className="grid grid-cols-8 gap-3 bg-neutral-100 p-3 place-items-center rounded-lg shadow font-semibold">
           <span
             onClick={() => toggleSortOrder('eventName')}
-            className="cursor-pointer flex items-center gap-x-3 justify-self-start"
+            className="cursor-pointer flex items-center gap-x-3 justify-self-start "
           >
-            Etkinlik Adı{' '}
-            {sortBy === 'eventName' ? (
+            Etkinlik Adı
+            {
+              sortBy === 'eventName' ? (
+                sortOrder === 'asc' ? (
+                  <FaSortAlphaDown size={20} />
+                ) : (
+                  <FaSortAlphaDownAlt size={20} />
+                )
+              ) : (
+                <FaSortAlphaDown size={20} />
+              )
+            }
+          </span>
+          <span
+            onClick={() => toggleSortOrder('eventDate')}
+            className="cursor-pointer flex items-center gap-x-3 justify-self-start "
+          >
+            Etkinlik Tarihi
+            {sortBy === 'eventDate' ? (
               sortOrder === 'asc' ? (
                 <FaSortAlphaDown size={20} />
               ) : (
                 <FaSortAlphaDownAlt size={20} />
               )
             ) : (
-              <FaSortAlphaDownAlt size={20} />
-            )}
-          </span>
-          <span
-            onClick={() => toggleSortOrder('eventDate')}
-            className="cursor-pointer flex items-center gap-x-3 justify-self-start"
-          >
-            Etkinlik Tarihi{' '}
-            {sortBy === 'eventDate' ? (
-              sortOrder === 'asc' ? (
-                <FaSortAlphaDown size={20} /> 
-              ) : (
-                <FaSortAlphaDownAlt size={20} />
-              )
-            ) : (
-              <FaSortAlphaDownAlt size={20} />
+              <FaSortAlphaDown size={20} />
             )}
           </span>
           <span className="justify-self-center">Etkinlik Afişi</span>
-
           <span className="justify-self-center">Etkinlik Konumu</span>
           <span className="justify-self-center">Kulüp Adı</span>
           <span className="justify-self-center">Katılımcı Sayısı</span>
