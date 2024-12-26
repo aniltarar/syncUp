@@ -5,10 +5,11 @@ import { useState } from 'react';
 import LeaderGiveLeadershipModal from '../Modals/LeaderGiveLeadershipModal';
 import LeaderRemoveMemberModal from '../Modals/LeaderRemoveMemberModal';
 
-const LeaderMemberBox = ({ member }) => {
+const LeaderMemberBox = ({ member, leaders }) => {
 
     const [isOpen, setIsOpen] = useState(false)
     const [isRemoveOpen, setIsRemoveOpen] = useState(false)
+
 
 
 
@@ -30,8 +31,11 @@ const LeaderMemberBox = ({ member }) => {
                 <span className='justify-self-center'>{member.department}</span>
 
                 <span className='flex gap-2 justify-self-center'>
-                    <button onClick={() => setIsOpen(true)} className='bg-primary text-white p-2 rounded-lg shadow hover:bg-primary-hover'>Liderlik Ver</button>
-                    <button onClick={()=>setIsRemoveOpen(true)} className='bg-red-500 text-white p-2 rounded-lg shadow hover:bg-red-600'>Kulüpten Çıkar</button>
+                    {
+                        leaders?.find((leader) => leader === member.uid) ? <button className=' bg-blue-500 text-white px-4 py-1 rounded-lg w-24 hover:bg-blue-600'>Lider</button> : <button onClick={() => setIsOpen(true)} className='bg-primary text-white  px-4 py-1 rounded-lg w-24 hover:bg-primary-dark'>Üye</button>
+                    }
+
+                    <button onClick={() => setIsRemoveOpen(true)} className='bg-red-500 text-white p-2 rounded-lg shadow hover:bg-red-600'>Kulüpten Çıkar</button>
                 </span>
 
             </div>

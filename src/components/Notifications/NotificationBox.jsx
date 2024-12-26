@@ -39,7 +39,7 @@ const NotificationBox = ({ notification }) => {
                 <p className='text-sm'><span className='font-semibold'>Mesaj : </span>{message}</p>
             </div>
             <div className='flex items-center justify-between w-full'>
-                <span className='text-sm'><span className='font-semibold'>Gönderen : </span>{from.toUpperCase()}</span>
+                <span className='text-sm'><span className='font-semibold'>Gönderen : </span>{from?.toUpperCase()}</span>
                 <div className=' flex gap-x-2 items-center'>
                     <button 
                         disabled={isRead} 

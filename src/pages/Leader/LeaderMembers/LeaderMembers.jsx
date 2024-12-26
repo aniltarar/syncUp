@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import { fetchMembersByClubID, resetMembers } from '../../../redux/slices/leaderSlice'
+import { fetchLeadersByClubID, fetchMembersByClubID, resetLeaders, resetMembers } from '../../../redux/slices/leaderSlice'
 import { FaSortAlphaDown, FaSortAlphaDownAlt } from 'react-icons/fa';
 import LeaderMemberBox from '../../../components/Leader/LeaderMemberBox';
 
@@ -9,7 +9,7 @@ const LeaderMembers = () => {
 
     const { clubID } = useParams()
     const dispatch = useDispatch()
-    const { members } = useSelector((state) => state.leader)
+    const { members,leaders } = useSelector((state) => state.leader)
     const [search, setSearch] = useState('')
     const [sortOrder, setSortOrder] = useState('asc')
 
@@ -26,8 +26,11 @@ const LeaderMembers = () => {
 
     useEffect(() => {
         dispatch(resetMembers())
+        dispatch(resetLeaders())
         dispatch(fetchMembersByClubID(clubID))
+        dispatch(fetchLeadersByClubID(clubID))
     }, [dispatch, clubID])
+
 
 
     return (
@@ -55,7 +58,7 @@ const LeaderMembers = () => {
 
             {
                 filteredMembers?.map((member) => (
-                    <LeaderMemberBox key={member.uid} member={member} />
+                    <LeaderMemberBox key={member.uid} member={member} leaders={leaders} />
                 ))
             }
 

@@ -13,7 +13,6 @@ import 'dayjs/locale/tr'; // Türkçe dil dosyasını dahil ediyoruz
 dayjs.extend(relativeTime);
 dayjs.locale('tr');
 
-
 const NotificationsDown = () => {
     const dispatch = useDispatch();
     const user = useAccount();
@@ -29,9 +28,11 @@ const NotificationsDown = () => {
         dispatch(fetchNotifications(user.uid))
     }, [dispatch, user.uid]);
 
+
+
     return (
         <Menu>
-            <MenuButton className="px-5 py-2 rounded-full  bg-primary/20 hover:bg-primary/50 hover:ring-2 ring-offset-2 ring-primary transition-all duration-200" onClick={toggleOpen}>
+            <MenuButton className="px-5 py-2 rounded-full bg-primary/20 hover:bg-primary/50 hover:ring-2 ring-offset-2 ring-primary transition-all duration-200" onClick={toggleOpen}>
                 <div className="flex items-center gap-3">
                     <span className=" flex rounded-full "><FaBell size={22} /></span>
                 </div>
@@ -52,9 +53,10 @@ const NotificationsDown = () => {
                     {
                         notifications &&
                         notifications.slice(0, 3).map((notification, index) => {
+                            // Tarih bilgisini almak için kontrol ve dönüşüm
                             const notificationTime = notification.createdAt?.toDate
-                                ? dayjs(notification.createdAt.toDate()).fromNow()
-                                : 'Geçersiz Tarih'; // Eğer createdAt eksikse
+                                ? dayjs(notification.createdAt.toDate()).fromNow()  // Geçmiş zamanı "X zaman önce" formatında al
+                                : 'Geçersiz Tarih';  // Eğer createdAt yoksa
 
                             return (
                                 <MenuItem key={notification.id || index}>
@@ -68,7 +70,6 @@ const NotificationsDown = () => {
                             );
                         })
                     }
-
 
                     <MenuItem className="mt-5 text-center block bg-neutral-200  transition-colors text-sm data-[focus]:bg-neutral-300  px-2 py-1 rounded-md">
                         <Link to='/notifications' className=' '>Tüm Bildirimlere Git</Link>

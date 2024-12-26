@@ -13,6 +13,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../../firebase/firebaseConfig";
 import toast from "react-hot-toast";
+import dayjs from "dayjs";
 
 const initialState = {
   status: "idle",
@@ -62,6 +63,25 @@ export const fetchClubLeadersName = createAsyncThunk(
       const leadersName = leadersData.docs.map((doc) => doc.data().displayName);
       return leadersName;
     } catch (e) {
+      return rejectWithValue(e.message);
+    }
+  }
+);
+
+export const updateClubByClubID = createAsyncThunk(
+  "leader/updateClubByClubID",
+  async (clubData, { rejectWithValue,dispatch }) => {
+    try {
+      const {id,clubName,clubLogo,description,leaders} = clubData;
+      
+      const clubRef = doc(db, "clubs", clubData.id);
+      await updateDoc(clubRef, clubData);
+      dispatch(fetchLeaderClubsByUserID(leaders[0]));
+      toast.success("Kulüp başarıyla güncellendi.");
+
+    } catch (e) {
+      console.log(rejectWithValue(e.message));
+      toast.error("Kulüp güncellenirken bir hata oluştu.");
       return rejectWithValue(e.message);
     }
   }
@@ -262,12 +282,25 @@ export const successMemberApply = createAsyncThunk(
         { merge: true }
       );
 
+      const notificationRef = doc(collection(db, "notifications"));
+      const setNotificationData = {
+        id: notificationRef.id,
+        to: memberApply.userID,
+        from: memberApply.clubName,
+        title: "Üyelik Başvurusu Onaylandı",
+        message: `${memberApply.clubName} kulübüne üyelik başvurunuz onaylandı.`,
+        createdAt: dayjs().toDate(),
+        status: "unread",
+      };
+      await setDoc(notificationRef, setNotificationData);
+
       // memberApply'nin userID'sini kullanarak user'ın clubs içerisine clubID ekle
       const userRef = doc(db, "users", memberApply.userID);
       await updateDoc(
         userRef,
         {
           clubs: arrayUnion(memberApply.clubID),
+          notifications: arrayUnion(notificationRef.id),
         },
         { merge: true }
       );
@@ -305,6 +338,27 @@ export const rejectMemberApply = createAsyncThunk(
       await updateDoc(memberApplyRef, {
         status: "failed",
       });
+
+      const notificationRef = doc(collection(db, "notifications"));
+      const setNotificationData = {
+        id: notificationRef.id,
+        to: memberApply.userID,
+        from: memberApply.clubName,
+        title: "Üyelik Başvurusu Reddedildi",
+        message: `${memberApply.clubName} kulübüne üyelik başvurunuz reddedildi.`,
+        createdAt: dayjs().toDate(),
+        status: "unread",
+      };
+      await setDoc(notificationRef, setNotificationData);
+
+      const userRef = doc(db, "users", memberApply.userID);
+      await updateDoc(
+        userRef,
+        {
+          notifications: arrayUnion(notificationRef.id),
+        },
+        { merge: true }
+      );
 
       dispatch(fetchMemberAppliesByClubID(memberApply.clubID));
       toast.success("Üyelik başarıyla reddedildi.");
@@ -404,6 +458,8 @@ export const updateAnnouncement = createAsyncThunk(
   }
 );
 
+// Member Services
+
 export const fetchMembersByClubID = createAsyncThunk(
   "leader/fetchMembersByClubID",
   async (clubID, { rejectWithValue }) => {
@@ -416,6 +472,21 @@ export const fetchMembersByClubID = createAsyncThunk(
       const membersSnapshot = await getDocs(membersQuery);
       const membersData = membersSnapshot.docs.map((doc) => doc.data());
       return membersData;
+    } catch (e) {
+      return rejectWithValue(e.message);
+    }
+  }
+);
+
+export const fetchLeadersByClubID = createAsyncThunk(
+  "leader/fetchLeadersByClubID",
+  async (clubID, { rejectWithValue }) => {
+    try {
+    const clubRef = doc(db, "clubs", clubID);
+    const club = await getDoc(clubRef);
+    const { leaders } = club.data();
+
+    return leaders;
     } catch (e) {
       return rejectWithValue(e.message);
     }
@@ -437,7 +508,14 @@ export const giveLeadership = createAsyncThunk(
       await updateDoc(clubRef, {
         leaders: arrayUnion(newLeaderID),
       });
+
+      const userRef = doc(db, "users", newLeaderID);
+      await updateDoc(userRef, {
+        role: "leader",
+      });
+
       dispatch(fetchLeaderClubsByUserID(newLeaderID));
+      dispatch(fetchLeadersByClubID(clubID));
       toast.success("Liderlik başarıyla verildi.");
     } catch (e) {
       toast.error("Liderlik verilirken bir hata oluştu.");
@@ -476,6 +554,8 @@ export const removeMember = createAsyncThunk(
   }
 );
 
+
+
 export const leaderSlice = createSlice({
   name: "leader",
   initialState,
@@ -492,6 +572,9 @@ export const leaderSlice = createSlice({
     resetMembers: (state) => {
       state.members = [];
     },
+    resetLeaders: (state) => {
+      state.leaders = [];
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -630,7 +713,18 @@ export const leaderSlice = createSlice({
       .addCase(fetchMembersByClubID.rejected, (state, action) => {
         state.status = "failed";
         state.message = action.payload;
-      });
+      })
+      .addCase(fetchLeadersByClubID.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchLeadersByClubID.fulfilled, (state, action) => {
+        state.status = "success";
+        state.leaders = action.payload;
+      })
+      .addCase(fetchLeadersByClubID.rejected, (state, action) => {
+        state.status = "failed";
+        state.message = action.payload;
+      })
   },
 });
 
@@ -639,5 +733,6 @@ export const {
   resetAnnouncements,
   resetCurrentClub,
   resetMembers,
+  resetLeaders
 } = leaderSlice.actions;
 export default leaderSlice.reducer;

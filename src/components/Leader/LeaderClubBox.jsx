@@ -24,7 +24,7 @@ const LeaderClubBox = ({ club }) => {
       const leaderNames = data.payload.map((name) => capitalizeWords(name));
       setLeaderNames(leaderNames);
     });
-    
+
   }, [club, dispatch]);
 
   useEffect(() => {
@@ -55,15 +55,17 @@ const LeaderClubBox = ({ club }) => {
       </span>
 
       {/* Üye Sayısı */}
-      <Link to={`members/${club.id}`} className="justify-self-center text-gray-800 px-4 py-1 bg-primary rounded-full hover:bg-primary-hover ">{club?.members?.length} Üye</Link>
+      <Link to={`members/${club?.id}`} className="justify-self-center text-gray-800 px-4 py-1 bg-primary rounded-full hover:bg-primary-hover ">{club?.members?.length} Üye</Link>
 
       {/* Etkinlik Sayısı */}
-      <span className="justify-self-center text-gray-800">{club?.events?.length} Etkinlik</span>
+      <Link to="/leader/events" className="justify-self-center text-gray-800 px-4 py-1 bg-primary rounded-full hover:bg-primary-hover ">{club?.events?.length} Etkinlik</Link>
 
       {/* Bekleyen Üye Başvuruları */}
-      <span className="justify-self-center text-sm px-4 py-1 rounded-full font-medium bg-yellow-100 text-yellow-500 animate-pulse">
-        {pendingApplies?.length || 0} Kişi bekliyor.
-      </span>
+      <Link to={`/leader/membership-applies/${club?.id}`} className={`justify-self-center text-sm px-4 py-1  rounded-full font-medium bg-yellow-200  ${pendingApplies?.length > 0 ? 'hover:bg-yellow-200 bg-yellow-200 animate-pulse hover:text-yellow-500' : ''}`}>
+        {
+          pendingApplies?.length > 0 ? `${pendingApplies.length} Bekleyen Başvuru` : 'Bekleyen Başvuru Yok'
+        }
+      </Link>
     </div>
   );
 };
