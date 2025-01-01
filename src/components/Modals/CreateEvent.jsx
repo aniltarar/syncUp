@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { createEvent } from '../../redux/slices/leaderSlice';
 
+
 const CreateEvent = ({ clubs, setIsOpen }) => {
 
     const { register, handleSubmit, formState: { errors } } = useForm();
@@ -31,7 +32,7 @@ const CreateEvent = ({ clubs, setIsOpen }) => {
             eventDescription: data.eventDescription,
             eventLocation: data.eventLocation,
             eventDate: data.eventDate,
-            eventCapacity: personCount,
+            eventCapacity: Number(personCount),
             eventImage: fileData.secure_url,
             clubID: data.clubID,
             clubName: clubs.find(club => club.id === data.clubID).clubName,

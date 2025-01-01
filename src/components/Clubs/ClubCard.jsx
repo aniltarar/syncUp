@@ -21,13 +21,13 @@ const ClubCard = ({ club }) => {
             toast.error('Kulübe başvuru yapabilmek için giriş yapmalısınız.');
             return;
         }
-    
+
         // Kullanıcı bilgilerini kontrol edin
         if (!user.displayName) {
             toast.error('Kullanıcı bilgileri eksik. Lütfen profilinizi güncelleyin.');
             return;
         }
-    
+
         // Kulübe üye başvurusu yap
         const applyData = {
             clubID: id,
@@ -35,25 +35,19 @@ const ClubCard = ({ club }) => {
             userID: user?.uid,
             displayName: user?.displayName, // Kullanıcının adı soyadı burada geçiliyor
         };
-    
+
         dispatch(applyMemberClub(applyData));
     };
-    
+
 
     return (
         <div className='flex flex-col border shadow-lg rounded-lg items-center gap-y-2 '>
-            <div className="badges flex w-full my-3 ml-3 gap-x-3">
-                <span className='px-2 py-1 bg-primary-light rounded-full text-sm hover:bg-primary-hover cursor-pointer'>Teknoloji</span>
-                <span className='px-2 py-1 bg-primary-light rounded-full text-sm hover:bg-primary-hover cursor-pointer'>Yazılım</span>
-            </div>
-            <div className="clubLogo p-3">
-                <img src={clubLogo} className='h-52 rounded-md border ' alt={`${clubName} kulübünün logosu.`} />
+
+            <div className="clubLogo w-full">
+                <img src={clubLogo} className='h-52 rounded-md border object-center object-contain w-full' alt={`${clubName} kulübünün logosu.`} />
             </div>
             <div className="clubName text-lg font-semibold">{clubName}</div>
-            <div className="flex items-center justify-start gap-x-2 text-neutral-500 text-sm">
-                <IoLocationSharp size={22} />
-                <span>Mühendislik Fakültesi</span>
-            </div>
+
             <div className="members-events flex justify-between gap-x-5">
                 <span className='flex items-center gap-x-1 text-sm text-neutral-500'>
                     <FaUsers size={22} />
@@ -79,8 +73,8 @@ const ClubCard = ({ club }) => {
                     className='px-2 py-1 bg-primary rounded-lg flex items-center justify-center gap-x-2 w-full hover:bg-primary-hover'
                     onClick={handleMemberApply}
                 >
-                    <MdLogin size={20} />
-                    <span className='text-center'>Katıl</span>
+                    <MdLogin className='text-white' size={20} />
+                    <span className='text-center text-white'>Katıl</span>
                 </button>
             </div>
         </div>
