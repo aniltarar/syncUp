@@ -63,7 +63,7 @@ const AdminClubsApplies = () => {
     });
 
   return (
-    <div className='p-3 flex flex-col gap-y-3'>
+    <div className='flex flex-col gap-y-3'>
       <div className="w-full bg-neutral-100 p-3 rounded-lg">
         <h1 className='text-2xl'>
           Hoş Geldiniz, <span className='text-primary font-semibold'>{user?.displayName}</span>

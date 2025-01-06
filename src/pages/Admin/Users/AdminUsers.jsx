@@ -69,7 +69,7 @@ useEffect(() => {
   }, [dispatch]);
 
   return (
-    <div className='flex flex-col p-3 gap-y-5'>
+    <div className='flex flex-col gap-y-5'>
       <div className='bg-neutral-100 p-3 rounded-lg flex flex-row items-center justify-between gap-y-2'>
         <div>
 

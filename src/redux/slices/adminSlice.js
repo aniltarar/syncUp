@@ -185,6 +185,21 @@ export const setClubPassive = createAsyncThunk(
     }
   }
 );
+// Event / Etkinlik servisleri
+
+export const getEvents = createAsyncThunk(
+  "admin/getEvents",
+  async (_, { rejectWithValue }) => {
+    try {
+      const eventsRef = collection(db, "events");
+      const events = await getDocs(eventsRef);
+      const eventsData = events.docs.map((doc) => doc.data());
+      return eventsData;
+    } catch (e) {
+      return rejectWithValue(e.message);
+    }
+  }
+);
 
 // Users / Kullanıcı servisleri
 
@@ -234,6 +249,22 @@ export const enableUser = createAsyncThunk(
         "Kullanıcı engellenenler listesinden çıkarılamadı! Lütfen tekrar deneyin."
       );
       return rejectWithValue(error.message);
+    }
+  }
+);
+// Announcument / Duyuru servisleri
+
+export const getAnnouncuments = createAsyncThunk(
+  "admin/getAnnouncuments",
+  async (_, { rejectWithValue }) => {
+    try {
+      const announcumentsRef = collection(db, "announcements");
+      const announcuments = await getDocs(announcumentsRef);
+      const announcumentsData = announcuments.docs.map((doc) => doc.data());
+      
+      return announcumentsData;
+    } catch (e) {
+      return rejectWithValue(e.message);
     }
   }
 );
@@ -295,6 +326,68 @@ export const adminSlice = createSlice({
         state.users = action.payload;
       })
       .addCase(getUsers.rejected, (state, action) => {
+        state.status = "failed";
+        state.message = action.payload;
+      })
+      .addCase(disableUser.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(disableUser.fulfilled, (state, action) => {
+        state.status = "success";
+      })
+      .addCase(disableUser.rejected, (state, action) => {
+        state.status = "failed";
+        state.message = action.payload;
+      })
+      .addCase(enableUser.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(enableUser.fulfilled, (state, action) => {
+        state.status = "success";
+      })
+      .addCase(enableUser.rejected, (state, action) => {
+        state.status = "failed";
+        state.message = action.payload;
+      })
+      .addCase(setClubActive.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(setClubActive.fulfilled, (state, action) => {
+        state.status = "success";
+      })
+      .addCase(setClubActive.rejected, (state, action) => {
+        state.status = "failed";
+        state.message = action.payload;
+      })
+      .addCase(setClubPassive.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(setClubPassive.fulfilled, (state, action) => {
+        state.status = "success";
+      })
+      .addCase(setClubPassive.rejected, (state, action) => {
+        state.status = "failed";
+        state.message = action.payload;
+      })
+      .addCase(getEvents.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(getEvents.fulfilled, (state, action) => {
+        state.status = "success";
+        state.events = action.payload;
+      })
+      .addCase(getEvents.rejected, (state, action) => {
+        state.status = "failed";
+        state.message = action.payload;
+      })
+      .addCase(getAnnouncuments.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(getAnnouncuments.fulfilled, (state, action) => {
+        state.status = "success";
+        state.announcuments = action.payload;
+      })
+      .addCase(getAnnouncuments.rejected, (state, action) => {
         state.status = "failed";
         state.message = action.payload;
       });

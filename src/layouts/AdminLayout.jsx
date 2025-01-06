@@ -8,7 +8,7 @@ const AdminLayout = () => {
     return (
         <AdminContainer>
             <AdminSideBar />
-            <div className='w-full min-h-screen bg-white'>
+            <div className='w-full min-h-screen bg-white p-3'>
                 <Toaster position='top-right' />
                 <Outlet />
             </div>

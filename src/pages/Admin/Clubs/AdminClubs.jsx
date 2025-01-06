@@ -11,7 +11,6 @@ const AdminClubs = () => {
   const dispatch = useDispatch();
   const { clubs } = useSelector((state) => state.admin);
 
-
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState('all');
   const [sortOrder, setSortOrder] = useState('asc');
@@ -33,7 +32,6 @@ const AdminClubs = () => {
       return b.clubName.localeCompare(a.clubName);
     }
   });
-
   const clubsContainerRef = useRef(null);
 
   useEffect(() => {
@@ -42,14 +40,12 @@ const AdminClubs = () => {
     }
 
   }, [clubsContainerRef])
-
-
   useEffect(() => {
     dispatch(getClubs());
   }, [dispatch]);
 
   return (
-    <div className="flex flex-col p-3 gap-y-5">
+    <div className="flex flex-col  gap-y-5">
       <div className="bg-neutral-100 p-3 rounded-lg flex flex-row items-center justify-between gap-y-2">
         <div>
           <h1 className="text-2xl font-semibold">Kulüp Yönetim Paneli</h1>
