@@ -12,7 +12,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../../firebase/firebaseConfig";
 import toast from "react-hot-toast";
-import { array } from "zod";
+
 import dayjs from "dayjs";
 
 const initialState = {
@@ -22,7 +22,7 @@ const initialState = {
   applies: [],
   clubs: [],
   events: [],
-  announcuments: [],
+  announcements: [],
   feedbacks: [],
 };
 
@@ -254,16 +254,55 @@ export const enableUser = createAsyncThunk(
 );
 // Announcument / Duyuru servisleri
 
-export const getAnnouncuments = createAsyncThunk(
+export const getAnnouncements = createAsyncThunk(
   "admin/getAnnouncuments",
   async (_, { rejectWithValue }) => {
     try {
-      const announcumentsRef = collection(db, "announcements");
-      const announcuments = await getDocs(announcumentsRef);
-      const announcumentsData = announcuments.docs.map((doc) => doc.data());
-      
-      return announcumentsData;
+      const announcementsRef = collection(db, "announcements");
+      const announcements = await getDocs(announcementsRef);
+      const announcementsData = announcements.docs.map((doc) => doc.data());
+      return announcementsData;
     } catch (e) {
+      return rejectWithValue(e.message);
+    }
+  }
+);
+
+export const toggleAnnouncementStatus = createAsyncThunk(
+  "admin/toggleAnnouncementStatus",
+  async (announcementID, { dispatch, rejectWithValue }) => {
+    try {
+      const announcementRef = doc(db, "announcements", announcementID);
+      const announcement = await getDoc(announcementRef);
+      const { status } = announcement.data();
+      await updateDoc(announcementRef, { status: status === "active" ? "passive" : "active" });
+      toast.success("Duyuru başarıyla güncellendi!");
+      dispatch(getAnnouncements());
+      return announcementID;
+    } catch (error) {
+      toast.error("Duyuru güncellenemedi! Lütfen tekrar deneyin.");
+      return rejectWithValue(error.message);
+    }
+  });
+
+export const createAnnouncement = createAsyncThunk(
+  "admin/createAnnouncement",
+  async (data, { rejectWithValue, dispatch }) => {
+    try{
+      const announcementRef = doc(collection(db, "announcements"));
+      const announcementData = {
+        id: announcementRef.id,
+        ...data,
+      }
+      await setDoc(announcementRef, announcementData);
+      toast.success("Duyuru başarıyla oluşturuldu!");
+      dispatch(getAnnouncements());
+      return announcementData;
+      
+
+    }catch(e){
+      toast.error("Duyuru oluşturulamadı! Lütfen tekrar deneyin.");
+      console.log(rejectWithValue(e.message));
       return rejectWithValue(e.message);
     }
   }
@@ -380,14 +419,14 @@ export const adminSlice = createSlice({
         state.status = "failed";
         state.message = action.payload;
       })
-      .addCase(getAnnouncuments.pending, (state) => {
+      .addCase(getAnnouncements.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(getAnnouncuments.fulfilled, (state, action) => {
+      .addCase(getAnnouncements.fulfilled, (state, action) => {
         state.status = "success";
-        state.announcuments = action.payload;
+        state.announcements = action.payload;
       })
-      .addCase(getAnnouncuments.rejected, (state, action) => {
+      .addCase(getAnnouncements.rejected, (state, action) => {
         state.status = "failed";
         state.message = action.payload;
       });

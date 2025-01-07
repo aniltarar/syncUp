@@ -290,7 +290,7 @@ export const successMemberApply = createAsyncThunk(
         title: "Üyelik Başvurusu Onaylandı",
         message: `${memberApply.clubName} kulübüne üyelik başvurunuz onaylandı.`,
         createdAt: dayjs().toDate(),
-        status: "unread",
+        isRead: false,
       };
       await setDoc(notificationRef, setNotificationData);
 
@@ -347,7 +347,7 @@ export const rejectMemberApply = createAsyncThunk(
         title: "Üyelik Başvurusu Reddedildi",
         message: `${memberApply.clubName} kulübüne üyelik başvurunuz reddedildi.`,
         createdAt: dayjs().toDate(),
-        status: "unread",
+        isRead: false,
       };
       await setDoc(notificationRef, setNotificationData);
 

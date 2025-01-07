@@ -1,17 +1,18 @@
-import dayjs from 'dayjs';
 import React from 'react'
 import { createPortal } from 'react-dom'
-import { useForm } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
-import { createAnnouncement } from '../../redux/slices/leaderSlice';
+import { useForm } from 'react-hook-form'
+import { createAnnouncement } from '../../redux/slices/adminSlice'
+import dayjs from 'dayjs'
+import { useDispatch } from 'react-redux'
 
 
+const AdminCreateAnnouncementModal = ({ setIsOpen }) => {
 
-const LeaderCreateAnnouncement = ({ setIsOpen, club }) => {
-
+    const dispatch = useDispatch()
     const modalRoot = document.getElementById('modal-root')
-    const { register, handleSubmit, formState: { errors } } = useForm();
-    const dispatch = useDispatch();
+
+const { register, handleSubmit, formState: { errors } } = useForm();
+
 
     const announcementSubmit = async (data) => {
 
@@ -30,32 +31,39 @@ const LeaderCreateAnnouncement = ({ setIsOpen, club }) => {
             title: data.title,
             content: data.content,
             announcementImage: fileData.url,
-            clubID: club.id,
-            publisher: club.clubName,
+            clubID: "11111",
+            publisher: "SyncUp Yönetimi",
             createdAt: dayjs().toDate(),
-            createdBy: club.leaders,
+            status:"active"
         }
         dispatch(createAnnouncement(announcementData))
         setIsOpen(false);
     }
 
 
+
     return createPortal(
+        <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50'>
+            <div className='bg-white rounded-lg shadow-lg w-1/2  p-6'>
+                <div className='w-full flex  items-start justify-between mb-2 '>
+                    <div >
+                        <h1 className='text-2xl font-semibold'>Yeni Duyuru Oluştur</h1>
+                        <p className='text-sm text-neutral-600 mt-2'>Duyurunuzu oluşturun ve yayınlayın</p>
+                    </div>
+                    <button onClick={() => setIsOpen(false)} className="text-gray-500 hover:text-black text-2xl" >&times;</button>
+                </div>
+                
+                <hr />
 
-        <div className='fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center'>
-            <div className='bg-white p-8 rounded-lg w-1/3'>
-
-                <h1 className='text-2xl font-semibold'>{club.clubName} - Duyuru Oluştur</h1>
-                <hr className='my-4' />
                 <form onSubmit={handleSubmit(announcementSubmit)}>
-                    <div className='flex flex-col gap-y-4'>
+                    <div className='flex flex-col gap-y-4 my-2'>
                         <div className='flex flex-col gap-y-2'>
                             <label htmlFor="title" className='font-semibold'>Duyuru Başlığı</label>
                             <input type="text" id="title" {...register('title', { required: true })} className='border border-gray-300 rounded-lg p-2' />
                             {errors.title && <span className='text-red-500'>Bu alan zorunludur</span>}
                         </div>
                         <div className='flex flex-col gap-y-2'>
-                            <label>Duyuru Resmi</label>
+                            <label className='font-semibold'>Duyuru Resmi</label>
                             <input
                                 type="file"
                                 {...register("announcementImage", {
@@ -79,10 +87,9 @@ const LeaderCreateAnnouncement = ({ setIsOpen, club }) => {
 
                 </form>
             </div>
-        </div>
-        ,
-        modalRoot
+        </div>, modalRoot
+
     )
 }
 
-export default LeaderCreateAnnouncement
+export default AdminCreateAnnouncementModal

@@ -21,8 +21,8 @@ const EventBox = ({ event }) => {
             <span>{eventName}</span>
             <span className='justify-self-center'>{dayjs(eventDate).format("DD/MM/YYYY HH:mm")}</span>
             <span className='justify-self-center'>{eventLocation}</span>
-            <span className={` ${statusColor[status]} w-32 text-center rounded-lg p-1 font-semibold justify-self-center`}>{statusTranslate[status]}</span>
             <span className='justify-self-center'>{clubName}</span>
+            <span className={` ${statusColor[status]} w-32 text-center rounded-lg p-1 font-semibold justify-self-center`}>{statusTranslate[status]}</span>
         </div>
     )
 }

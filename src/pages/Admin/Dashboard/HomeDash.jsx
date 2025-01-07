@@ -10,7 +10,7 @@ import PopulerClubBox from '../../../components/Admin/AdminDashboard/PopulerClub
 import LastEventBox from '../../../components/Admin/AdminDashboard/LastEventBox';
 
 
-const TopSection = ({ user, applies, clubs, users, events, announcuments }) => {
+const TopSection = ({ user, applies, clubs, users, events, announcements }) => {
 
   const filteredPendingApplies = applies?.filter(apply => apply.status === 'pending');
 
@@ -68,7 +68,7 @@ const TopSection = ({ user, applies, clubs, users, events, announcuments }) => {
             <FaBullhorn size={22} className='text-black' />
           </div>
           <div className="flex items-center gap-x-3 bg-white p-3 rounded-lg w-full">
-            <span className='text-3xl font-bold text-primary'>{announcuments.length}</span>
+            <span className='text-3xl font-bold text-primary'>{announcements.length}</span>
             <span className='text-xl'>Aktif Duyuru</span>
           </div>
         </div>
@@ -174,13 +174,13 @@ const HomeDash = () => {
   const user = useAccount();
   useAdmin();
   // Redux Stateler
-  const { applies, clubs, users, events, announcuments } = useSelector(state => state.admin);
+  const { applies, clubs, users, events, announcements } = useSelector(state => state.admin);
 
 
 
   return (
     <div className=' flex flex-col gap-y-5'>
-      <TopSection user={user} applies={applies} clubs={clubs} users={users} events={events} announcuments={announcuments} />
+      <TopSection user={user} applies={applies} clubs={clubs} users={users} events={events} announcements={announcements} />
       <MidSection clubs={clubs} events={events} />
     </div>
   )

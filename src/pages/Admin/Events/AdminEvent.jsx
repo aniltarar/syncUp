@@ -10,11 +10,14 @@ const AdminEvent = () => {
   const user = useAccount()
   const dispatch = useDispatch()
   const { events } = useSelector((state) => state.admin)
+
   const [search, setSearch] = useState('')
   const [status, setStatus] = useState('all')
   const [sortOrder, setSortOrder] = useState('asc')
   const [sortType, setSortType] = useState('eventName')
   const [selectedClub, setSelectedClub] = useState('all')
+
+
   const filteredEvents = events?.filter((event) => {
     const matchSearch = event.eventName.toLowerCase().includes(search.toLowerCase())
     const matchStatus = status === 'all' || event.status === status
@@ -73,17 +76,6 @@ const AdminEvent = () => {
           onChange={(e) => setSearch(e.target.value)}
           className="col-span-3 p-2 border rounded"
         />
-
-        <select
-          value={status}
-          onChange={(e) => setStatus(e.target.value)}
-          className="col-span-1 p-2 border rounded"
-        >
-          <option value="all">Tüm Durumlar</option>
-          <option value="pending">Planlanıyor</option>
-          <option value="finished">Tamamlanmış</option>
-          <option value="failed">İptal Edilmiş</option>
-        </select>
         <select
           value={selectedClub}
           onChange={(e) => setSelectedClub(e.target.value)}
@@ -97,6 +89,17 @@ const AdminEvent = () => {
             </option>
           ))}
         </select>
+        <select
+          value={status}
+          onChange={(e) => setStatus(e.target.value)}
+          className="col-span-1 p-2 border rounded"
+        >
+          <option value="all">Tüm Durumlar</option>
+          <option value="pending">Planlanıyor</option>
+          <option value="finished">Tamamlanmış</option>
+          <option value="failed">İptal Edilmiş</option>
+        </select>
+
 
 
       </div>
@@ -120,8 +123,8 @@ const AdminEvent = () => {
           }
         </span>
         <span className='font-semibold justify-self-center'>Yer</span>
-        <span className='font-semibold justify-self-center'>Durum</span>
         <span className='font-semibold justify-self-center'>Kulüp</span>
+        <span className='font-semibold justify-self-center'>Durum</span>
       </div>
 
       <div className='flex flex-col gap-y-3' ref={eventsContainerRef}>
