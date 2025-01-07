@@ -60,13 +60,18 @@ const AdminEvent = () => {
 
   return (
     <div className='flex flex-col gap-y-3' >
-      <div className="w-full bg-neutral-100 p-3 rounded-lg">
-        <h1 className='text-2xl'>
-          Hoş Geldiniz, <span className='text-primary font-semibold'>{user?.displayName}</span>
-        </h1>
-        <p>
-          Etkinlikler ile ilgili detayları buradan görebilirsiniz. Gerekli işlemleri yapabilirsiniz.
-        </p>
+      <div className="w-full flex items-center justify-between bg-neutral-100 p-3 rounded-lg">
+        <div>
+          <h1 className='text-2xl'>
+            Hoş Geldiniz, <span className='text-primary font-semibold'>{user?.displayName}</span>
+          </h1>
+          <p>
+            Etkinlikler ile ilgili detayları buradan görebilirsiniz. Gerekli işlemleri yapabilirsiniz.
+          </p>
+        </div>
+        <div className=' text-xl flex items-center gap-x-2 animate-pulse'>
+          <span className='text-2xl font-semibold text-primary '>{sortedEvents?.length}</span>  Etkinlik Mevcut
+        </div>
       </div>
       <div className='grid grid-cols-5 bg-neutral-100 p-3 rounded-lg gap-x-3'>
         <input

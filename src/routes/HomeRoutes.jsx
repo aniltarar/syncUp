@@ -3,6 +3,7 @@ import { roleLoader } from "../loaders/roleLoader";
 
 import About from "../pages/About/About";
 import Announcement from "../pages/Announcement/Announcement";
+import AnnouncementDetail from "../pages/Announcement/AnnouncementDetail";
 import AllClubs from "../pages/Club/AllClubs";
 import BeClubLeader from "../pages/Club/BeClubLeader";
 import ClubDetail from "../pages/Club/ClubDetail";
@@ -27,7 +28,8 @@ export const HomeRoutes = {
         { path: "clubs/:id", element: <ClubDetail />, },
         { path: "events", element: <AllEvents />, },
         {path:"events/:id",element:<EventDetail/>},
-        { path: "announcments", element: <Announcement />, },
+        { path: "announcements", element: <Announcement />, },
+        {path:"announcements/:id",element:<AnnouncementDetail/>},
         { path: "settings", element: <Settings />, loader:()=>roleLoader(["user","leader","admin"]) },
         {path:"my-applies",element:<MyApplies/>, loader:()=>roleLoader(["user","leader","admin"])},
 

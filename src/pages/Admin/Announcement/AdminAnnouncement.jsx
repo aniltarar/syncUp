@@ -129,7 +129,7 @@ const AdminAnnouncement = () => {
           </span>
 
           <span className="font-semibold justify-self-center">Görsel</span>
-          <span className="font-semibold justify-self-center">Kulüp Adı</span>
+          <span className="font-semibold justify-self-center">Yayınlayan</span>
           <span className="font-semibold justify-self-center">Yayın Durumu</span>
         </div>
 

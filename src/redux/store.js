@@ -5,6 +5,7 @@ import adminReducer from "./slices/adminSlice";
 import applyReducer from "./slices/applySlice";
 import leaderReducer from "./slices/leaderSlice";
 import eventReducer from "./slices/eventSlice";
+import announcementReducer from "./slices/announcementSlice";
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ export const store = configureStore({
     admin: adminReducer,
     leader: leaderReducer,
     event: eventReducer,
+    announcement: announcementReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
