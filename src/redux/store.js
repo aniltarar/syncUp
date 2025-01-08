@@ -6,6 +6,8 @@ import applyReducer from "./slices/applySlice";
 import leaderReducer from "./slices/leaderSlice";
 import eventReducer from "./slices/eventSlice";
 import announcementReducer from "./slices/announcementSlice";
+import feedbackReducer from "./slices/feedbackSlice";
+
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +18,7 @@ export const store = configureStore({
     leader: leaderReducer,
     event: eventReducer,
     announcement: announcementReducer,
+    feedback: feedbackReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

@@ -120,6 +120,14 @@ const ProfileDown = () => {
           <MenuItem>
             <Link
               className="block transition-colors text-sm data-[focus]:bg-neutral-100 px-2 py-1 rounded-md"
+              to="/feedback"
+            >
+              Geri Bildirimler
+            </Link>
+          </MenuItem>
+          <MenuItem>
+            <Link
+              className="block transition-colors text-sm data-[focus]:bg-neutral-100 px-2 py-1 rounded-md"
               to="/settings"
             >
               Ayarlar

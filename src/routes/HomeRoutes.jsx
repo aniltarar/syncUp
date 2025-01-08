@@ -12,6 +12,7 @@ import MyClubs from "../pages/Club/MyClubs";
 import AllEvents from "../pages/Event/AllEvents";
 import EventDetail from "../pages/Event/EventDetail";
 import PassedEvents from "../pages/Event/PassedEvents";
+import Feedback from "../pages/Feedback/Feedback";
 import Home from "../pages/Home/Home";
 import Notifications from "../pages/Notifications/Notifications";
 import Profile from "../pages/Profile/Profile";
@@ -34,6 +35,7 @@ export const HomeRoutes = {
         {path:"my-applies",element:<MyApplies/>, loader:()=>roleLoader(["user","leader","admin"])},
 
         { path: "notifications", element: <Notifications />, loader: () => roleLoader(["user", "leader", "admin"]) },
+        { path: "feedback", element: <Feedback />, loader: () => roleLoader(["user", "leader", "admin"]) },
 
         { path: "my-clubs", element: <MyClubs />, loader: () => roleLoader(["user", "leader", "admin"]) },
         { path: "passed-events", element: <PassedEvents />, loader: () => roleLoader(["user", "leader", "admin"]) },

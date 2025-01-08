@@ -7,13 +7,13 @@ const LeaderEventBox = ({ event }) => {
   const eventDate = dayjs(event.eventDate).format('DD/MM/YYYY HH:mm');
 
   const statusTranslate = {
-    success: 'Tamamlandı',
+    finished: 'Tamamlandı',
     failed: 'İptal Edildi',
     pending: 'Planlanıyor',
   };
 
   const statusColor = {
-    success: 'text-green-500 bg-green-100',
+    finished: 'text-green-500 bg-green-100',
     failed: 'text-red-500 bg-red-100',
     pending: 'text-yellow-500 bg-yellow-100',
   };
