@@ -9,7 +9,7 @@ import autoAnimate from '@formkit/auto-animate'
 const Feedback = () => {
 
     const [search, setSearch] = useState('')
-    const [sortOrder, setSortOrder] = useState('all') // Varsayılan sıralama "En Yeni"
+    const [sortOrder, setSortOrder] = useState('all')
     const [isOpen, setIsOpen] = useState(false)
     const { feedbacks } = useSelector(state => state.feedback)
 
@@ -21,8 +21,6 @@ const Feedback = () => {
             return feedback.status === 'pending'
         } else if (sortOrder === 'success') {
             return feedback.status === 'success'
-        } else if (sortOrder === 'rejected') {
-            return feedback.status === 'rejected'
         }
         else {
             return feedback
@@ -69,13 +67,13 @@ const Feedback = () => {
                         <option value="all">Tümü</option>
                         <option value="pending">Beklemede</option>
                         <option value="success">Çözümlenmiş</option>
-                        <option value="rejected">Reddedilmiş</option>
                     </select>
                     <button onClick={() => setIsOpen(true)} className='bg-primary py-2 rounded-md text-white hover:bg-primary-hover'>Geri Bildirim Oluştur</button>
                 </div>
                 {
-                    feedbacks?.length < 1 && <div className='text-center text-2xl bg-red-100 text-red-500 p-3 rounded-lg'>Henüz geri bildirim oluşturulmamış.</div>
+                    filteredFeedbacks?.length < 1 && <div className='text-center text-2xl bg-red-100 text-red-500 p-3 rounded-lg mt-5'>Henüz geribildirim oluşturulmamış ya da belirlediğiniz koşullarda geribildirim bulunmamaktadır.</div>
                 }
+                
 
                 <div ref={feedbackBoxRef} className='grid grid-cols-1 gap-3'>
                     {

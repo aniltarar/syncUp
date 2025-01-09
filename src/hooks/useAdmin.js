@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import {  getAnnouncements, getApplies, getClubs, getEvents, getUsers } from "../redux/slices/adminSlice";
+import {  getAnnouncements, getApplies, getClubs, getEvents, getFeedbacks, getUsers } from "../redux/slices/adminSlice";
 export const useAdmin = () => {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -10,6 +10,7 @@ export const useAdmin = () => {
       dispatch(getUsers()),
       dispatch(getEvents()),
       dispatch(getAnnouncements()),
+      dispatch(getFeedbacks()),
       
     ]);
   }, [dispatch]);

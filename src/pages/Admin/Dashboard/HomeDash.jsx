@@ -10,11 +10,15 @@ import PopulerClubBox from '../../../components/Admin/AdminDashboard/PopulerClub
 import LastEventBox from '../../../components/Admin/AdminDashboard/LastEventBox';
 
 
-const TopSection = ({ user, applies, clubs, users, events, announcements }) => {
+const TopSection = ({ user, applies, clubs, users, events, announcements, feedbacks }) => {
 
   const filteredPendingApplies = applies?.filter(apply => apply.status === 'pending');
 
   const filteredPendingEvents = events?.filter(event => event.status === 'pending');
+
+  const filteredPendingFeedbacks = feedbacks?.filter(feedback => feedback.status === 'pending');
+
+ 
 
 
   return (
@@ -79,7 +83,7 @@ const TopSection = ({ user, applies, clubs, users, events, announcements }) => {
             <MdFeedback size={22} className='text-black' />
           </div>
           <div className="flex items-center gap-x-3 bg-white p-3 rounded-lg w-full">
-            <span className='text-3xl font-bold text-primary'>26</span>
+            <span className='text-3xl font-bold text-primary'>{filteredPendingFeedbacks?.length}</span>
             <span className='text-xl'>Aktif Geri Bildirim</span>
           </div>
         </div>
@@ -145,7 +149,7 @@ const MidSection = ({ clubs, events }) => {
             <FaCalendarDay size={30} className="text-black" />
           </div>
           <div className='space-y-3'>
-          
+
             {
               sortedEvents.length === 0 &&
               <div className='text-center text-lg font-semibold text-gray-500'>Henüz etkinlik bulunmamaktadır.</div>
@@ -174,13 +178,13 @@ const HomeDash = () => {
   const user = useAccount();
   useAdmin();
   // Redux Stateler
-  const { applies, clubs, users, events, announcements } = useSelector(state => state.admin);
+  const { applies, clubs, users, events, announcements,feedbacks } = useSelector(state => state.admin);
 
 
 
   return (
     <div className=' flex flex-col gap-y-5'>
-      <TopSection user={user} applies={applies} clubs={clubs} users={users} events={events} announcements={announcements} />
+      <TopSection user={user} applies={applies} clubs={clubs} users={users} events={events} announcements={announcements} feedbacks={feedbacks} />
       <MidSection clubs={clubs} events={events} />
     </div>
   )

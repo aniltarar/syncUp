@@ -8,12 +8,11 @@ const FeedbackBox = ({ feedback }) => {
     const statusTranslate = {
         "pending": "Beklemede",
         "success": "Çözümlendi",
-        "rejected": "Reddedildi"
+       
     }
     const statusColor = {
         "pending": "bg-yellow-100 text-yellow-800 ",
         "success": "bg-green-100 text-green-800 animate-pulse",
-        "rejected": "bg-red-100 text-red-800 animate-pulse"
     }
     const formattedDate = dayjs(createdAt.toDate()).format('DD/MM/YYYY HH:mm')
 

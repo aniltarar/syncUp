@@ -275,7 +275,9 @@ export const toggleAnnouncementStatus = createAsyncThunk(
       const announcementRef = doc(db, "announcements", announcementID);
       const announcement = await getDoc(announcementRef);
       const { status } = announcement.data();
-      await updateDoc(announcementRef, { status: status === "active" ? "passive" : "active" });
+      await updateDoc(announcementRef, {
+        status: status === "active" ? "passive" : "active",
+      });
       toast.success("Duyuru başarıyla güncellendi!");
       dispatch(getAnnouncements());
       return announcementID;
@@ -283,27 +285,82 @@ export const toggleAnnouncementStatus = createAsyncThunk(
       toast.error("Duyuru güncellenemedi! Lütfen tekrar deneyin.");
       return rejectWithValue(error.message);
     }
-  });
+  }
+);
 
 export const createAnnouncement = createAsyncThunk(
   "admin/createAnnouncement",
   async (data, { rejectWithValue, dispatch }) => {
-    try{
+    try {
       const announcementRef = doc(collection(db, "announcements"));
       const announcementData = {
         id: announcementRef.id,
         ...data,
-      }
+      };
       await setDoc(announcementRef, announcementData);
       toast.success("Duyuru başarıyla oluşturuldu!");
       dispatch(getAnnouncements());
       return announcementData;
-      
-
-    }catch(e){
+    } catch (e) {
       toast.error("Duyuru oluşturulamadı! Lütfen tekrar deneyin.");
       console.log(rejectWithValue(e.message));
       return rejectWithValue(e.message);
+    }
+  }
+);
+// Feedback / Geri Bildirim servisleri
+
+export const getFeedbacks = createAsyncThunk(
+  "admin/getFeedbacks",
+  async (_, { rejectWithValue }) => {
+    try {
+      const feedbacksRef = collection(db, "feedbacks");
+      const feedbacks = await getDocs(feedbacksRef);
+      const feedbacksData = feedbacks.docs.map((doc) => doc.data());
+      return feedbacksData;
+    } catch (e) {
+      toast.error("Geri bildirimler alınamadı! Lütfen tekrar deneyin.");
+      return rejectWithValue(e.message);
+    }
+  }
+);
+
+export const replyFeedback = createAsyncThunk(
+  "admin/replyFeedback",
+  async (data, { rejectWithValue, dispatch }) => {
+    try {
+      const { feedbackID, reply, userID } = data;
+      const feedbackRef = doc(db, "feedbacks", feedbackID);
+      await updateDoc(feedbackRef, {
+        reply,
+        status: "success",
+      });
+
+      const notificationRef = doc(collection(db, "notifications"));
+      const notificationData = {
+        createdAt: dayjs().toDate(),
+        from: "SyncUp Yöneticisi",
+        id: notificationRef.id,
+        isRead: false,
+        message: `Geri bildiriminiz yanıtlandı!`,
+        status: "unread",
+        to: userID,
+        title: "Geri Bildirim Yanıtı",
+      };
+      await setDoc(notificationRef, notificationData);
+
+      const userRef = doc(db, "users", userID);
+      await updateDoc(userRef, {
+        notifications: arrayUnion(notificationRef.id),
+      });
+      
+
+      toast.success("Geri bildirim başarıyla yanıtlandı!");
+      dispatch(getFeedbacks());
+      return feedbackID;
+    } catch (error) {
+      toast.error("Geri bildirim yanıtlanamadı! Lütfen tekrar deneyin.");
+      return rejectWithValue(error.message);
     }
   }
 );
@@ -427,6 +484,27 @@ export const adminSlice = createSlice({
         state.announcements = action.payload;
       })
       .addCase(getAnnouncements.rejected, (state, action) => {
+        state.status = "failed";
+        state.message = action.payload;
+      })
+      .addCase(toggleAnnouncementStatus.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(toggleAnnouncementStatus.fulfilled, (state, action) => {
+        state.status = "success";
+      })
+      .addCase(toggleAnnouncementStatus.rejected, (state, action) => {
+        state.status = "failed";
+        state.message = action.payload;
+      })
+      .addCase(getFeedbacks.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(getFeedbacks.fulfilled, (state, action) => {
+        state.status = "success";
+        state.feedbacks = action.payload;
+      })
+      .addCase(getFeedbacks.rejected, (state, action) => {
         state.status = "failed";
         state.message = action.payload;
       });
