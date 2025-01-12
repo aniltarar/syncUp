@@ -31,7 +31,6 @@ const EditEvent = ({ event, setIsEditOpen }) => {
             id: event.id,
             clubName: event.clubName,
             leaders: event.leaders,
-            status: event.status,
             eventDate: data.eventDate,
             eventCapacity: personCount,
             status: "pending"

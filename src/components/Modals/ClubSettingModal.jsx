@@ -12,6 +12,7 @@ const ClubSettingModal = ({ club, setIsEditOpen }) => {
         clubName: club.clubName,
         clubDescription: club.clubDescription,
         clubLogo: club.clubLogo,
+        clubLocation: club.clubLocation
     };
 
     const dispatch = useDispatch();
@@ -39,6 +40,7 @@ const ClubSettingModal = ({ club, setIsEditOpen }) => {
             clubDescription: data.clubDescription,
             clubLogo: updatedClubLogo,
             leaders: club.leaders,
+            clubLocation: data.clubLocation,
         };
 
         dispatch(updateClubByClubID(clubData));
@@ -70,8 +72,10 @@ const ClubSettingModal = ({ club, setIsEditOpen }) => {
                                 {...register('clubName')}
                                 className='border border-gray-200 rounded-md p-2'
                                 defaultValue={defaultValues.clubName}
+                                placeholder='Kulüp adını giriniz'
                             />
                         </div>
+                        
 
                         <div className='flex flex-col gap-y-2'>
                             <label htmlFor='clubDescription' className='font-semibold'>Kulüp Açıklaması</label>
@@ -80,6 +84,18 @@ const ClubSettingModal = ({ club, setIsEditOpen }) => {
                                 {...register('clubDescription')}
                                 className='border border-gray-200 rounded-md p-2 min-h-32 max-h-60'
                                 defaultValue={defaultValues.clubDescription}
+                                placeholder='Kulüp hakkında detaylı bilgi giriniz'
+                            />
+                        </div>
+                        <div className='flex flex-col gap-y-2'>
+                            <label htmlFor='clubLocation' className='font-semibold'>Kulüp Konumu</label>
+                            <input
+                                type='text'
+                                id='clubLocation'
+                                {...register('clubLocation')}
+                                className='border border-gray-200 rounded-md p-2'
+                                placeholder='Kulübün bulunduğu konumu giriniz'
+                                defaultValue={defaultValues.clubLocation}
                             />
                         </div>
 

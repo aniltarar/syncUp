@@ -39,6 +39,7 @@ const BeClubLeader = () => {
       clubLogo: fileData.secure_url,
       createdBy: user.uid,
       createdByName: user.displayName,
+      clubLocation:data.clubLocation,
       status: "pending"
     }
     dispatch(createApply(clubData));
@@ -102,6 +103,7 @@ const BeClubLeader = () => {
 
 
           </div>
+          
 
           {/* Kulüp Logo */}
           <div>

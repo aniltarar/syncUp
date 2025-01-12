@@ -4,6 +4,7 @@ import { useAccount } from '../../hooks/useAccount';
 import dayjs from 'dayjs';
 import { useDispatch } from 'react-redux';
 import { createFeedback } from '../../redux/slices/feedbackSlice';
+import toast from 'react-hot-toast';
 
 const CreateFeedback = ({ setIsOpen }) => {
 
@@ -14,6 +15,11 @@ const CreateFeedback = ({ setIsOpen }) => {
     const dispatch = useDispatch()
 
     const onUpdateSubmit = async (data) => {
+
+        if (!user) {
+            toast.error('Kullanıcı Bulunamadı')
+            return;
+        }
 
         const feedbackData = {
             userID: user.uid,

@@ -14,6 +14,7 @@ import { db } from "../../firebase/firebaseConfig";
 import toast from "react-hot-toast";
 import dayjs from "dayjs";
 
+
 const initialState = {
   status: "idle",
   clubs: [],
@@ -33,25 +34,145 @@ export const fetchClubs = createAsyncThunk("club/fetchClubs", async () => {
     return rejectWithValue(e.message);
   }
 });
+
 // ID'si verilen kulübü getirme işlemi
+
+// export const fetchClubByID = createAsyncThunk(
+//   "club/fetchClubByID",
+//   async (id) => {
+//     try {
+//       // Kulüp bilgilerinin getirilmesi
+//       const clubRef = doc(db, "clubs", id);
+//       const clubSnapshot = await getDoc(clubRef);
+//       const club = clubSnapshot.data();
+
+//       const clubData = {
+//         clubID: club.id,
+//         clubName: club.clubName,
+//         clubLogo: club.clubLogo,
+//         clubDescription: club.clubDescription,
+//         clubLocation: club.clubLocation,
+//         clubCreatedAt: club.createdAt,
+//         clubMembers: club.members,
+//       }
+     
+//       // Etkinliklerin getirilmesi
+//       const eventsRef = collection(db, "events");
+//       const eventsQuery = query(eventsRef,where("clubID", "==", id));
+//       const eventsSnapshot = await getDocs(eventsQuery);
+//       const events = eventsSnapshot.docs.map((doc) => doc.data());
+
+//       const eventsData = {
+//         eventID: events.id,
+//         eventName: events.eventName,
+//         eventDate: events.eventDate,
+//         eventLocation: events.eventLocation,
+//       }
+
+//       // Duyuruların getirilmesi
+//       const announcementsRef = collection(db, "announcements");
+//       const announcementsQuery = query(announcementsRef,where("clubID", "==", id));
+//       const announcementsSnapshot = await getDocs(announcementsQuery);
+//       const announcements = announcementsSnapshot.docs.map((doc) => doc.data());
+
+//       const announcementsData = {
+//         announcementID: announcements.id,
+//         announcementTitle : announcements.title,
+//         announcementDate : announcements.createdAt,
+    
+//       }
+
+//       const clubDetailData = {
+//         clubData,
+//         eventsData,
+//         announcementsData
+//       }
+
+//       return clubDetailData;
+
+
+//     } catch (e) {
+//       toast.error("Bir hata oluştu. Lütfen tekrar deneyiniz.");
+//       console.log(rejectWithValue(e.message));
+//       return rejectWithValue(e.message);
+//     }
+//   }
+// );
+
+// Club oluşturma / Apply'i onaylama işlemi
 
 export const fetchClubByID = createAsyncThunk(
   "club/fetchClubByID",
-  async (id) => {
+  async (id, { rejectWithValue,dispatch }) => {
     try {
+      // Kulüp bilgilerinin getirilmesi
       const clubRef = doc(db, "clubs", id);
       const clubSnapshot = await getDoc(clubRef);
       const club = clubSnapshot.data();
 
-      return club;
+      const clubData = {
+        clubID: id, // `doc` referansındaki `id` doğrudan kullanılır
+        clubName: club?.clubName || '',
+        clubLogo: club?.clubLogo || '',
+        clubDescription: club?.clubDescription || '',
+        clubLocation: club?.clubLocation || '',
+        clubCreatedAt: club?.createdAt || '',
+        clubMembers: club?.members || [],
+      };
+
+      // Etkinliklerin getirilmesi
+      const eventsRef = collection(db, "events");
+      const eventsQuery = query(eventsRef, where("clubID", "==", id));
+      const eventsSnapshot = await getDocs(eventsQuery);
+      const eventsData = eventsSnapshot.docs.map((doc) => ({
+        eventID: doc.id, // `doc.id` ile belge ID'si alınır
+        eventName: doc.data().eventName || '',
+        eventDate: doc.data().eventDate || '',
+        eventLocation: doc.data().eventLocation || '',
+      }));
+
+      // Duyuruların getirilmesi
+      const announcementsRef = collection(db, "announcements");
+      const announcementsQuery = query(announcementsRef, where("clubID", "==", id));
+      const announcementsSnapshot = await getDocs(announcementsQuery);
+      const announcementsData = announcementsSnapshot.docs.map((doc) => ({
+        announcementID: doc.id, // `doc.id` ile belge ID'si alınır
+        announcementTitle: doc.data().title || '',
+        announcementDate: doc.data().createdAt || '',
+      }));
+
+      // Kulüp liderlerinin isimlerinin getirilmesi
+      const usersRef = collection(db, "users");
+      const leadersQuery = query(usersRef,where("uid", "in", club.leaders));
+      const leadersSnapshot = await getDocs(leadersQuery);
+      const leaders = leadersSnapshot.docs.map((doc) => doc.data());
+      const leadersData = leaders.map((leader) => {
+        return {
+          uid: leader.uid,
+          displayName: leader.displayName,
+        
+        };
+      });
+    
+      // Sonuç
+      const clubDetailData = {
+        clubData,
+        eventsData,
+        announcementsData,
+        leadersData,
+      };
+
+      return clubDetailData;
     } catch (e) {
-      console.log(e.message);
+      toast.error("Bir hata oluştu. Lütfen tekrar deneyiniz.");
+      console.error(e.message);
       return rejectWithValue(e.message);
     }
   }
 );
 
-// Club oluşturma / Apply'i onaylama işlemi
+
+
 export const createClub = createAsyncThunk(
   "club/createClub",
   async (applyData, { rejectWithValue }) => {

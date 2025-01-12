@@ -28,13 +28,25 @@ const NotificationsDown = () => {
         dispatch(fetchNotifications(user.uid))
     }, [dispatch, user.uid]);
 
+    const filteredNotifications = notifications?.filter(notification => {
+        const unReadNotification = notification.isRead === false;
+        return unReadNotification;
+    }
+    );
+
 
 
     return (
         <Menu>
             <MenuButton className="px-5 py-2 rounded-full bg-primary/20 hover:bg-primary/50 hover:ring-2 ring-offset-2 ring-primary transition-all duration-200" onClick={toggleOpen}>
                 <div className="flex items-center gap-3">
-                    <span className=" flex rounded-full "><FaBell size={22} /></span>
+                    <span
+                        className={`flex rounded-full ${filteredNotifications.length > 0 ? "animate-shake " : ""
+                            }`}
+                    >
+                        <FaBell size={22} />
+                    </span>
+
                 </div>
             </MenuButton>
             <Transition

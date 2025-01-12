@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useAccount } from '../../hooks/useAccount';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchNotifications } from '../../redux/slices/authSlice';
 import NotificationBox from '../../components/Notifications/NotificationBox';
+import autoAnimate from '@formkit/auto-animate';
 
 const Notifications = () => {
 
@@ -36,6 +37,14 @@ const Notifications = () => {
         return matchSearch
     })
 
+    const notificationBoxRef = useRef(null)
+
+    useEffect(() => {
+        autoAnimate(notificationBoxRef.current, 'fadeInUp')
+    }, [filteredNotifications])
+
+  
+ 
     if(notifications.length === 0) {
 
         return(
@@ -70,7 +79,7 @@ const Notifications = () => {
                 </select>
             </div>
 
-            <div className='flex flex-col gap-y-2'>
+            <div ref={notificationBoxRef} className='flex flex-col gap-y-2'>
                 {filteredNotifications?.map(notification => (
                     <NotificationBox key={notification.id} notification={notification} />
                 ))}
