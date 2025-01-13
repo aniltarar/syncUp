@@ -125,19 +125,12 @@ const ProfileDown = () => {
               Geri Bildirimler
             </Link>
           </MenuItem>
-          <MenuItem>
-            <Link
-              className="block transition-colors text-sm data-[focus]:bg-neutral-100 px-2 py-1 rounded-md"
-              to="/settings"
-            >
-              Ayarlar
-            </Link>
-          </MenuItem>
+          
          
           <MenuItem>
             <Link
               onClick={exitHandle}
-              className="block transition-colors text-sm bg-red-400 px-2 py-1 rounded-md data-[focus]:bg-red-500"
+              className="block text-white transition-colors text-sm bg-red-500 px-2 py-1 rounded-md data-[focus]:bg-red-600"
               href="/license"
             >
               Çıkış Yap

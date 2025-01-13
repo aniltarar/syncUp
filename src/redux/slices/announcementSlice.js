@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
 import { db } from "../../firebase/firebaseConfig";
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
 
 const initialState = {
   status: "idle",
@@ -15,10 +15,12 @@ export const fetchAnnouncements = createAsyncThunk(
   async () => {
     try {
       const announcementsRef = collection(db, "announcements");
-      const announcementsSnapshot = await getDocs(announcementsRef);
+      const activeAnnouncementQuery = query(announcementsRef,where("status", "==", "active"));
+      const announcementsSnapshot = await getDocs(activeAnnouncementQuery);
       const announcementsData = announcementsSnapshot.docs.map((doc) =>
         doc.data()
       );
+
       return announcementsData;
     } catch (error) {
       toast.error(

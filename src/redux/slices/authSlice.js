@@ -21,6 +21,7 @@ import toast from "react-hot-toast";
 
 const initialState = {
   user: JSON.parse(localStorage.getItem("user")) || null,
+  notifactionsDown:[],
   status: "idle",
   message: "",
 };
@@ -41,6 +42,8 @@ export const registerUser = createAsyncThunk(
       const user = userCredential.user;
       await updateProfile(user, { displayName: displayName });
       // Firestore'a veri ekleme
+
+      
       const usersRef = doc(collection(db, "users"), user.uid);
 
       const userData = {
@@ -174,6 +177,42 @@ export const fetchNotifications = createAsyncThunk(
     }
   }
 );
+export const fetchNotificationsDown = createAsyncThunk(
+  "auth/fetchNotificationsDown",
+  async (uid, { rejectWithValue }) => {
+    try {
+      // Kullanıcıya ait bildirim ID'lerini getir
+      const userRef = doc(db, "users", uid);
+      const userDoc = await getDoc(userRef);
+
+      const { notifications } = userDoc.data(); // Kullanıcıya ait bildirimlerin ID dizisi
+
+      // Eğer notifications boşsa, boş bir dizi döndür
+      if (!notifications || notifications.length === 0) {
+        return [];
+      }
+
+      // Bildirimleri Firestore'dan çek
+      const notificationsRef = collection(db, "notifications");
+      const notifyQuery = query(
+        notificationsRef,
+        where("id", "in", notifications) // notifications burada dolu
+      );
+
+      const notifySnapshot = await getDocs(notifyQuery);
+      const notificationsData = notifySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+
+      return notificationsData;
+    } catch (e) {
+      console.error("Error fetching notifications:", e.message);
+      return rejectWithValue(e.message);
+    }
+  }
+);
 
 // Bildirimi okundu olarak işaretle
 export const markAsRead = createAsyncThunk(
@@ -287,7 +326,40 @@ export const authSlice = createSlice({
       .addCase(fetchNotifications.rejected, (state, action) => {
         state.status = "failed";
         state.message = action.payload;
+      })
+      .addCase(markAsRead.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(markAsRead.fulfilled, (state, action) => {
+        state.status = "succeeded";
+      })
+      .addCase(markAsRead.rejected, (state, action) => {
+        state.status = "failed";
+        state.message = action.payload;
+      })
+      .addCase(deleteNotification.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(deleteNotification.fulfilled, (state, action) => {
+        state.status = "succeeded";
+      })
+      .addCase(deleteNotification.rejected, (state, action) => {
+        state.status = "failed";
+        state.message = action.payload;
+      })
+      .addCase(fetchNotificationsDown.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchNotificationsDown.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.notifactionsDown = action.payload;
+      })
+      .addCase(fetchNotificationsDown.rejected, (state, action) => {
+        state.status = "failed";
+        state.message = action.payload;
       });
+     
+
   },
 });
 

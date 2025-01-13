@@ -31,16 +31,17 @@ export const createApply = createAsyncThunk(
         ...data,
       };
       await setDoc(applyRef, applyData);
-      toast.success("Kulüp başvurunuz başarıyla gönderildi!");
-
       const setUserApplies = doc(db, "users", data.createdBy);
       await updateDoc(setUserApplies, {
         applies: arrayUnion(applyRef.id),
       });
 
+      toast.success("Kulüp başvurunuz başarıyla gönderildi!");
+
       return data;
     } catch (error) {
-      console.log(error);
+      console.log(rejectWithValue(error.message));
+     
       toast.error("Kulüp başvurunuz gönderilemedi!");
       return rejectWithValue(error.message);
     }

@@ -13,7 +13,7 @@ const BeClubLeader = () => {
   const [hasIdentity, setHasIdentity] = useState(null);
 
   useEffect(() => {
-    if (user?.identity === null) {
+    if (user?.identity === "") {
       setHasIdentity(true)
     }
   }, [user])
@@ -46,9 +46,6 @@ const BeClubLeader = () => {
 
     reset();
   }
-
-
-
 
   return (
     <>
@@ -102,6 +99,19 @@ const BeClubLeader = () => {
             {errors.clubDescription && <p className="text-red-500 text-sm">{errors.clubDescription.message}</p>}
 
 
+          </div>
+
+          {/* Kulüp Lokasyonu */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Kulüp Lokasyonu</label>
+            <input
+              type="text"
+              placeholder='Kulübünüzün bulunduğu şehri veya okulu yazınız.'
+              {...register("clubLocation", { required: "Kulüp Lokasyonunu Girmek Zorunludur", maxLength: { value: 50, message: "Kulüp lokasyonu en fazla 50 karakter olabilir." }, minLength: { value: 5, message: "Kulüp lokasyonu en az 5 karakter olabilir." } })}
+              className={`mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:ring-primary focus:border-primary ${errors.location ? "border-red-500" : "border-gray-300"
+                }`}
+            />
+            {errors.clubLocation && <p className="text-red-500 text-sm">{errors.clubLocation.message}</p>}
           </div>
           
 

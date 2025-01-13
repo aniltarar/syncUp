@@ -18,6 +18,8 @@ const initialState = {
   message: "",
 };
 
+
+
 export const fetchActiveEvents = createAsyncThunk(
   "event/fetchActiveEvents",
   async () => {
@@ -43,6 +45,8 @@ export const fetchEventById = createAsyncThunk(
       const eventRef = doc(db, "events", id);
       const eventSnapshot = await getDoc(eventRef);
       const event = eventSnapshot.data();
+
+  
       return event;
     } catch (e) {
       console.log(rejectWithValue(e.message));
@@ -115,6 +119,23 @@ export const fetchEventByUserID = createAsyncThunk(
     }
   }
 )
+
+export const setFinishedEventByID = createAsyncThunk(
+  "event/setFinishedEventByID",
+  async (id, { rejectWithValue }) => {
+    try {
+      const eventRef = doc(db, "events", id);
+      await updateDoc(eventRef, {
+        status: "finished",
+      });
+      return id;
+    } catch (e) {
+      console.log(rejectWithValue(e.message));
+      toast.error("Bir hata oluştu. Lütfen tekrar deneyin.");
+      return rejectWithValue(e.message);
+    }
+  });
+
 
 export const eventSlice = createSlice({
   name: "event",

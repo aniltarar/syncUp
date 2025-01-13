@@ -50,6 +50,11 @@ const EventDetail = () => {
       toast.error('Etkinliğe katılabilmek için giriş yapmalısınız.');
       return;
     }
+    if (dayjs(eventDate).isBefore(dayjs())) {
+      toast.error('Etkinlik tarihi geçtiği için katılım yapamazsınız.');
+      return;
+  }
+
     const joinData = {
       clubID,
       eventID:id,

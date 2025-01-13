@@ -14,11 +14,23 @@ const AllEvents = () => {
 
 
   return (
-    <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 '>
+    <div className='flex flex-col gap-y-3 w-full'>
 
-      {events.map((event) => (
-        <EventCard key={event.id} event={event} />
-      ))}
+      {
+        events.length === 0 &&
+        <div className='w-full bg-red-100 rounded-md p-3'>
+
+          <p className='text-center w-full text-2xl font-semibold text-red-500'>Henüz planlama aşamasında etkinlik bulunamıyor.</p>
+        </div>
+      }
+      
+
+      <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3'>
+
+        {events.map((event) => (
+          <EventCard key={event.id} event={event} />
+        ))}
+      </div>
 
     </div>
   )

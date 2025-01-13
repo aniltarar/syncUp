@@ -34,6 +34,7 @@ const LeaderCreateAnnouncement = ({ setIsOpen, club }) => {
             publisher: club.clubName,
             createdAt: dayjs().toDate(),
             createdBy: club.leaders,
+            clubName: club.clubName,
         }
         dispatch(createAnnouncement(announcementData))
         setIsOpen(false);

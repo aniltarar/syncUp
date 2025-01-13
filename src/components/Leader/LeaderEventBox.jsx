@@ -1,9 +1,12 @@
 import dayjs from 'dayjs';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import CancelledEvent from '../Modals/CancelledEvent';
 import EditEvent from '../Modals/EditEvent';
+import { useDispatch } from 'react-redux';
+import { setFinishedEventByID } from '../../redux/slices/eventSlice';
+import { fetchEventsByLeaderID } from '../../redux/slices/leaderSlice';
 
-const LeaderEventBox = ({ event }) => {
+const LeaderEventBox = ({ event,user }) => {
   const eventDate = dayjs(event.eventDate).format('DD/MM/YYYY HH:mm');
 
   const statusTranslate = {
@@ -20,6 +23,21 @@ const LeaderEventBox = ({ event }) => {
 
   const [isOpen, setIsOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
+
+  const dispatch = useDispatch();
+
+  // Etkinliğin tarihi geçtiğinde etkinliği tamamlandı olarak işaretler
+  const checkEventDate = () =>{
+    if(dayjs(event.eventDate).isBefore(dayjs())){
+      dispatch(setFinishedEventByID(event.id))
+      dispatch(fetchEventsByLeaderID(user.uid))
+    }
+  }
+
+  useEffect(() => {
+    checkEventDate()
+  }, [event.eventDate])
+
 
   return (
     <>

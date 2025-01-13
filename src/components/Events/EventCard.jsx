@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { IoIosInformationCircleOutline } from 'react-icons/io';
 import { Link } from 'react-router-dom';
-import { fetchActiveEvents, joinEvent } from '../../redux/slices/eventSlice';
+import { fetchActiveEvents, joinEvent, setFinishedEventByID } from '../../redux/slices/eventSlice';
 import { useDispatch } from 'react-redux';
 import { useAccount } from '../../hooks/useAccount';
 import dayjs from 'dayjs';
@@ -30,6 +30,14 @@ const EventCard = ({ event }) => {
             toast.error('Etkinliğe katılabilmek için giriş yapmalısınız.');
             return;
         }
+
+        // Etkinlik Tarihi Geçmişse Katılım Yapılamaz
+        if (dayjs(eventDate).isBefore(dayjs())) {
+            toast.error('Etkinlik tarihi geçtiği için katılım yapamazsınız.');
+            return;
+        }
+
+
         const joinData = {
             clubID,
             eventID: id,
@@ -40,6 +48,18 @@ const EventCard = ({ event }) => {
 
     }
 
+    const checkEventDate = () => {
+        // event Tarihi geçmişse eğer finished olarak güncelle
+        if (dayjs(eventDate).isBefore(dayjs())) {
+            dispatch(setFinishedEventByID(id));
+        }
+    }
+
+    useEffect(() => {
+        checkEventDate();
+    }, [eventDate]);
+
+
     return (
         <div className="bg-white border rounded-lg shadow-md hover:shadow-lg transition-shadow overflow-hidden flex flex-col">
             {/* Etkinlik Görseli */}
@@ -49,11 +69,7 @@ const EventCard = ({ event }) => {
                     alt={`${eventName} görseli`}
                     className="w-full h-full object-cover"
                 />
-                <div className="absolute top-4 left-4">
-                    {/* <span className="bg-primary text-white px-3 py-1 rounded-full text-sm font-medium shadow-sm">
-                        {clubName}
-                    </span> */}
-                </div>
+              
             </div>
 
             {/* Etkinlik Bilgileri */}
@@ -73,7 +89,6 @@ const EventCard = ({ event }) => {
                         <span className='bg-gray-200 border rounded-lg px-2 py-1'>
                             {clubName}
                         </span>
-
 
                     </div>
                     <div className="flex items-center gap-x-2">

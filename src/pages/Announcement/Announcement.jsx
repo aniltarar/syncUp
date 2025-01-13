@@ -11,7 +11,7 @@ const Announcement = () => {
   const [sortOrder, setSortOrder] = useState('newest'); // Varsayılan sıralama "En Yeni"
 
   // Filtreleme
-  const filteredAnnouncements = announcements.filter((announcement) =>
+  const filteredAnnouncements = announcements?.filter((announcement) =>
     announcement.title.toLowerCase().includes(search.toLowerCase())
   );
 

@@ -14,7 +14,6 @@ import { db } from "../../firebase/firebaseConfig";
 import toast from "react-hot-toast";
 import dayjs from "dayjs";
 
-
 const initialState = {
   status: "idle",
   clubs: [],
@@ -55,7 +54,7 @@ export const fetchClubs = createAsyncThunk("club/fetchClubs", async () => {
 //         clubCreatedAt: club.createdAt,
 //         clubMembers: club.members,
 //       }
-     
+
 //       // Etkinliklerin getirilmesi
 //       const eventsRef = collection(db, "events");
 //       const eventsQuery = query(eventsRef,where("clubID", "==", id));
@@ -79,7 +78,7 @@ export const fetchClubs = createAsyncThunk("club/fetchClubs", async () => {
 //         announcementID: announcements.id,
 //         announcementTitle : announcements.title,
 //         announcementDate : announcements.createdAt,
-    
+
 //       }
 
 //       const clubDetailData = {
@@ -89,7 +88,6 @@ export const fetchClubs = createAsyncThunk("club/fetchClubs", async () => {
 //       }
 
 //       return clubDetailData;
-
 
 //     } catch (e) {
 //       toast.error("Bir hata oluştu. Lütfen tekrar deneyiniz.");
@@ -103,7 +101,7 @@ export const fetchClubs = createAsyncThunk("club/fetchClubs", async () => {
 
 export const fetchClubByID = createAsyncThunk(
   "club/fetchClubByID",
-  async (id, { rejectWithValue,dispatch }) => {
+  async (id, { rejectWithValue, dispatch }) => {
     try {
       // Kulüp bilgilerinin getirilmesi
       const clubRef = doc(db, "clubs", id);
@@ -112,11 +110,11 @@ export const fetchClubByID = createAsyncThunk(
 
       const clubData = {
         clubID: id, // `doc` referansındaki `id` doğrudan kullanılır
-        clubName: club?.clubName || '',
-        clubLogo: club?.clubLogo || '',
-        clubDescription: club?.clubDescription || '',
-        clubLocation: club?.clubLocation || '',
-        clubCreatedAt: club?.createdAt || '',
+        clubName: club?.clubName || "",
+        clubLogo: club?.clubLogo || "",
+        clubDescription: club?.clubDescription || "",
+        clubLocation: club?.clubLocation || "",
+        clubCreatedAt: club?.createdAt || "",
         clubMembers: club?.members || [],
       };
 
@@ -126,34 +124,37 @@ export const fetchClubByID = createAsyncThunk(
       const eventsSnapshot = await getDocs(eventsQuery);
       const eventsData = eventsSnapshot.docs.map((doc) => ({
         eventID: doc.id, // `doc.id` ile belge ID'si alınır
-        eventName: doc.data().eventName || '',
-        eventDate: doc.data().eventDate || '',
-        eventLocation: doc.data().eventLocation || '',
+        eventName: doc.data().eventName || "",
+        eventDate: doc.data().eventDate || "",
+        eventLocation: doc.data().eventLocation || "",
       }));
 
       // Duyuruların getirilmesi
       const announcementsRef = collection(db, "announcements");
-      const announcementsQuery = query(announcementsRef, where("clubID", "==", id));
+      const announcementsQuery = query(
+        announcementsRef,
+        where("clubID", "==", id)
+      );
       const announcementsSnapshot = await getDocs(announcementsQuery);
       const announcementsData = announcementsSnapshot.docs.map((doc) => ({
         announcementID: doc.id, // `doc.id` ile belge ID'si alınır
-        announcementTitle: doc.data().title || '',
-        announcementDate: doc.data().createdAt || '',
+        announcementTitle: doc.data().title || "",
+        announcementDate: doc.data().createdAt || "",
+        status: doc.data().status || "",
       }));
 
       // Kulüp liderlerinin isimlerinin getirilmesi
       const usersRef = collection(db, "users");
-      const leadersQuery = query(usersRef,where("uid", "in", club.leaders));
+      const leadersQuery = query(usersRef, where("uid", "in", club.leaders));
       const leadersSnapshot = await getDocs(leadersQuery);
       const leaders = leadersSnapshot.docs.map((doc) => doc.data());
       const leadersData = leaders.map((leader) => {
         return {
           uid: leader.uid,
           displayName: leader.displayName,
-        
         };
       });
-    
+
       // Sonuç
       const clubDetailData = {
         clubData,
@@ -173,28 +174,26 @@ export const fetchClubByID = createAsyncThunk(
 
 // Kullanıcın Üye olduğu kulüpleri getirme işlemi
 export const fetchUserClubs = createAsyncThunk(
-  "club/fetchUserClubs",async (userID) => {
-    try{
+  "club/fetchUserClubs",
+  async (userID) => {
+    try {
       // kullanıcıya erişmek
-      const userRef = doc(db,"users",userID);
+      const userRef = doc(db, "users", userID);
       const userSnapshot = await getDoc(userRef);
-      const {clubs} = userSnapshot.data();
+      const { clubs } = userSnapshot.data();
 
       // kulüplerin getirlimesi
-    const clubsRef = collection(db, "clubs");
-    const clubsQuery = query(clubsRef, where("id", "in", clubs));
-    const clubsSnapshot = await getDocs(clubsQuery);
-    const clubsData = clubsSnapshot.docs.map((doc) => doc.data());
-    
+      const clubsRef = collection(db, "clubs");
+      const clubsQuery = query(clubsRef, where("id", "in", clubs));
+      const clubsSnapshot = await getDocs(clubsQuery);
+      const clubsData = clubsSnapshot.docs.map((doc) => doc.data());
 
-    return clubsData;
-
-    }catch(e){
+      return clubsData;
+    } catch (e) {
       return rejectWithValue(e.message);
     }
   }
-)
-
+);
 
 export const createClub = createAsyncThunk(
   "club/createClub",
@@ -236,6 +235,11 @@ export const applyMemberClub = createAsyncThunk(
   "club/applyMemberClub",
   async (applyData, { rejectWithValue }) => {
     try {
+      // kullanıcıya eriş
+      const userRef = doc(db, "users", applyData.userID);
+      const userSnapshot = await getDoc(userRef);
+      const userData = userSnapshot.data();
+
       // memberApplies içinde aynı kulübe aynı kullanıcıdan başvuru var mı kontrolü
       const memberAppliesColRef = collection(db, "memberApplies");
       const isMemberExist = query(
@@ -243,11 +247,19 @@ export const applyMemberClub = createAsyncThunk(
         where("clubID", "==", applyData.clubID),
         where("userID", "==", applyData.userID)
       );
+
+      // kullanıcı kulübe kayıtlı mı ?
+      if (userData.clubs.includes(applyData.clubID)) {
+        toast.error("Bu kulübe zaten üyesiniz.");
+        return;
+      }
+
       const isMemberExistSnapshot = await getDocs(isMemberExist);
       if (isMemberExistSnapshot.docs.length > 0) {
         toast.error("Bu kulübe zaten başvurunuz bulunmaktadır.");
         return;
       }
+
       // MemberApplies collection'unun olusturulması
       const memberAppliesRef = doc(collection(db, "memberApplies"));
       const memberApplyData = {
@@ -268,9 +280,6 @@ export const applyMemberClub = createAsyncThunk(
       });
 
       // Kullanıcının içerisindeki membershipApplies dizisine kulübün ID'si eklenir.
-      const userRef = doc(db, "users", applyData.userID);
-      const userSnapshot = await getDoc(userRef);
-      const userData = userSnapshot.data();
 
       await updateDoc(userRef, {
         membershipApplies: arrayUnion(memberAppliesRef.id),
@@ -343,7 +352,7 @@ export const clubSlice = createSlice({
       .addCase(fetchUserClubs.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(fetchUserClubs.fulfilled, (state,action) => {
+      .addCase(fetchUserClubs.fulfilled, (state, action) => {
         state.status = "success";
         state.clubs = action.payload;
       })
@@ -354,5 +363,5 @@ export const clubSlice = createSlice({
   },
 });
 
-export const { resetCurrentClub,resetClubs } = clubSlice.actions;
+export const { resetCurrentClub, resetClubs } = clubSlice.actions;
 export default clubSlice.reducer;

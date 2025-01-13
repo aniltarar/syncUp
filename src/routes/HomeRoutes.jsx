@@ -16,7 +16,7 @@ import Feedback from "../pages/Feedback/Feedback";
 import Home from "../pages/Home/Home";
 import Notifications from "../pages/Notifications/Notifications";
 import Profile from "../pages/Profile/Profile";
-import Settings from "../pages/Settings/Settings";
+
 
 export const HomeRoutes = {
     path: "/",
@@ -31,7 +31,7 @@ export const HomeRoutes = {
         {path:"events/:id",element:<EventDetail/>},
         { path: "announcements", element: <Announcement />, },
         {path:"announcements/:id",element:<AnnouncementDetail/>},
-        { path: "settings", element: <Settings />, loader:()=>roleLoader(["user","leader","admin"]) },
+
         {path:"my-applies",element:<MyApplies/>, loader:()=>roleLoader(["user","leader","admin"])},
 
         { path: "notifications", element: <Notifications />, loader: () => roleLoader(["user", "leader", "admin"]) },

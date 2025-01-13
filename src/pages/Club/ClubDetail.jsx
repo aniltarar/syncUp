@@ -45,6 +45,8 @@ const ClubDetail = () => {
 
     }, [dispatch, id])
 
+    const filteredActiveAnnouncements = announcementsData?.filter((announcement) => announcement.status === 'active')
+
 
 
 
@@ -140,7 +142,7 @@ const ClubDetail = () => {
                         }
 
                         {
-                            announcementsData?.slice(0, 3).map((announcement) => (
+                            filteredActiveAnnouncements?.slice(0, 3).map((announcement) => (
                                 <Link to={`/announcements/${announcement?.announcementID}`} key={announcement.announcementID} className='flex  gap-y-2 justify-between bg-neutral-50 p-2 rounded-md hover:bg-neutral-100'>
                                     <h1 className='text-lg font-semibold'>{announcement.announcementTitle}</h1>
                                     <p className=''>{dayjs(announcement?.announcementDate.toDate()).format("DD/MM/YYYY HH:mm")} </p>

@@ -148,7 +148,7 @@ const LeaderEvents = () => {
         </div>
         <div className="event-list grid gap-3">
           {filteredEvents?.map((event) => (
-            <LeaderEventBox event={event} key={event.id} />
+            <LeaderEventBox event={event} key={event.id} user={user} />
           ))}
         </div>
       </div>
