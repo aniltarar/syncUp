@@ -171,6 +171,29 @@ export const fetchClubByID = createAsyncThunk(
   }
 );
 
+// Kullanıcın Üye olduğu kulüpleri getirme işlemi
+export const fetchUserClubs = createAsyncThunk(
+  "club/fetchUserClubs",async (userID) => {
+    try{
+      // kullanıcıya erişmek
+      const userRef = doc(db,"users",userID);
+      const userSnapshot = await getDoc(userRef);
+      const {clubs} = userSnapshot.data();
+
+      // kulüplerin getirlimesi
+    const clubsRef = collection(db, "clubs");
+    const clubsQuery = query(clubsRef, where("id", "in", clubs));
+    const clubsSnapshot = await getDocs(clubsQuery);
+    const clubsData = clubsSnapshot.docs.map((doc) => doc.data());
+    
+
+    return clubsData;
+
+    }catch(e){
+      return rejectWithValue(e.message);
+    }
+  }
+)
 
 
 export const createClub = createAsyncThunk(
@@ -270,6 +293,9 @@ export const clubSlice = createSlice({
     resetCurrentClub: (state) => {
       state.currentClub = {};
     },
+    resetClubs: (state) => {
+      state.clubs = [];
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -313,9 +339,20 @@ export const clubSlice = createSlice({
       .addCase(applyMemberClub.rejected, (state, action) => {
         state.status = "failed";
         state.message = action.payload;
+      })
+      .addCase(fetchUserClubs.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchUserClubs.fulfilled, (state,action) => {
+        state.status = "success";
+        state.clubs = action.payload;
+      })
+      .addCase(fetchUserClubs.rejected, (state, action) => {
+        state.status = "failed";
+        state.message = action.payload;
       });
   },
 });
 
-export const { resetCurrentClub } = clubSlice.actions;
+export const { resetCurrentClub,resetClubs } = clubSlice.actions;
 export default clubSlice.reducer;

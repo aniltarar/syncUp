@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchClubs } from '../../redux/slices/clubSlice';
+import { fetchClubs, resetClubs } from '../../redux/slices/clubSlice';
 import ClubCard from '../../components/Clubs/ClubCard';
 import { useAccount } from '../../hooks/useAccount';
 
@@ -12,6 +12,7 @@ const user = useAccount();
 
 
   useEffect(() => {
+    dispatch(resetClubs())
     dispatch(fetchClubs())
   }, [dispatch])
 

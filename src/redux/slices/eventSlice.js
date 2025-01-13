@@ -99,12 +99,32 @@ export const joinEvent = createAsyncThunk(
   }
 );
 
+export const fetchEventByUserID = createAsyncThunk(
+  "event/fetchEventByUserID",
+  async (userID, { rejectWithValue }) => {
+    try {
+      const eventsRef = collection(db, "events");
+      const eventQuery = query(eventsRef, where("participants", "array-contains", userID));
+      const eventSnapshot = await getDocs(eventQuery);
+      const events = eventSnapshot.docs.map((doc) => doc.data());
+      return events;
+    } catch (e) {
+      console.log(rejectWithValue(e.message));
+      toast.error("Bir hata oluştu. Lütfen tekrar deneyin.");
+      return rejectWithValue(e.message);
+    }
+  }
+)
+
 export const eventSlice = createSlice({
   name: "event",
   initialState,
   reducers: {
     resetCurrentEvent: (state) => {
       state.currentEvent = {};
+    },
+    resetEvents: (state) => {
+      state.events = [];
     },
   },
   extraReducers: (builder) => {
@@ -130,9 +150,30 @@ export const eventSlice = createSlice({
       .addCase(fetchEventById.rejected, (state, action) => {
         state.status = "failed";
         state.message = action.payload;
+      })
+      .addCase(joinEvent.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(joinEvent.fulfilled, (state) => {
+        state.status = "success";
+      })
+      .addCase(joinEvent.rejected, (state, action) => {
+        state.status = "failed";
+        state.message = action.payload;
+      })
+      .addCase(fetchEventByUserID.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchEventByUserID.fulfilled, (state, action) => {
+        state.status = "success";
+        state.events = action.payload;
+      })
+      .addCase(fetchEventByUserID.rejected, (state, action) => {
+        state.status = "failed";
+        state.message = action.payload;
       });
   },
 });
 
-export const { resetCurrentEvent } = eventSlice.actions;
+export const { resetCurrentEvent,resetEvents } = eventSlice.actions;
 export default eventSlice.reducer;

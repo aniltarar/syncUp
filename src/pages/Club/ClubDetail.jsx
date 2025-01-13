@@ -7,7 +7,7 @@ import { IoLocationSharp } from 'react-icons/io5'
 import { FaCalendarDay, FaUsers } from 'react-icons/fa6'
 import { FiAward } from 'react-icons/fi'
 import { FaRegUserCircle } from 'react-icons/fa'
-import { CiInstagram, CiLinkedin, CiMail } from 'react-icons/ci'
+
 import toast from 'react-hot-toast'
 import dayjs from 'dayjs'
 
@@ -42,6 +42,7 @@ const ClubDetail = () => {
         dispatch(resetCurrentClub())
         // Mevcut kulübü getirme işlemi
         dispatch(fetchClubByID(id))
+
     }, [dispatch, id])
 
 
@@ -149,13 +150,7 @@ const ClubDetail = () => {
 
                     </div>
                 </div>
-                <div className="col-span-5 row-span-1 col-start-1 row-start-3 border rounded-md h-full p-3">
-                    <h1 className='text-xl font-semibold border-b p-2'>Kulübe Başvuru</h1>
-                    <div className="flex flex-grow justify-center items-center h-full">
-                        <button className='bg-primary text-xl font-semibold w-full h-full p-5 rounded-md hover:bg-primary-hover text-white ' onClick={handleMemberApply}>Başvur</button>
-                    </div>
-
-                </div>
+               
 
             </div>
 
