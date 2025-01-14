@@ -19,6 +19,7 @@ import {
 import { auth, db } from "../../firebase/firebaseConfig"; // auth ve db'yi import edin
 import toast from "react-hot-toast";
 
+
 const initialState = {
   user: JSON.parse(localStorage.getItem("user")) || null,
   notifactionsDown:[],
@@ -80,6 +81,13 @@ export const loginUser = createAsyncThunk(
 
       const userRef = doc(db, "users", user.uid);
       const userDoc = await getDoc(userRef);
+      
+      const userData = userDoc.data();
+
+      if(userData.disabled){
+        toast.error("Hesabınız askıya alınmıştır. Lütfen yönetici ile iletişime geçiniz.")
+        return rejectWithValue("User account blocked");
+      }
 
       if (userDoc.exists()) {
         return userDoc.data();
@@ -252,6 +260,35 @@ export const deleteNotification = createAsyncThunk(
   }
 );
 
+export const reloadUser = createAsyncThunk(
+  "auth/reloadUser",
+  async (uid, { rejectWithValue }) => {
+    try {
+      const userRef = doc(db, "users", uid);
+      const userDoc = await getDoc(userRef);
+      const userData = userDoc.data();
+
+      if(userData?.disabled){
+        // hesabı login'e yönlendirme
+        toast.error("Hesabınız askıya alınmıştır. Lütfen yönetici ile iletişime geçiniz.")
+        setInterval(()=>{
+          window.location.href = "/auth/login"
+          localStorage.removeItem("user")
+
+        },2000)
+        
+        return rejectWithValue("User account blocked");
+      }
+
+      return userData;
+    } catch (e) {
+      console.error("Reload user error:", e);
+      return rejectWithValue(e.message);
+    }
+  })
+
+
+
 export const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -355,6 +392,18 @@ export const authSlice = createSlice({
         state.notifactionsDown = action.payload;
       })
       .addCase(fetchNotificationsDown.rejected, (state, action) => {
+        state.status = "failed";
+        state.message = action.payload;
+      })
+      .addCase(reloadUser.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(reloadUser.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.user = action.payload;
+        localStorage.setItem("user", JSON.stringify(action.payload));
+      })
+      .addCase(reloadUser.rejected, (state, action) => {
         state.status = "failed";
         state.message = action.payload;
       });

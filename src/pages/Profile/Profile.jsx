@@ -3,7 +3,7 @@ import { useAccount } from '../../hooks/useAccount';
 import { facultiesAndDepartments } from '../../data/universityData';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
-import { sendResetPasswordEmail, updateUser } from '../../redux/slices/authSlice';
+import { reloadUser, sendResetPasswordEmail, updateUser } from '../../redux/slices/authSlice';
 
 
 const Profile = () => {
@@ -31,17 +31,7 @@ const Profile = () => {
   const dispatch = useDispatch();
 
   const onSubmit = (data) => {
-    // const updatedData = {}; // Güncellenecek verileri tutacak obje
-    // for (const key in data) {
-    //   if (data[key] && data[key] !== user[key]) {
-    //     // Sadece değişmiş olanları kontrol et
-    //     updatedData[key] = data[key];
 
-    //     // user id 'yi de ekleyelim
-    //     updatedData.uid = user.uid;
-    //   }
-    // };
-  
     dispatch(updateUser(data)); // Kullanıcıyı güncelle
   };
   useEffect(() => {
@@ -49,6 +39,10 @@ const Profile = () => {
       setSelectedFaculty(user.faculty);
     }
   }, [user.faculty]);
+
+  useEffect(() => {
+    dispatch(reloadUser(user.uid));
+  }, [dispatch, user.uid]);
 
 
 

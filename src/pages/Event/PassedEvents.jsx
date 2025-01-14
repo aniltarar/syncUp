@@ -42,6 +42,7 @@ const PassedEvents = () => {
   }, [dispatch])
   return (
     <div className='flex flex-col gap-y-3 w-full'>
+
       <div className='w-full grid grid-cols-5 gap-x-2'>
         <input type="text" placeholder="Etkinlik Ara" className="col-span-3 p-2 border border-gray-300 rounded" onChange={(e) => setSearch(e.target.value)} />
         <select className="col-span-1 p-2 border border-gray-300 rounded " onChange={(e) => setStatus(e.target.value)}>
@@ -55,12 +56,19 @@ const PassedEvents = () => {
           <option value="oldest">Eskiden Yeniye</option>
         </select>
       </div>
+      {
+        filteredEvents.length === 0 && (
+          <div className='flex justify-center items-center h-60 text-2xl text-gray-400'>
+            Etkinlik Bulunamadı
+          </div>
+        )
+      }
       <div ref={eventBoxRef} className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3'>
         {filteredEvents.map(event => (
           <PassedEventBox key={event.id} event={event} />
         ))}
       </div>
-      
+
 
     </div>
   )

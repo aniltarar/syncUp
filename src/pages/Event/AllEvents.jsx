@@ -2,15 +2,20 @@ import React, { useEffect } from 'react'
 import EventCard from '../../components/Events/EventCard'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchActiveEvents } from '../../redux/slices/eventSlice'
+import LoaderSpinner from '../../components/Loaders/LoaderSpinner'
 
 const AllEvents = () => {
 
   const dispatch = useDispatch()
-  const { events } = useSelector((state) => state.event)
+  const { events,status } = useSelector((state) => state.event)
 
   useEffect(() => {
     dispatch(fetchActiveEvents())
   }, [dispatch])
+
+  if (status === 'loading') {
+    return <LoaderSpinner />
+  }
 
 
   return (

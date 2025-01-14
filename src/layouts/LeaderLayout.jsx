@@ -4,7 +4,10 @@ import LeaderSidebar from '../components/Leader/LeaderSidebar'
 import { Toaster } from 'react-hot-toast'
 import { Outlet } from 'react-router-dom'
 
+
+
 const LeaderLayout = () => {
+
   return (
     <LeaderContainer>
       <LeaderSidebar />

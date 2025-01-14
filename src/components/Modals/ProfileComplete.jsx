@@ -28,11 +28,11 @@ const ProfileComplete = ({ user, setIsActive }) => {
   return createPortal(
 
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white rounded-lg shadow-lg w-96 p-6">
+      <div className="bg-white rounded-lg shadow-lg w-1/3 p-6">
 
         <div className="flex flex-col border-b-2 gap-y-3">
 
-          <h2 className="text-xl font-semibold ">Hoş Geldin, <span className="text-primary font-semibold text-xl animate-pulse">{user.displayName}</span></h2>
+          <h2 className="text-xl font-semibold ">Hoş Geldin, <span className="text-primary font-semibold text-xl animate-pulse">{user?.displayName}</span></h2>
           <span className="text-sm  text-neutral-400  mb-4 flex">Sistemi kullabilmek için gerekli bilgileri doldurmanız ve kaydetmeniz gerekmektedir.</span>
         </div>
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-y-4 mt-4">

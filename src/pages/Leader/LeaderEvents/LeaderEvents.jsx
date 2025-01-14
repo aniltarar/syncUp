@@ -10,7 +10,7 @@ import autoAnimate from '@formkit/auto-animate';
 const LeaderEvents = () => {
   const dispatch = useDispatch();
   const user = useAccount();
-  const { clubs, events } = useSelector((state) => state.leader);
+  const { clubs, events, } = useSelector((state) => state.leader);
 
   const [search, setSearch] = useState('');
   const [selectClub, setSelectClub] = useState('');
@@ -18,6 +18,8 @@ const LeaderEvents = () => {
   const [sortOrder, setSortOrder] = useState('asc'); // Varsayılan sıralama yönü (A-Z)
   const [sortBy, setSortBy] = useState('eventName'); // Varsayılan sıralama alanı
   const [isOpen, setIsOpen] = useState(false); // Modal açma durumu
+
+
 
   const toggleSortOrder = (field) => {
     if (sortBy === field) {

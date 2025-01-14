@@ -725,6 +725,47 @@ export const leaderSlice = createSlice({
         state.status = "failed";
         state.message = action.payload;
       })
+      .addCase(giveLeadership.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(giveLeadership.fulfilled, (state) => {
+        state.status = "success";
+      })
+      .addCase(giveLeadership.rejected, (state, action) => {
+        state.status = "failed";
+        state.message = action.payload;
+      })
+      .addCase(removeMember.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(removeMember.fulfilled, (state) => {
+        state.status = "success";
+      })
+      .addCase(removeMember.rejected, (state, action) => {
+        state.status = "failed";
+        state.message = action.payload;
+      })
+      .addCase(successMemberApply.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(successMemberApply.fulfilled, (state) => {
+        state.status = "success";
+      })
+      .addCase(successMemberApply.rejected, (state, action) => {
+        state.status = "failed";
+        state.message = action.payload;
+      })
+      .addCase(rejectMemberApply.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(rejectMemberApply.fulfilled, (state) => {
+        state.status = "success";
+      })
+      .addCase(rejectMemberApply.rejected, (state, action) => {
+        state.status = "failed";
+        state.message = action.payload;
+      });
+      
   },
 });
 

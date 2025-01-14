@@ -13,7 +13,7 @@ const BeClubLeader = () => {
   const [hasIdentity, setHasIdentity] = useState(null);
 
   useEffect(() => {
-    if (user?.identity === "") {
+    if (user?.identity === "" || user?.identity === null) {
       setHasIdentity(true)
     }
   }, [user])

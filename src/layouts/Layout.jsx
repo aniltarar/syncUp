@@ -16,7 +16,7 @@ const Layout = () => {
             <Outlet/>
         </div>
         {/* Statik Footer'ımız.  */}
-        {/* <Footer/> */}
+
     </Container>
   )
 }

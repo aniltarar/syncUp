@@ -5,10 +5,12 @@ import { fetchNotifications } from '../../redux/slices/authSlice';
 import NotificationBox from '../../components/Notifications/NotificationBox';
 import autoAnimate from '@formkit/auto-animate';
 
+
 const Notifications = () => {
     const dispatch = useDispatch();
     const user = useAccount();
-    const { notifications = [] } = useSelector(state => state.auth.user) || {};
+    const { notifications = [], } = useSelector(state => state.auth.user) || {};
+  
 
     const [search, setSearch] = useState('');
     const [isRead, setIsRead] = useState('');
@@ -43,12 +45,14 @@ const Notifications = () => {
     if (notifications.length === 0) {
         return (
             <div className="flex h-full w-full items-center justify-center">
-                <h1 className="text-2xl font-semibold p-3 rounded-lg bg-red-400 w-full text-center">
+                <h1 className="text-2xl font-semibold p-3 rounded-lg bg-neutral-100 w-full text-center">
                     Bildirim Bulunamadı
                 </h1>
             </div>
         );
     }
+
+ 
 
     return (
         <div className="flex flex-col gap-y-2 w-full">

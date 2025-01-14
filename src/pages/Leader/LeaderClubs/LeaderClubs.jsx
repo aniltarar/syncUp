@@ -12,7 +12,7 @@ const LeaderClubs = () => {
 
   const dispatch = useDispatch();
   const user = useAccount()
-  const { clubs } = useSelector(state => state.leader)
+  const { clubs, status } = useSelector(state => state.leader)
   const [sortOrder, setSortOrder] = useState("asc"); // A-Z veya Z-A sıralama
   const [search, setSearch] = useState('');
 
@@ -44,6 +44,7 @@ const LeaderClubs = () => {
   }, [clubs])
 
 
+ 
 
   return (
     <div className='flex flex-col gap-y-3 '>

@@ -3,12 +3,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchAnnouncements } from '../../redux/slices/announcementSlice';
 import AnnouncementBox from '../../components/Announcements/AnnouncementBox';
 import autoAnimate from '@formkit/auto-animate';
+import LoaderSpinner from '../../components/Loaders/LoaderSpinner';
 
 const Announcement = () => {
   const dispatch = useDispatch();
-  const { announcements } = useSelector((state) => state.announcement);
+  const { announcements,status } = useSelector((state) => state.announcement);
   const [search, setSearch] = useState('');
   const [sortOrder, setSortOrder] = useState('newest'); // Varsayılan sıralama "En Yeni"
+
+  
+
 
   // Filtreleme
   const filteredAnnouncements = announcements?.filter((announcement) =>
@@ -36,6 +40,10 @@ const Announcement = () => {
   useEffect(() => {
     dispatch(fetchAnnouncements());
   }, [dispatch]);
+
+  if (status === 'loading') {
+    return <LoaderSpinner />;
+  }
 
   return (
     <div className="flex flex-col gap-y-3 mb-3">

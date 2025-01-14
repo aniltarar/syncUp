@@ -2,19 +2,26 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchClubs, resetClubs } from '../../redux/slices/clubSlice';
 import ClubCard from '../../components/Clubs/ClubCard';
-import { useAccount } from '../../hooks/useAccount';
+import LoaderSpinner from '../../components/Loaders/LoaderSpinner';
+
 
 const AllClubs = () => {
   const dispatch = useDispatch();
 
-const user = useAccount();
-  const { clubs } = useSelector((state) => state.club)
+
+  const { clubs,status } = useSelector((state) => state.club)
 
 
   useEffect(() => {
     dispatch(resetClubs())
     dispatch(fetchClubs())
   }, [dispatch])
+
+  if (status === 'loading') {
+    return <LoaderSpinner />
+  }
+
+  
 
 
   return (
