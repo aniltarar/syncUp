@@ -148,6 +148,13 @@ const LeaderEvents = () => {
           <span className="justify-self-end">Etkinlik Durumu</span>
           <span className="justify-self-end">İşlemler</span>
         </div>
+        {
+          filteredEvents?.length === 0 && (
+            <div className='text-center text-lg text-gray-500'>
+              Henüz bir kulüp lideri değilsiniz.
+            </div>
+          )
+        }
         <div className="event-list grid gap-3">
           {filteredEvents?.map((event) => (
             <LeaderEventBox event={event} key={event.id} user={user} />

@@ -132,6 +132,15 @@ const AdminAnnouncement = () => {
           <span className="font-semibold justify-self-center">Yayınlayan</span>
           <span className="font-semibold justify-self-center">Yayın Durumu</span>
         </div>
+        
+           {
+            announcements?.length === 0 && (
+              <div className='text-center text-lg text-gray-500'>
+                Henüz bir duyuru yayınlanmamış.
+              </div>
+            )
+          }
+        
 
         <div className="flex flex-col gap-y-3" ref={announcementsContainerRef}>
           {sortedAnnouncements?.map((announcement) => (

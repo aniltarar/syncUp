@@ -90,6 +90,15 @@ const AdminClubs = () => {
         <span className="justify-self-center">Etkinlik Sayısı</span>
         <span className="justify-self-center">Durum</span>
       </div>
+      
+         {
+          clubs?.length === 0 && (
+            <div className='text-center text-lg text-gray-500'>
+              Henüz kulüp oluşturulmamış.
+            </div>
+          )
+        }
+      
 
       <div ref={clubsContainerRef} className='flex flex-col gap-y-3'>
 

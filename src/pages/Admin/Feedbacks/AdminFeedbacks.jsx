@@ -89,12 +89,21 @@ const AdminFeedbacks = () => {
       </div>
 
       <div>
-        {sortedFeedbacks?.length < 1 && (
+        {(sortedFeedbacks?.length < 1 && feedbacks?.length>0) && (
           <div className="text-center text-2xl bg-red-100 text-red-500 p-3 rounded-lg">
-            Henüz geribildirim oluşturulmamış ya da belirlediğiniz koşullarda geribildirim bulunmamaktadır.
+            Belirlediğiniz koşullarda geribildirim bulunmamaktadır.
           </div>
         )}
       </div>
+
+      {
+        (feedbacks?.length === 0) && (
+          <div className='text-center text-lg text-gray-500'>
+            Henüz geri bildirim oluşturulmamış.
+          </div>
+        )
+      }
+
 
       <div ref={feedbackBoxRef} className="flex flex-col gap-y-3">
         {sortedFeedbacks?.map((feedback, index) => (

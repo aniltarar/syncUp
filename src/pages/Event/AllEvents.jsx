@@ -23,10 +23,10 @@ const AllEvents = () => {
 
       {
         events.length === 0 &&
-        <div className='w-full bg-red-100 rounded-md p-3'>
-
-          <p className='text-center w-full text-2xl font-semibold text-red-500'>Henüz planlama aşamasında etkinlik bulunamıyor.</p>
-        </div>
+        <div className="bg-neutral-50 p-6 rounded-lg shadow-md flex flex-col items-center justify-center">
+            <h3 className="text-xl font-semibold mb-2">Etkinlik Bulunamadı</h3>
+            <p className="text-md text-center">Henüz etkinlik yayınlanmamış ya da aradığınız kriterlere uygun etkinlik bulunamadı.</p>
+          </div>
       }
       
 

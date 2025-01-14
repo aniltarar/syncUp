@@ -71,6 +71,13 @@ const LeaderClubs = () => {
         <span className='justify-self-center'>Etkinlik Sayısı</span>
         <span className='justify-self-center'>Bekleyen Üye Başvurusu</span>
       </div>
+      {
+        filteredClubs?.length === 0 && (
+          <div className='text-center text-lg text-gray-500'>
+            Henüz bir kulüp lideri değilsiniz.
+          </div>
+        )
+      }
 
       <div ref={clubBoxRef} className='grid gap-3'>
         {filteredClubs?.map((club) => (

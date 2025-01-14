@@ -132,6 +132,20 @@ const AdminEvent = () => {
         <span className='font-semibold justify-self-center'>Durum</span>
       </div>
 
+      {
+        events?.length === 0 && (
+          <div className='text-center text-lg text-gray-500'>
+            Henüz bir etkinlik planlanmamış.
+          </div>
+        )
+      }
+      {
+        (sortedEvents?.length === 0 && events?.length > 1) && (
+          <div className='text-center text-lg text-gray-500'>
+            Aradığınız kriterlere uygun etkinlik bulunamadı.
+          </div>
+        )
+      }
       <div className='flex flex-col gap-y-3' ref={eventsContainerRef}>
 
         {sortedEvents?.map((event) => (

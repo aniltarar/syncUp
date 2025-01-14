@@ -27,7 +27,13 @@ const LeaderMembershipApplies = () => {
       <div className='flex flex-col  justify-between gap-y-3'>
         <h1 className='text-2xl font-semibold'>Üyelik Başvuruları</h1>
         <hr />
-
+        {
+        clubs?.length === 0 && (
+          <div className='text-center text-lg text-gray-500'>
+            Henüz bir kulüp lideri değilsiniz.
+          </div>
+        )
+      }
 
         <div className='grid grid-cols-3 gap-3 '>
           {

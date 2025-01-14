@@ -7,9 +7,13 @@ import { FaSortAlphaDownAlt } from "react-icons/fa";
 import toast from 'react-hot-toast';
 import autoAnimate from '@formkit/auto-animate';
 
+
+
 const AdminUsers = () => {
   const dispatch = useDispatch();
   const { users } = useSelector(state => state.admin);
+
+
 
   const roleTranslate = {
     "admin": "Yönetici",
@@ -128,6 +132,13 @@ useEffect(() => {
         <span className="justify-self-start">Rolü</span>
         <span className="justify-self-center">Hesap Durumu</span>
       </div>
+      {
+        sortedUsers?.length === 0 && (
+          <div className='text-center text-lg text-gray-500'>
+            Henüz kullanıcı kaydı bulunmamaktadır.
+          </div>
+        )
+      }
 
       <div ref={userBoxRef} className='flex flex-col gap-y-3'>
 

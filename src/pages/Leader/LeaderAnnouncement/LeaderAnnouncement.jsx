@@ -26,6 +26,15 @@ const LeaderAnnouncement = () => {
         <h1 className='text-2xl font-semibold'>Duyurular</h1>
       </div>
       <hr />
+      {
+
+        clubs?.length === 0 && (
+          <div className='text-center text-lg text-gray-500'>
+            Henüz bir kulüp lideri değilsiniz.
+          </div>
+        )
+
+      }
       <div className='grid grid-cols-3 gap-3'>
         {
           clubs?.map(club => (
