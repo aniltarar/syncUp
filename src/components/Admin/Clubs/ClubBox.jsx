@@ -27,9 +27,9 @@ const ClubBox = ({ club }) => {
   }, [club, dispatch]);
 
   return (
-    <div key={club?.id} className="grid grid-cols-6 bg-white p-3 rounded-lg shadow min-h-32 max-h-40 items-center">
+    <div key={club?.id} className="grid grid-cols-6 bg-white p-3 rounded-lg shadow min-h-32 border items-center">
       <span>{club?.clubName}</span>
-      <span>{club?.clubDescription}</span>
+      <span>{club?.clubDescription.slice(0,100)}...</span>
       <span className="justify-self-center">
         {leaders.length > 0 ? leaders.join(', ') : 'Lider Yok'}
       </span>

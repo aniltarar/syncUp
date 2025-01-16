@@ -27,7 +27,8 @@ const MyApplies = () => {
     dispatch(getClubAppliesByUserID(user.uid));
   }, [dispatch, user.uid]);
 
-  console.table(memberApplies);
+
+
 
   return (
     <div className="w-full p-5 ">

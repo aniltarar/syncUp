@@ -11,13 +11,13 @@ const MemberApplyBox = ({ memberApply }) => {
 
     const statusTranslate = {
         success: 'Tamamlandı',
-        failed: 'Reddedildi',
+        rejected: 'Reddedildi',
         pending: 'Beklemede',
     };
 
     const statusColor = {
         success: 'text-green-500 bg-green-100',
-        failed: 'text-red-500 bg-red-100',
+        rejected: 'text-red-500 bg-red-100',
         pending: 'text-yellow-500 bg-yellow-100',
     };
 
