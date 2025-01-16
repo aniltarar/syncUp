@@ -13,19 +13,21 @@ const MyApplies = () => {
   const statusTranslate = {
     pending: 'Beklemede',
     success: 'Kabul Edildi',
-    failed: 'Reddedildi',
+    rejected: 'Reddedildi',
   };
 
   const statusColor = {
     pending: 'bg-yellow-200 text-yellow-700',
     success: 'bg-green-200 text-green-700',
-    failed: 'bg-red-200 text-red-700',
+    rejected: 'bg-red-200 text-red-700',
   };
 
   useEffect(() => {
     dispatch(getMemberAppliesByUserID(user.uid));
     dispatch(getClubAppliesByUserID(user.uid));
   }, [dispatch, user.uid]);
+
+  console.table(memberApplies);
 
   return (
     <div className="w-full p-5 ">
@@ -50,11 +52,11 @@ const MyApplies = () => {
             <h2 className="text-lg font-semibold mb-4">Kulüp Başvurularım</h2>
             {applies && applies.length > 0 ? (
               <div className="grid grid-cols-1 gap-4">
-                {applies.map((apply) => (
-                  <div key={apply.id} className="flex p-3 border rounded-lg items-center justify-between">
-                    <span>Kulüp: {apply.clubName}</span>
-                    <span className={`${statusColor[apply.status]} px-2 py-1 rounded-lg w-36 text-center `}>
-                      {statusTranslate[apply.status]}
+                {applies?.map((apply) => (
+                  <div key={apply?.id} className="flex p-3 border rounded-lg items-center justify-between">
+                    <span>Kulüp: {apply?.clubName}</span>
+                    <span className={`${statusColor[apply?.status]} px-2 py-1 rounded-lg w-36 text-center `}>
+                      {statusTranslate[apply?.status]} 
                     </span>
                   </div>
                 ))}

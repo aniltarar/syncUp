@@ -324,12 +324,12 @@ export const rejectMemberApply = createAsyncThunk(
       const memberApplyData = await getDoc(memberApplyRef);
       if (
         memberApplyData.data().status === "success" ||
-        memberApplyData.data().status === "failed"
+        memberApplyData.data().status === "rejected"
       ) {
         if (memberApplyData.data().status === "success") {
           toast.error("Üyelik zaten onaylanmış.");
           return;
-        } else if (memberApplyData.data().status === "failed") {
+        } else if (memberApplyData.data().status === "rejected") {
           toast.error("Üyelik zaten reddedilmiş.");
           return;
         }

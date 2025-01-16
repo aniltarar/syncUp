@@ -83,9 +83,9 @@ const Register = () => {
 
 
             <div className='flex flex-col gap-y-2 mt-5'>
-              <span className='hover:cursor-pointer'>Şifrenizi mi unuttunuz? Tıklayın.</span>
+              
               <button className='px-2 py-3 bg-[#29e2a2] text-xl rounded-md hover:bg-[#35c290] transition-colors'>Kayıt Ol</button>
-              <Link to="/auth/login" className='hover:cursor-pointer'>Hesabınız yok mu? Yeni hesap oluşturmak için tıklayın.</Link>
+              <Link to="/auth/login" className='hover:cursor-pointer'>Hesabınız var mı? Giriş yapmak için tıklayın.</Link>
             </div>
 
           </form>

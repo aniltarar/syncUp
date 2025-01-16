@@ -10,11 +10,12 @@ import { FaRegUserCircle } from 'react-icons/fa'
 
 import toast from 'react-hot-toast'
 import dayjs from 'dayjs'
+import LoaderSpinner from '../../components/Loaders/LoaderSpinner'
 
 const ClubDetail = () => {
     // Kulübün ID'sini almak için useParams hook'unu kullanın.
     const { id } = useParams()
-    const { currentClub } = useSelector((state) => state.club)
+    const { currentClub,status } = useSelector((state) => state.club)
     const { clubData, eventsData, announcementsData, leadersData } = currentClub
     const { user } = useSelector((state) => state.auth)
     const dispatch = useDispatch()
@@ -47,8 +48,10 @@ const ClubDetail = () => {
 
     const filteredActiveAnnouncements = announcementsData?.filter((announcement) => announcement.status === 'active')
 
-
-
+    if (status === 'loading') {
+        return <LoaderSpinner />
+    }
+    
 
     // Kulüp oluşturulma tarihi
 

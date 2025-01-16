@@ -208,6 +208,7 @@ export const createClub = createAsyncThunk(
         clubLogo: applyData.clubLogo,
         createdAt: dayjs().toDate(),
         leaders: [applyData.createdBy],
+        clubLocation: applyData.clubLocation,
         members: [],
         events: [],
         announcements: [],

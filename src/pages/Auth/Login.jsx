@@ -63,8 +63,7 @@ const Login = () => {
 
 
             <div className='flex flex-col gap-y-2   w-full  justify-end'>
-              <span className='hover:cursor-pointer'>Şifrenizi mi unuttunuz? Tıklayın.</span>
-              <button className='px-2 py-3 bg-[#29e2a2] text-xl rounded-md hover:bg-[#35c290] transition-colors'>Giriş Yap</button>
+              <button className='px-2 py-3 bg-primary text-xl rounded-md hover:bg-primary-hover transition-colors'>Giriş Yap</button>
               <Link to="/auth/register" className='hover:cursor-pointer'>Hesabınız yok mu? Yeni hesap oluşturmak için tıklayın.</Link>
             </div>
 

@@ -76,7 +76,7 @@ const Announcement = () => {
       }
 
       <div ref={announcementBoxRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 w-full">
-        {sortedAnnouncements.map((announcement) => (
+        {sortedAnnouncements?.map((announcement) => (
           <AnnouncementBox key={announcement.id} announcement={announcement} />
         ))}
       </div>
