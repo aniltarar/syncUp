@@ -8,7 +8,6 @@ import eventReducer from "./slices/eventSlice";
 import announcementReducer from "./slices/announcementSlice";
 import feedbackReducer from "./slices/feedbackSlice";
 
-
 export const store = configureStore({
   reducer: {
     auth: authReducer,

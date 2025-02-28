@@ -4,7 +4,9 @@ import { doc, getDoc } from "firebase/firestore";
 import { redirect } from "react-router-dom";
 
 export const roleLoader = (requiredRoles) => {
+
   return new Promise((resolve) => {
+   
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         const userRef = doc(db, "users", user.uid);

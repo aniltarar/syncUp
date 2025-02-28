@@ -39,6 +39,7 @@ export const createFeedback = createAsyncThunk(
             }
             await setDoc(feedbackRef, feedbackData)
             toast.success("Geri Bildirim Oluşturuldu.")
+
             dispatch(fetchFeedbacksByUserID(data.userID))
 
             return feedbackData;
@@ -68,7 +69,8 @@ export const feedbackSlice = createSlice({
         }).addCase(fetchFeedbacksByUserID.rejected,(state,action)=>{
             state.status="failed"
             state.message=action.payload
-        }).addCase(createFeedback.pending,(state)=>{
+        })
+        .addCase(createFeedback.pending,(state)=>{
             state.status="loading"
         }).addCase(createFeedback.fulfilled,(state)=>{
             state.status="success"

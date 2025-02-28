@@ -27,6 +27,8 @@ const CreateEvent = ({ clubs, setIsOpen }) => {
             body: formData
         });
         const fileData = await response.json();
+
+        
         const eventData = {
             eventName: data.eventName,
             eventDescription: data.eventDescription,

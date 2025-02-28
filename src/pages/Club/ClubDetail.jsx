@@ -37,6 +37,7 @@ const ClubDetail = () => {
         dispatch(applyMemberClub(applyData))
     }
 
+
     // Kulüp detaylarını getirme işlemi
     useEffect(() => {
         // Eğer Slice'ta mevcut kulüp varsa sıfırlama işlemi

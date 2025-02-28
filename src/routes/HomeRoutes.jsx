@@ -1,5 +1,7 @@
+
 import Layout from "../layouts/Layout";
 import { roleLoader } from "../loaders/roleLoader";
+
 
 import About from "../pages/About/About";
 import Announcement from "../pages/Announcement/Announcement";
@@ -25,14 +27,14 @@ export const HomeRoutes = {
         { path: "/", element: <Home /> },
         { path: "about", element: <About />, loader: () => roleLoader(["user", "leader", "admin"]) },
         { path: "profile", element: <Profile />, loader: () => roleLoader(["user", "leader", "admin"]) },
-        { path: "clubs", element: <AllClubs />, },
+        { path: "clubs", element: <AllClubs/> },
         { path: "clubs/:id", element: <ClubDetail />, },
         { path: "events", element: <AllEvents />, },
-        {path:"events/:id",element:<EventDetail/>},
+        { path: "events/:id", element: <EventDetail /> },
         { path: "announcements", element: <Announcement />, },
-        {path:"announcements/:id",element:<AnnouncementDetail/>},
+        { path: "announcements/:id", element: <AnnouncementDetail /> },
 
-        {path:"my-applies",element:<MyApplies/>, loader:()=>roleLoader(["user","leader","admin"])},
+        { path: "my-applies", element: <MyApplies />, loader: () => roleLoader(["user", "leader", "admin"]) },
 
         { path: "notifications", element: <Notifications />, loader: () => roleLoader(["user", "leader", "admin"]) },
         { path: "feedback", element: <Feedback />, loader: () => roleLoader(["user", "leader", "admin"]) },
@@ -40,9 +42,5 @@ export const HomeRoutes = {
         { path: "my-clubs", element: <MyClubs />, loader: () => roleLoader(["user", "leader", "admin"]) },
         { path: "passed-events", element: <PassedEvents />, loader: () => roleLoader(["user", "leader", "admin"]) },
         { path: "be-club-leader", element: <BeClubLeader />, loader: () => roleLoader(["user", "leader", "admin"]) },
-
-
-
-
     ]
 }
